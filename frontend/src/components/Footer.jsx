@@ -7,8 +7,6 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import "./Footer.css";
-import { useLanguage } from "../context/LanguageContext";
-const { t } = useLanguage();
 
 export default function Footer() {
   return (
@@ -21,7 +19,6 @@ export default function Footer() {
               alt="Cambodia Bus Express"
               className="footer-logo-img"
             />
-
             <div>
               <h2>BUSTRAVEL</h2>
               <p>BOOKING EXPRESS</p>
@@ -34,27 +31,16 @@ export default function Footer() {
           </p>
 
           <div className="footer-socials">
-            <a
-              href="https://www.facebook.com/share/14hj91dcDpr/?mibextid=wwXIfr"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href="https://www.facebook.com/share/14hj91dcDpr/?mibextid=wwXIfr" target="_blank" rel="noreferrer">
               <FaFacebookF />
             </a>
-
             <a href="https://instagram.com" target="_blank" rel="noreferrer">
               <FaInstagram />
             </a>
-
             <a href="https://t.me/Hao_chhorng" target="_blank" rel="noreferrer">
               <FaTelegramPlane />
             </a>
-
-            <a
-              href="https://www.tiktok.com/@gar?is_from_webapp=1&sender_device=pc"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href="https://www.tiktok.com/@gar?is_from_webapp=1&sender_device=pc" target="_blank" rel="noreferrer">
               <FaTiktok />
             </a>
           </div>
@@ -62,21 +48,11 @@ export default function Footer() {
 
         <div className="footer-col">
           <h3>Company</h3>
-          <Link to="/">
-            Home <ArrowRight size={13} />
-          </Link>
-          <Link to="/booking">
-            Booking <ArrowRight size={13} />
-          </Link>
-          <Link to="/branch">
-            Branch <ArrowRight size={13} />
-          </Link>
-          <Link to="/about">
-            About Us <ArrowRight size={13} />
-          </Link>
-          <Link to="/faq">
-            FAQ <ArrowRight size={13} />
-          </Link>
+          <Link to="/"><ArrowRight size={13} /> Home</Link>
+          <Link to="/booking"><ArrowRight size={13} /> Booking</Link>
+          <Link to="/branch"><ArrowRight size={13} /> Branch</Link>
+          <Link to="/about"><ArrowRight size={13} /> About Us</Link>
+          <Link to="/faq"><ArrowRight size={13} /> FAQ</Link>
         </div>
 
         <div className="footer-col">
@@ -89,25 +65,10 @@ export default function Footer() {
 
         <div className="footer-col">
           <h3>Contact Us</h3>
-
-          <p>
-            <Phone size={14} />
-            089 737 861
-          </p>
-
-          <p>
-            <Mail size={14} />
-            cambodiabus168@booking.com
-          </p>
-
-          <p>
-            <MapPin size={14} />
-            Main Branch In Phnom Penh, Cambodia
-          </p>
-
-          <Link to="/branch" className="footer-branch-btn">
-            Find Branch
-          </Link>
+          <p><Phone size={14} /> 089 737 861</p>
+          <p><Mail size={14} /> cambodiabus168@booking.com</p>
+          <p><MapPin size={14} /> Main Branch In Phnom Penh, Cambodia</p>
+          <Link to="/branch" className="footer-branch-btn">Find Branch</Link>
         </div>
       </div>
 

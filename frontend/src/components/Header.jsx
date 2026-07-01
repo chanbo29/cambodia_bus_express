@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
-const { t } = useLanguage();
 import "./Header.css";
 
 export default function Header() {
@@ -25,7 +24,6 @@ export default function Header() {
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
     localStorage.removeItem("user");
-
     navigate("/");
     window.location.reload();
   };
@@ -66,11 +64,7 @@ export default function Header() {
             >
               <div className="profile-avatar">
                 {profileImage ? (
-                  <img
-                    src={profileImage}
-                    alt="Profile"
-                    className="profile-avatar-img"
-                  />
+                  <img src={profileImage} alt="Profile" className="profile-avatar-img" />
                 ) : (
                   <User size={18} />
                 )}
@@ -87,10 +81,7 @@ export default function Header() {
             {showDropdown && (
               <div className="dropdown-menu">
                 {(user?.is_staff === true || user?.is_superuser === true) && (
-                  <Link
-                    to="/admin-dashboard"
-                    onClick={() => setShowDropdown(false)}
-                  >
+                  <Link to="/admin-dashboard" onClick={() => setShowDropdown(false)}>
                     <Settings size={16} />
                     Admin Dashboard
                   </Link>
@@ -101,10 +92,7 @@ export default function Header() {
                   Profile
                 </Link>
 
-                <Link
-                  to="/profile/settings"
-                  onClick={() => setShowDropdown(false)}
-                >
+                <Link to="/profile/settings" onClick={() => setShowDropdown(false)}>
                   <Settings size={16} />
                   Settings
                 </Link>
@@ -128,7 +116,6 @@ export default function Header() {
           </NavLink>
         )}
 
-        {/* Language toggle — always visible */}
         <button className="lang-toggle" onClick={toggleLang} title={lang === "en" ? "Switch to Khmer" : "Switch to English"}>
           {lang === "en" ? (
             <>

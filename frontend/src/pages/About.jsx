@@ -1,11 +1,8 @@
 import "./About.css";
-import { useLanguage } from "../context/LanguageContext";
-const { t } = useLanguage();
 
 export default function About() {
   return (
     <div className="about-page">
-      {/* Hero */}
       <section className="about-hero">
         <div className="about-hero__dots" aria-hidden="true">
           {Array.from({ length: 20 }).map((_, i) => (
@@ -38,7 +35,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Stats */}
       <section className="about-stats">
         <div className="about-stats__item">
           <h3>10+</h3>
@@ -58,7 +54,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Mission */}
       <section className="about-mission">
         <div className="about-mission__image">
           <img
@@ -83,7 +78,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Values */}
       <section className="about-values">
         <div className="about-values__item">
           <div className="about-values__icon">🛡️</div>
@@ -107,7 +101,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* CTA */}
       <section className="about-cta">
         <h2>Ready for your next journey?</h2>
         <p>Book your seat in minutes and travel across Cambodia with us.</p>

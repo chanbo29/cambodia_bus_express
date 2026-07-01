@@ -14,18 +14,6 @@ import {
 } from "lucide-react";
 import { getMyProfile, updateMyProfile } from "../services/booking";
 import "./Profile.css";
-import { useLanguage } from "../context/LanguageContext";
-const { t } = useLanguage();
-
-/* ============================================================
-   DESIGN NOTE — "Boarding Pass" profile
-   This is a bus-ticketing product, so the profile card is built
-   like a boarding pass / ticket stub: a perforated tear line,
-   route-style data labels, and a stamp that lands when a new
-   photo is uploaded. Departure-board flicker on the activity
-   panel echoes a terminal display. One signature move per
-   surface — everything else stays quiet.
-   ============================================================ */
 
 export default function Profile() {
   const [profile, setProfile] = useState(null);
@@ -37,8 +25,6 @@ export default function Profile() {
   const [form, setForm] = useState({ full_name: "", email: "", phone: "" });
   const [photo, setPhoto] = useState(null);
 
-  // Key the stored photo to the logged-in user, so switching accounts
-  // doesn't show the previous user's photo.
   const photoKey = (p) => `profileImage:${p?.username || p?.email || "unknown"}`;
 
   useEffect(() => {
@@ -132,7 +118,6 @@ export default function Profile() {
       </div>
 
       <div className="bp-layout">
-        {/* ---------- Boarding pass card ---------- */}
         <aside className="bp-pass bp-anim bp-pass-anim">
           <div className="bp-pass-top">
             <div className="bp-photo-wrap">
@@ -145,10 +130,7 @@ export default function Profile() {
               )}
 
               {stamped && (
-                <span
-                  className="bp-stamp"
-                  onAnimationEnd={() => setStamped(false)}
-                >
+                <span className="bp-stamp" onAnimationEnd={() => setStamped(false)}>
                   UPDATED
                 </span>
               )}
@@ -193,7 +175,6 @@ export default function Profile() {
           </div>
         </aside>
 
-        {/* ---------- Account info ---------- */}
         <main className="bp-content">
           <div className="bp-anim bp-d2">
             <h2 className="bp-section-title">Account Information</h2>

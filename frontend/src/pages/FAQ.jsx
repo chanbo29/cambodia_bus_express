@@ -11,12 +11,10 @@ import {
 import { FaTelegramPlane } from "react-icons/fa";
 import "./FAQ.css";
 import { useLanguage } from "../context/LanguageContext";
-const { t } = useLanguage();
-
-
 
 export default function FAQ() {
   const { t } = useLanguage();
+
   const FAQ_ICONS = [Ticket, XCircle, CreditCard, Clock, Tag];
   const FAQ_ITEMS = [
     { icon: FAQ_ICONS[0], question: t("faq_q1"), answer: t("faq_a1") },
@@ -25,6 +23,7 @@ export default function FAQ() {
     { icon: FAQ_ICONS[3], question: t("faq_q4"), answer: t("faq_a4") },
     { icon: FAQ_ICONS[4], question: t("faq_q5"), answer: t("faq_a5") },
   ];
+
   const [openIndex, setOpenIndex] = useState(0);
 
   const toggle = (index) => {
