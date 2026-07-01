@@ -7,6 +7,8 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import "./Footer.css";
+import { useLanguage } from "../context/LanguageContext";
+const { t } = useLanguage();
 
 export default function Footer() {
   return (

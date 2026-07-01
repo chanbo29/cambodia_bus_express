@@ -16,6 +16,8 @@ import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 import "./Dashboard.css";
 import "./ManageUsers.css";
+import { useLanguage } from "../context/LanguageContext";
+const { t } = useLanguage();
 
 export default function ManageUsers() {
   const navigate = useNavigate();

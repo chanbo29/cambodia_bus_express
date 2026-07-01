@@ -11,6 +11,7 @@ import {
 import { FaTelegramPlane } from "react-icons/fa";
 import "./FAQ.css";
 import { useLanguage } from "../context/LanguageContext";
+const { t } = useLanguage();
 
 
 

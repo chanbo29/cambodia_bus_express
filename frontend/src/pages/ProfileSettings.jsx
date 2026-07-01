@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Save, User, Mail, Phone } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
+const { t } = useLanguage();
 
 export default function ProfileSettings() {
   const savedUser = JSON.parse(localStorage.getItem("user"));

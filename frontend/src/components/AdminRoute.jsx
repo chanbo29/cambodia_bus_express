@@ -1,4 +1,6 @@
 import { Navigate } from "react-router-dom";
+import { useLanguage } from "../context/LanguageContext";
+const { t } = useLanguage();
 
 export default function AdminRoute({ children }) {
   const token = localStorage.getItem("access");

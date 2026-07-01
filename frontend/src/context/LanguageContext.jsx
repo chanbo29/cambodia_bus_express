@@ -1,16 +1,21 @@
-import { createContext, useContext, useState } from "react";
-import en from "../locales/En";
-import km from "../locales/Km";
+import { createContext, useContext, useState, useEffect } from "react";
+import en from "../locales/en";
+import km from "../locales/km";
 
 const translations = { en, km };
 
 const LanguageContext = createContext(null);
 
 export function LanguageProvider({ children }) {
-  // Persist language choice across page reloads
   const [lang, setLang] = useState(
     () => localStorage.getItem("lang") || "en"
   );
+
+  // Apply font class to <body> whenever language changes
+  useEffect(() => {
+    document.body.classList.remove("lang-en", "lang-km");
+    document.body.classList.add(`lang-${lang}`);
+  }, [lang]);
 
   const toggleLang = () => {
     const next = lang === "en" ? "km" : "en";
@@ -18,8 +23,7 @@ export function LanguageProvider({ children }) {
     localStorage.setItem("lang", next);
   };
 
-  // t("key") returns the translated string; falls back to English if
-  // the Khmer translation is missing for that key
+  // t("key") returns translated string, falls back to English
   const t = (key) =>
     translations[lang][key] ?? translations["en"][key] ?? key;
 
@@ -30,7 +34,6 @@ export function LanguageProvider({ children }) {
   );
 }
 
-// Custom hook - just call useLanguage() in any component
 export function useLanguage() {
   const ctx = useContext(LanguageContext);
   if (!ctx) throw new Error("useLanguage must be used inside <LanguageProvider>");

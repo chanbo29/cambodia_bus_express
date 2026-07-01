@@ -15,6 +15,8 @@ import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 import "./Dashboard.css";
 import "./ManageCheckIn.css";
+import { useLanguage } from "../context/LanguageContext";
+const { t } = useLanguage();
 
 function getCambodiaNow() {
   const str = new Date().toLocaleString("en-US", {

@@ -14,6 +14,8 @@ import {
   Search,
   Star,
 } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
+const { t } = useLanguage();
 
 export default function Schedule() {
   const navigate = useNavigate();

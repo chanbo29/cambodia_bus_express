@@ -1,5 +1,6 @@
 import "./About.css";
 import { useLanguage } from "../context/LanguageContext";
+const { t } = useLanguage();
 
 export default function About() {
   return (

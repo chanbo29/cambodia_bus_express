@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { getMyProfile, updateMyProfile } from "../services/booking";
 import "./Profile.css";
+import { useLanguage } from "../context/LanguageContext";
+const { t } = useLanguage();
 
 /* ============================================================
    DESIGN NOTE — "Boarding Pass" profile

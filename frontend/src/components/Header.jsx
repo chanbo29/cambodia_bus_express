@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
+const { t } = useLanguage();
 import "./Header.css";
 
 export default function Header() {

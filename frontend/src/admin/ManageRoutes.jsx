@@ -20,6 +20,8 @@ import {
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 import "./Dashboard.css";
+import { useLanguage } from "../context/LanguageContext";
+const { t } = useLanguage();
 
 const CITIES = [
   "Phnom Penh",

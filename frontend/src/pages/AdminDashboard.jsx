@@ -16,7 +16,8 @@ import About from "../pages/About";
 import Contact from "../pages/Contact";
 import AdminDashboard from "../pages/AdminDashboard";
 import AdminRoute from "../components/AdminRoute";
-
+import { useLanguage } from "../context/LanguageContext";
+const { t } = useLanguage();
 export default function AppRoutes() {
   return (
     <Routes>

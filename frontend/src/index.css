@@ -1,18 +1,47 @@
-html,
-body,
-#root {
-  width: 100%;
-  min-height: 100%;
+/* ── Noto Sans Khmer + Inter from Google Fonts ─────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+/* ── CSS Variables ──────────────────────────────────────────── */
+:root {
+  --teal-950: #04342c;
+  --teal-800: #085041;
+  --teal-600: #0f6e56;
+  --teal-100: #9fe1cb;
+  --teal-50: #e1f5ee;
+  --text-dark: #15211d;
+  --text-muted: #62716b;
+  --border: #e6ece9;
+  --white: #ffffff;
+  --font-body: 'Inter', sans-serif;
+  --font-khmer: 'Noto Sans Khmer', sans-serif;
+}
+
+/* ── Base ───────────────────────────────────────────────────── */
+* {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  overflow-x: hidden;
-  background: #f7fbf8;
-  font-family: Inter, Arial, sans-serif;
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
 }
 
-* {
-  box-sizing: border-box;
+/* ── Khmer language mode ────────────────────────────────────── */
+body.lang-km {
+  font-family: var(--font-khmer);
+}
+
+body.lang-km * {
+  font-family: var(--font-khmer) !important;
+  line-height: 1.9 !important;
+  letter-spacing: 0 !important;
+}
+
+/* ── English language mode ──────────────────────────────────── */
+body.lang-en {
+  font-family: var(--font-body);
 }

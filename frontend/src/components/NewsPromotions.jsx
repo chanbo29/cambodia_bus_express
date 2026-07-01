@@ -1,4 +1,6 @@
 // Replace these with your real promo image URLs
+import { useLanguage } from "../context/LanguageContext";
+const { t } = useLanguage();
 const PROMO_IMAGES = [
   {
     src: "https://res.cloudinary.com/jvwlddbl/image/upload/v1782921733/688304995_122168342240930524_871956963636454236_n_rq1vqf.jpg",

@@ -4,6 +4,7 @@ import AppPromoModal from "../components/AppPromoModal";
 import NewsPromotions from "../components/NewsPromotions";
 import "./Home.css";
 import { useLanguage } from "../context/LanguageContext";
+const { t } = useLanguage();
 import "./AppPromoModal.css";
 import "./NewsPromotions.css";
 import {
