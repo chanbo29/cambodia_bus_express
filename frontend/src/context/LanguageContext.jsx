@@ -1,45 +1,57 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import en from "../locales/en";
 import km from "../locales/km";
 
 const translations = { en, km };
 
-const LanguageContext = createContext(null);
+// Get current language from localStorage
+export function getLang() {
+  return localStorage.getItem("lang") || "en";
+}
 
-export function LanguageProvider({ children }) {
-  const [lang, setLang] = useState(
-    () => localStorage.getItem("lang") || "en"
-  );
+// Set language and notify all components
+export function setLang(lang) {
+  localStorage.setItem("lang", lang);
+  document.body.classList.remove("lang-en", "lang-km");
+  document.body.classList.add(`lang-${lang}`);
+  // Broadcast change to all components listening
+  window.dispatchEvent(new CustomEvent("langChange", { detail: lang }));
+}
+
+// Translate a key
+export function translate(key) {
+  const lang = getLang();
+  return translations[lang]?.[key] ?? translations["en"]?.[key] ?? key;
+}
+
+// Hook — no Context needed, just listens to window events
+export function useLanguage() {
+  const [lang, setLangState] = useState(getLang());
 
   useEffect(() => {
+    // Apply font class on mount
     document.body.classList.remove("lang-en", "lang-km");
     document.body.classList.add(`lang-${lang}`);
+
+    // Listen for language changes from other components
+    const handler = (e) => setLangState(e.detail);
+    window.addEventListener("langChange", handler);
+    return () => window.removeEventListener("langChange", handler);
   }, [lang]);
 
   const toggleLang = () => {
     const next = lang === "en" ? "km" : "en";
     setLang(next);
-    localStorage.setItem("lang", next);
   };
 
   const t = (key) =>
     translations[lang]?.[key] ?? translations["en"]?.[key] ?? key;
 
-  return (
-    <LanguageContext.Provider value={{ lang, toggleLang, t }}>
-      {children}
-    </LanguageContext.Provider>
-  );
+  return { lang, toggleLang, t };
 }
 
-export function useLanguage() {
-  const ctx = useContext(LanguageContext);
-  if (!ctx) {
-    return {
-      lang: "en",
-      toggleLang: () => {},
-      t: (key) => key,
-    };
-  }
-  return ctx;
+// LanguageProvider is now just a passthrough — kept for compatibility
+// so you don't need to change main.jsx
+export function LanguageProvider({ children }) {
+  return children;
 }
