@@ -1,6 +1,7 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import {
   Phone,
+  Mail,
   User,
   LogOut,
   Settings,
@@ -32,107 +33,112 @@ export default function Header() {
   return (
     <header className="site-header">
 
-      {/* Logo */}
-      <NavLink to="/" className="site-logo">
-        <div className="site-logo-icon">
-          <Bus size={20} />
-        </div>
-        <div className="site-logo-text">
-          <h2>Cambodia Bus</h2>
-          <p>EXPRESS</p>
-        </div>
-      </NavLink>
-
-      {/* Nav */}
-      <nav className="site-nav">
-        <NavLink to="/">{t("nav_home")}</NavLink>
-        <NavLink to="/booking">{t("nav_booking")}</NavLink>
-        <NavLink to="/branch">{t("nav_branch")}</NavLink>
-        <NavLink to="/about">{t("nav_about")}</NavLink>
-        <NavLink to="/faq">{t("nav_faq")}</NavLink>
-      </nav>
-
-      {/* Right side */}
-      <div className="site-right">
-
-        {/* Phone */}
-        <div className="site-help">
-          <small>Need Help?</small>
-          <b>023 888 999</b>
+      {/* ── Top bar: contact info + language toggle ── */}
+      <div className="site-topbar">
+        <div className="site-topbar-left">
+          <span className="topbar-item">
+            <Phone size={12} />
+            023 888 999
+          </span>
+          <span className="topbar-divider" />
+          <span className="topbar-item">
+            <Mail size={12} />
+            cambodiabus168@booking.com
+          </span>
         </div>
 
-        <div className="site-divider" />
+        <div className="site-topbar-right">
+          <button className="lang-toggle" onClick={toggleLang}>
+            <img
+              src={lang === "en" ? "https://flagcdn.com/w40/kh.png" : "https://flagcdn.com/w40/gb.png"}
+              alt={lang === "en" ? "Khmer" : "English"}
+              className="lang-flag-img"
+            />
+            <span className="lang-label">{lang === "en" ? "ភាសាខ្មែរ" : "English"}</span>
+          </button>
+        </div>
+      </div>
 
-        {/* Language toggle */}
-        <button
-          className="lang-toggle"
-          onClick={toggleLang}
-          title={lang === "en" ? "Switch to Khmer" : "Switch to English"}
-        >
-          <img
-            src={lang === "en" ? "https://flagcdn.com/w40/kh.png" : "https://flagcdn.com/w40/gb.png"}
-            alt={lang === "en" ? "Khmer" : "English"}
-            className="lang-flag-img"
-          />
-          <span className="lang-label">{lang === "en" ? "KH" : "EN"}</span>
-        </button>
+      {/* ── Bottom bar: logo + nav + user ── */}
+      <div className="site-navbar">
 
-        {/* User area */}
-        {token ? (
-          <div className="profile-dropdown">
-            <button
-              className="profile-btn"
-              onClick={() => setShowDropdown(!showDropdown)}
-            >
-              <div className="profile-avatar">
-                {profileImage ? (
-                  <img src={profileImage} alt="Profile" className="profile-avatar-img" />
-                ) : (
-                  <User size={16} />
-                )}
-              </div>
-              <div className="profile-text">
-                <small>Welcome</small>
-                <b>{user?.username || "User"}</b>
-              </div>
-              <ChevronDown size={15} />
-            </button>
-
-            {showDropdown && (
-              <div className="dropdown-menu">
-                {(user?.is_staff === true || user?.is_superuser === true) && (
-                  <Link to="/admin-dashboard" onClick={() => setShowDropdown(false)}>
-                    <Settings size={15} />
-                    Admin Dashboard
-                  </Link>
-                )}
-                <Link to="/profile" onClick={() => setShowDropdown(false)}>
-                  <User size={15} />
-                  Profile
-                </Link>
-                <Link to="/history" onClick={() => setShowDropdown(false)}>
-                  <Ticket size={15} />
-                  Booking History
-                </Link>
-                <button onClick={logout}>
-                  <LogOut size={15} />
-                  {t("nav_logout")}
-                </button>
-              </div>
-            )}
+        {/* Logo */}
+        <NavLink to="/" className="site-logo">
+          <div className="site-logo-icon">
+            <Bus size={20} />
           </div>
-        ) : (
-          <NavLink to="/login" className="site-login">
-            <User size={15} />
-            {t("nav_login")}
-          </NavLink>
-        )}
-
-        {/* Book Now CTA */}
-        <NavLink to="/booking" className="site-book-btn">
-          {t("nav_booking")}
+          <div className="site-logo-text">
+            <h2>Cambodia Bus</h2>
+            <p>EXPRESS</p>
+          </div>
         </NavLink>
 
+        {/* Nav */}
+        <nav className="site-nav">
+          <NavLink to="/">{t("nav_home")}</NavLink>
+          <NavLink to="/booking">{t("nav_booking")}</NavLink>
+          <NavLink to="/schedule">{t("nav_schedule")}</NavLink>
+          <NavLink to="/branch">{t("nav_branch")}</NavLink>
+          <NavLink to="/about">{t("nav_about")}</NavLink>
+          <NavLink to="/faq">{t("nav_faq")}</NavLink>
+        </nav>
+
+        {/* Right: user + book now */}
+        <div className="site-right">
+          {token ? (
+            <div className="profile-dropdown">
+              <button
+                className="profile-btn"
+                onClick={() => setShowDropdown(!showDropdown)}
+              >
+                <div className="profile-avatar">
+                  {profileImage ? (
+                    <img src={profileImage} alt="Profile" className="profile-avatar-img" />
+                  ) : (
+                    <User size={15} />
+                  )}
+                </div>
+                <div className="profile-text">
+                  <small>{t("nav_home") === "Home" ? "Welcome" : "សូមស្វាគមន៍"}</small>
+                  <b>{user?.username || "User"}</b>
+                </div>
+                <ChevronDown size={14} />
+              </button>
+
+              {showDropdown && (
+                <div className="dropdown-menu">
+                  {(user?.is_staff === true || user?.is_superuser === true) && (
+                    <Link to="/admin-dashboard" onClick={() => setShowDropdown(false)}>
+                      <Settings size={15} />
+                      Admin Dashboard
+                    </Link>
+                  )}
+                  <Link to="/profile" onClick={() => setShowDropdown(false)}>
+                    <User size={15} />
+                    {t("profile_account")}
+                  </Link>
+                  <Link to="/history" onClick={() => setShowDropdown(false)}>
+                    <Ticket size={15} />
+                    {t("nav_history")}
+                  </Link>
+                  <button onClick={logout}>
+                    <LogOut size={15} />
+                    {t("nav_logout")}
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <NavLink to="/login" className="site-login">
+              <User size={15} />
+              {t("nav_login")}
+            </NavLink>
+          )}
+
+          <NavLink to="/booking" className="site-book-btn">
+            {t("nav_booking")}
+          </NavLink>
+        </div>
       </div>
     </header>
   );
