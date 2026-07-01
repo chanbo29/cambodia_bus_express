@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import "./Branch.css";
 import { useLanguage } from "../context/LanguageContext";
-const { t } = useLanguage();
+
 export default function Branch() {
   const branches = [
   {

@@ -1,7 +1,5 @@
 import { Bus, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
-import { useLanguage } from "../context/LanguageContext";
-const { t } = useLanguage();
 
 export default function RouteCard({ route }) {
   return (

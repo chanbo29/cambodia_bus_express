@@ -16,8 +16,6 @@ import {
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 import "./Dashboard.css";
-import { useLanguage } from "../context/LanguageContext";
-const { t } = useLanguage();
 
 // Today's date in Cambodia time as "YYYY-MM-DD" — avoids the UTC-date bug
 // where toISOString() can show yesterday/tomorrow depending on the

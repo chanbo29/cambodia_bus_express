@@ -27,7 +27,7 @@ import {
 import "./Booking.css";
 import { createBooking, getSchedules, getBookedSeats, checkPromo } from "../services/booking";
 import { useLanguage } from "../context/LanguageContext";
-const { t } = useLanguage();
+
 
 const DEFAULT_IMAGE_BY_TYPE = {
   "VIP Van": "https://res.cloudinary.com/jvwlddbl/image/upload/v1782926596/VAN_wsmt3p.png",

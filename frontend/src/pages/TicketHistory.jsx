@@ -20,8 +20,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import "./TicketHistory.css";
-import { useLanguage } from "../context/LanguageContext";
-const { t } = useLanguage();
+
 
 // Default photo per vehicle type, shown when there's no admin-uploaded image
 const DEFAULT_IMAGE_BY_TYPE = {

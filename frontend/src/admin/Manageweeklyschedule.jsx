@@ -2,8 +2,7 @@ import { useEffect, useState } from "react";
 import { Bus, MapPin, Save, Trash2, Calendar } from "lucide-react";
 import API from "../services/api";
 import "./ManageWeeklySchedule.css";
-import { useLanguage } from "../context/LanguageContext";
-const { t } = useLanguage();
+
 
 const DAYS = [
   { value: 0, label: "Monday" },
