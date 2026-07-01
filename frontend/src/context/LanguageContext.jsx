@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import en from "../locales/en";
 import km from "../locales/km";
 
@@ -11,7 +11,6 @@ export function LanguageProvider({ children }) {
     () => localStorage.getItem("lang") || "en"
   );
 
-  // Apply font class to <body> whenever language changes
   useEffect(() => {
     document.body.classList.remove("lang-en", "lang-km");
     document.body.classList.add(`lang-${lang}`);
@@ -23,9 +22,8 @@ export function LanguageProvider({ children }) {
     localStorage.setItem("lang", next);
   };
 
-  // t("key") returns translated string, falls back to English
   const t = (key) =>
-    translations[lang][key] ?? translations["en"][key] ?? key;
+    translations[lang]?.[key] ?? translations["en"]?.[key] ?? key;
 
   return (
     <LanguageContext.Provider value={{ lang, toggleLang, t }}>
@@ -36,8 +34,6 @@ export function LanguageProvider({ children }) {
 
 export function useLanguage() {
   const ctx = useContext(LanguageContext);
-  
-  // Return safe defaults if used outside provider
   if (!ctx) {
     return {
       lang: "en",
@@ -45,6 +41,5 @@ export function useLanguage() {
       t: (key) => key,
     };
   }
-  
   return ctx;
 }
