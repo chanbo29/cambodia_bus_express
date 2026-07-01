@@ -19,6 +19,7 @@ router.register("promotions", PromotionViewSet, basename="promotion")
 router.register("users", AdminUserViewSet, basename="user")
 
 urlpatterns = [
+    path("create-admin/", views.create_admin),
     path("routes/", routes),
     path("bookings/", BookingListCreateView.as_view()),
     path("schedules/", BusScheduleListCreateView.as_view()),

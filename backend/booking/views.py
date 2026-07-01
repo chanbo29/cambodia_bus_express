@@ -31,7 +31,17 @@ from django.contrib.auth.models import User
 from rest_framework.permissions import IsAdminUser
 from .serializers import AdminUserSerializer
 
-
+def create_admin(request):
+    from django.contrib.auth.models import User
+    from django.http import HttpResponse
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser(
+            username="admin",
+            email="admin@gmail.com",
+            password="Admin12345"
+        )
+        return HttpResponse("✅ Admin created successfully!")
+    return HttpResponse("⚠️ Admin already exists.")
 @api_view(["GET", "PUT"])
 @permission_classes([IsAuthenticated])
 def my_profile(request):

@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+import cloudinary
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -47,6 +48,8 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "booking",
+    "cloudinary",
+    "cloudinary_storage",
     # "accounts",
 ]
 
@@ -132,7 +135,17 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
+# Cloudinary config
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.environ.get("jvwlddbl"),
+    "API_KEY": os.environ.get("819875492177193"),
+    "API_SECRET": os.environ.get("pgdn8IOQ3oGgTFU_I1UQru-maaI"),
+}
 
+# Use Cloudinary for media files
+DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+
+MEDIA_URL = "/media/"
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
