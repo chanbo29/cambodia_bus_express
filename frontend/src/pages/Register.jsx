@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { User, Mail, Lock, ArrowRight } from "lucide-react";
 import "./Register.css";
-
+import { useLanguage } from "../context/LanguageContext";
 
 const ROUTE_STOPS = ["Phnom Penh", "Battambang", "Siem Reap", "Sihanoukville"];
 
