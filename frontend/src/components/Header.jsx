@@ -65,7 +65,7 @@ export default function Header() {
         {/* Logo */}
         <NavLink to="/" className="site-logo">
           <div className="site-logo-icon">
-            <Bus size={20} />
+            <Bus size={24} />
           </div>
           <div className="site-logo-text">
             <h2>Cambodia Bus</h2>
