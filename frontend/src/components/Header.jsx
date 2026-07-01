@@ -6,6 +6,7 @@ import {
   Settings,
   Ticket,
   ChevronDown,
+  Bus,
 } from "lucide-react";
 import { useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
@@ -30,14 +31,19 @@ export default function Header() {
 
   return (
     <header className="site-header">
+
+      {/* Logo */}
       <NavLink to="/" className="site-logo">
-        <img src="/logo-bus.png" alt="Cambodia Bus Express" className="site-logo-img" />
-        <div>
+        <div className="site-logo-icon">
+          <Bus size={20} />
+        </div>
+        <div className="site-logo-text">
           <h2>Cambodia Bus</h2>
           <p>EXPRESS</p>
         </div>
       </NavLink>
 
+      {/* Nav */}
       <nav className="site-nav">
         <NavLink to="/">{t("nav_home")}</NavLink>
         <NavLink to="/booking">{t("nav_booking")}</NavLink>
@@ -46,16 +52,32 @@ export default function Header() {
         <NavLink to="/faq">{t("nav_faq")}</NavLink>
       </nav>
 
+      {/* Right side */}
       <div className="site-right">
-        <div className="site-phone-icon">
-          <Phone size={20} />
-        </div>
 
+        {/* Phone */}
         <div className="site-help">
           <small>Need Help?</small>
           <b>023 888 999</b>
         </div>
 
+        <div className="site-divider" />
+
+        {/* Language toggle */}
+        <button
+          className="lang-toggle"
+          onClick={toggleLang}
+          title={lang === "en" ? "Switch to Khmer" : "Switch to English"}
+        >
+          <img
+            src={lang === "en" ? "https://flagcdn.com/w40/kh.png" : "https://flagcdn.com/w40/gb.png"}
+            alt={lang === "en" ? "Khmer" : "English"}
+            className="lang-flag-img"
+          />
+          <span className="lang-label">{lang === "en" ? "KH" : "EN"}</span>
+        </button>
+
+        {/* User area */}
         {token ? (
           <div className="profile-dropdown">
             <button
@@ -66,69 +88,51 @@ export default function Header() {
                 {profileImage ? (
                   <img src={profileImage} alt="Profile" className="profile-avatar-img" />
                 ) : (
-                  <User size={18} />
+                  <User size={16} />
                 )}
               </div>
-
               <div className="profile-text">
                 <small>Welcome</small>
                 <b>{user?.username || "User"}</b>
               </div>
-
-              <ChevronDown size={16} />
+              <ChevronDown size={15} />
             </button>
 
             {showDropdown && (
               <div className="dropdown-menu">
                 {(user?.is_staff === true || user?.is_superuser === true) && (
                   <Link to="/admin-dashboard" onClick={() => setShowDropdown(false)}>
-                    <Settings size={16} />
+                    <Settings size={15} />
                     Admin Dashboard
                   </Link>
                 )}
-
                 <Link to="/profile" onClick={() => setShowDropdown(false)}>
-                  <User size={16} />
+                  <User size={15} />
                   Profile
                 </Link>
-
-                <Link to="/profile/settings" onClick={() => setShowDropdown(false)}>
-                  <Settings size={16} />
-                  Settings
-                </Link>
-
                 <Link to="/history" onClick={() => setShowDropdown(false)}>
-                  <Ticket size={16} />
+                  <Ticket size={15} />
                   Booking History
                 </Link>
-
                 <button onClick={logout}>
-                  <LogOut size={16} />
-                  Logout
+                  <LogOut size={15} />
+                  {t("nav_logout")}
                 </button>
               </div>
             )}
           </div>
         ) : (
           <NavLink to="/login" className="site-login">
-            <User size={16} />
-            {t("nav_login")} / {t("nav_register")}
+            <User size={15} />
+            {t("nav_login")}
           </NavLink>
         )}
 
-        <button className="lang-toggle" onClick={toggleLang} title={lang === "en" ? "Switch to Khmer" : "Switch to English"}>
-          {lang === "en" ? (
-            <>
-              <img src="https://flagcdn.com/w40/kh.png" alt="Khmer" className="lang-flag-img" />
-              <span className="lang-label">KH</span>
-            </>
-          ) : (
-            <>
-              <img src="https://flagcdn.com/w40/gb.png" alt="English" className="lang-flag-img" />
-              <span className="lang-label">EN</span>
-            </>
-          )}
-        </button>
+        {/* Book Now CTA */}
+        <NavLink to="/booking" className="site-book-btn">
+          {t("nav_booking")}
+        </NavLink>
+
       </div>
     </header>
   );
