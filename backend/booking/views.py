@@ -31,17 +31,18 @@ from django.contrib.auth.models import User
 from rest_framework.permissions import IsAdminUser
 from .serializers import AdminUserSerializer
 
-def create_admin(request):
+def reset_admin(request):
     from django.contrib.auth.models import User
     from django.http import HttpResponse
-    if not User.objects.filter(username="admin").exists():
-        User.objects.create_superuser(
-            username="admin",
-            email="admin@gmail.com",
-            password="Admin12345"
-        )
-        return HttpResponse("✅ Admin created successfully!")
-    return HttpResponse("⚠️ Admin already exists.")
+    try:
+        user = User.objects.get(username="admin")
+        user.set_password("Admin12345")
+        user.is_staff = True
+        user.is_superuser = True
+        user.save()
+        return HttpResponse("Admin password reset successfully!")
+    except User.DoesNotExist:
+        return HttpResponse("Admin not found.")
 @api_view(["GET", "PUT"])
 @permission_classes([IsAuthenticated])
 def my_profile(request):
