@@ -77,7 +77,7 @@ export default function Header() {
         <nav className="site-nav">
           <NavLink to="/">{t("nav_home")}</NavLink>
           <NavLink to="/booking">{t("nav_booking")}</NavLink>
-          <NavLink to="/schedule">{t("nav_schedule")}</NavLink>
+          {/* <NavLink to="/schedule">{t("nav_schedule")}</NavLink> */}
           <NavLink to="/branch">{t("nav_branch")}</NavLink>
           <NavLink to="/about">{t("nav_about")}</NavLink>
           <NavLink to="/faq">{t("nav_faq")}</NavLink>
