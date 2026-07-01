@@ -80,6 +80,7 @@ TEMPLATES = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
+    "https://cambodia-bus-express.vercel.app",  # ← your real Vercel URL
 ]
 CORS_ALLOW_CREDENTIALS = True
 WSGI_APPLICATION = 'config.wsgi.application'
