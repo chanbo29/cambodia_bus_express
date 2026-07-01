@@ -35,15 +35,18 @@ export default function Register() {
     setSubmitting(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/auth/register/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: form.username,
-          email: form.email,
-          password: form.password,
-        }),
-      });
+      const response = await fetch(
+  `${import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api"}/auth/register/`,
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      username: form.username,
+      email: form.email,
+      password: form.password,
+    }),
+  }
+);
 
       const data = await response.json();
 

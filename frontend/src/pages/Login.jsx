@@ -18,11 +18,14 @@ export default function Login() {
     setSubmitting(true);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/auth/login/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
+      const response = await fetch(
+  `${import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api"}/auth/login/`,
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(form),
+  }
+);
 
       const data = await response.json();
 
