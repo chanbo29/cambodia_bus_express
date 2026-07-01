@@ -303,3 +303,18 @@ class AdminUserViewSet(viewsets.ModelViewSet):
     serializer_class = AdminUserSerializer
     permission_classes = [IsAdminUser]
     http_method_names = ["get", "patch", "delete"]
+
+
+
+
+
+def load_backup(request):
+    from django.core.management import call_command
+    from django.http import HttpResponse
+    import os
+    try:
+        backup_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'backup.json')
+        call_command('loaddata', backup_path)
+        return HttpResponse("✅ Data loaded successfully!")
+    except Exception as e:
+        return HttpResponse(f"❌ Error: {str(e)}")

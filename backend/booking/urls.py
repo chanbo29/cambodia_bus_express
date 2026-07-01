@@ -27,5 +27,6 @@ urlpatterns = [
     path("booked-seats/", views.booked_seats),
     path("check-promo/", views.check_promo),
     path("profile/", views.my_profile),
+    path("load-backup/", views.load_backup),
     path("", include(router.urls)),  # <-- this line makes router.register(...) actually work
 ]
