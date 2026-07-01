@@ -29,7 +29,7 @@ export default function About() {
 
         <div className="about-hero__image">
           <img
-            src="https://res.cloudinary.com/jvwlddbl/image/upload/v1782926596/NIGHT_BUS_gun15z.png"
+            src="https://res.cloudinary.com/jvwlddbl/image/upload/v1782921733/bus_aiiukv.jpg"
             alt="Cambodia Bus Express coach on the highway"
           />
         </div>
@@ -57,7 +57,7 @@ export default function About() {
       <section className="about-mission">
         <div className="about-mission__image">
           <img
-            src="https://res.cloudinary.com/jvwlddbl/image/upload/v1782926596/VAN_wsmt3p.png"
+            src="https://res.cloudinary.com/jvwlddbl/image/upload/v1782921732/701123181_122169944774930524_7382350094244258584_n_dfaapw.jpg"
             alt="Passengers boarding a bus"
           />
         </div>
