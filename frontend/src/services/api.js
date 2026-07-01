@@ -1,83 +1,111 @@
 import axios from "axios";
 
+const BASE_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api";
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api",
-});
-// Attach the JWT access token to every outgoing request, if present.
-API.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
+  baseURL: BASE_URL,
 });
 
+// ── Attach access token to every request ─────────────────────
+API.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("access");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// ── Queue system — prevents multiple refresh calls at once ────
 let isRefreshing = false;
-let refreshQueue = [];
+let failedQueue = [];
 
-function clearAuth() {
-  localStorage.removeItem("access");
-  localStorage.removeItem("refresh");
-  localStorage.removeItem("user");
-}
+const processQueue = (error, token = null) => {
+  failedQueue.forEach((p) => {
+    if (error) {
+      p.reject(error);
+    } else {
+      p.resolve(token);
+    }
+  });
+  failedQueue = [];
+};
 
-// On 401, try to refresh the access token using the refresh token before
-// giving up and logging the user out. This is what prevents the
-// "expires after 5 minutes and kicks me out" behavior.
+// ── On 401 — silently refresh and retry original request ──────
 API.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response?.status !== 401 || originalRequest._retry) {
-      return Promise.reject(error);
+    if (error.response?.status === 401 && !originalRequest._retry) {
+
+      // If already refreshing, queue this request
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((token) => {
+            originalRequest.headers.Authorization = `Bearer ${token}`;
+            return API(originalRequest);
+          })
+          .catch((err) => Promise.reject(err));
+      }
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      const refresh = localStorage.getItem("refresh");
+
+      // No refresh token → log out cleanly
+      if (!refresh) {
+        isRefreshing = false;
+        logout();
+        return Promise.reject(error);
+      }
+
+      try {
+        const res = await axios.post(`${BASE_URL}/auth/token/refresh/`, {
+          refresh,
+        });
+
+        const newAccess = res.data.access;
+
+        // Save new access token
+        localStorage.setItem("access", newAccess);
+
+        // Update all future requests
+        API.defaults.headers.common["Authorization"] = `Bearer ${newAccess}`;
+        originalRequest.headers.Authorization = `Bearer ${newAccess}`;
+
+        processQueue(null, newAccess);
+        return API(originalRequest);
+
+      } catch (refreshError) {
+        // Refresh token expired → log out
+        processQueue(refreshError, null);
+        logout();
+        return Promise.reject(refreshError);
+      } finally {
+        isRefreshing = false;
+      }
     }
 
-    const refreshToken = localStorage.getItem("refresh");
-    if (!refreshToken) {
-      clearAuth();
-      return Promise.reject(error);
-    }
-
-    originalRequest._retry = true;
-
-    if (isRefreshing) {
-      // Another request already triggered a refresh — wait for it instead
-      // of firing a second refresh call.
-      return new Promise((resolve, reject) => {
-        refreshQueue.push({ resolve, reject, originalRequest });
-      });
-    }
-
-    isRefreshing = true;
-
-    try {
-      const res = await axios.post(
-        "http://127.0.0.1:8000/api/auth/token/refresh/",
-        { refresh: refreshToken }
-      );
-
-      const newAccess = res.data.access;
-      localStorage.setItem("access", newAccess);
-
-      // Retry queued requests with the new token
-      refreshQueue.forEach(({ resolve, originalRequest: queuedReq }) => {
-        queuedReq.headers.Authorization = `Bearer ${newAccess}`;
-        resolve(API(queuedReq));
-      });
-      refreshQueue = [];
-
-      originalRequest.headers.Authorization = `Bearer ${newAccess}`;
-      return API(originalRequest);
-    } catch (refreshError) {
-      refreshQueue.forEach(({ reject }) => reject(refreshError));
-      refreshQueue = [];
-      clearAuth();
-      return Promise.reject(refreshError);
-    } finally {
-      isRefreshing = false;
-    }
+    return Promise.reject(error);
   }
 );
+
+// ── Clean logout — clears all stored data ────────────────────
+function logout() {
+  localStorage.removeItem("access");
+  localStorage.removeItem("refresh");
+  localStorage.removeItem("user");
+  localStorage.removeItem("passengerInfo");
+  // Redirect to login only if not already there
+  if (!window.location.pathname.includes("/login")) {
+    window.location.href = "/login";
+  }
+}
 
 export default API;
