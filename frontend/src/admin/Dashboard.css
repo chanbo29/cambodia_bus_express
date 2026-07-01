@@ -1,0 +1,729 @@
+/* ============ Base ============ */
+.admin-page {
+  --teal-50: #e1f5ee;
+  --teal-100: #9fe1cb;
+  --teal-400: #1d9e75;
+  --teal-600: #0f6e56;
+  --teal-800: #085041;
+  --teal-900: #04342c;
+  --text-dark: #15211d;
+  --text-muted: #62716b;
+  --white: #ffffff;
+  --border: #e6ece9;
+  --danger: #c2473a;
+  --danger-bg: #fbeae7;
+  font-family: "Inter", "Poppins", sans-serif;
+  background: #fafbfa;
+  min-height: 100vh;
+  color: var(--text-dark);
+  display: grid;
+  grid-template-columns: 250px 1fr;
+}
+
+/* ============ Sidebar ============ */
+.admin-sidebar {
+  background: var(--teal-900);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 8px 28px;
+}
+
+.admin-logo > div {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--teal-600);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.admin-logo h2 {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--white);
+  margin: 0;
+}
+
+.admin-logo p {
+  font-size: 11.5px;
+  color: var(--teal-100);
+  margin: 2px 0 0;
+}
+
+.admin-sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--teal-100);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.admin-sidebar nav a:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.admin-sidebar nav a.active {
+  background: var(--teal-600);
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* ============ Main content ============ */
+.admin-main {
+  padding: 28px 36px 60px;
+}
+
+.admin-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 28px;
+  margin-bottom: 20px;
+}
+
+.admin-header h1 {
+  font-size: 23px;
+  font-weight: 600;
+  margin: 0 0 6px;
+  letter-spacing: -0.01em;
+}
+
+.admin-header p {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.admin-header > button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--teal-900);
+  color: var(--white);
+  border: none;
+  border-radius: 10px;
+  padding: 11px 20px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.admin-header > button:hover {
+  background: var(--teal-800);
+}
+
+/* ============ Stat cards ============ */
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.admin-stats > div {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.admin-stats svg {
+  color: var(--teal-600);
+  margin-bottom: 14px;
+}
+
+.admin-stats span {
+  display: block;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.admin-stats h3 {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+/* ============ Two-column dashboard grid ============ */
+.dashboard-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.dashboard-grid-2col .admin-card {
+  margin-bottom: 0;
+}
+
+.view-all-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--teal-50);
+  color: var(--teal-800);
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ============ Cards (forms / lists) ============ */
+.admin-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.card-title h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.card-title p {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.cancel-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--teal-50);
+  color: var(--teal-800);
+  border: none;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ============ Route form (inline, if used) ============ */
+.route-form {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.route-form > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.route-form label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.route-form input,
+.route-form select {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13.5px;
+  outline: none;
+}
+
+.route-form input:focus,
+.route-form select:focus {
+  border-color: var(--teal-400);
+}
+
+.save-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--teal-900);
+  color: var(--white);
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  grid-column: 1 / -1;
+}
+
+.save-btn:hover {
+  background: var(--teal-800);
+}
+
+/* ============ Route table ============ */
+.route-table {
+  overflow-x: auto;
+}
+
+.route-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.route-table th {
+  text-align: left;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.route-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+
+.route-table td strong {
+  display: block;
+  font-weight: 600;
+}
+
+.route-table td span {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.route-thumb {
+  width: 56px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.route-thumb-placeholder {
+  width: 56px;
+  height: 40px;
+  border-radius: 8px;
+  background: var(--teal-50);
+  color: var(--teal-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.action-buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.edit-btn {
+  background: var(--teal-50);
+  color: var(--teal-800);
+}
+
+.delete-btn {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.empty-table {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 30px;
+}
+
+/* ============ Slide-in drawer (Add/Edit Route) ============ */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 52, 44, 0.45);
+  z-index: 999;
+  display: flex;
+  justify-content: flex-end;
+  animation: drawer-fade-in 0.2s ease;
+}
+
+@keyframes drawer-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.route-drawer {
+  width: 420px;
+  max-width: 100%;
+  height: 100%;
+  background: var(--white);
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.12);
+  overflow-y: auto;
+  animation: drawer-slide-in 0.25s ease;
+}
+
+@keyframes drawer-slide-in {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.drawer-head h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.drawer-close {
+  background: var(--teal-50);
+  border: none;
+  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--teal-800);
+}
+
+.drawer-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px;
+}
+
+.drawer-form label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.drawer-form select,
+.drawer-form input {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+  background: var(--white);
+}
+
+.drawer-form select:focus,
+.drawer-form input:focus {
+  border-color: var(--teal-400);
+}
+
+.drawer-form input[readonly] {
+  background: #f7f9f7;
+  color: var(--text-muted);
+}
+
+.image-upload-box {
+  display: block;
+  border: 1.5px dashed var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  height: 120px;
+}
+
+.image-upload-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-upload-empty {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 12.5px;
+}
+
+.drawer-save-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--teal-900);
+  color: var(--white);
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+.drawer-save-btn:hover {
+  background: var(--teal-800);
+}
+
+/* ============ Responsive ============ */
+@media (max-width: 1100px) {
+  .admin-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-grid-2col {
+    grid-template-columns: 1fr;
+  }
+
+  .route-form {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 880px) {
+  .admin-page {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-sidebar {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 16px;
+  }
+
+  .admin-logo {
+    display: none;
+  }
+
+  .admin-sidebar nav {
+    flex-direction: row;
+  }
+
+  .admin-sidebar nav a span {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-main {
+    padding: 20px;
+  }
+
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .admin-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .route-form {
+    grid-template-columns: 1fr;
+  }
+
+  .route-drawer {
+    width: 100%;
+  }
+}
+
+/* ============ Departure status badges ============ */
+.departure-status-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.departure-status-badge.upcoming {
+  background: #e1f5ee;
+  color: #085041;
+}
+
+.departure-status-badge.boarding {
+  background: #fff7e6;
+  color: #b3760b;
+}
+
+.departure-status-badge.departed {
+  background: #f1f0ed;
+  color: #62716b;
+}
+
+/* ============ Departure filter tabs ============ */
+.departure-filter-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.departure-filter-tabs button {
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text-muted);
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.departure-filter-tabs button:hover {
+  border-color: var(--teal-400);
+}
+
+.departure-filter-tabs button.active {
+  background: var(--teal-900);
+  color: white;
+  border-color: var(--teal-900);
+}
+
+/* ============ Route list search + type filter ============ */
+.route-filter-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.route-search-box {
+  flex: 1;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 9px 14px;
+  color: var(--text-muted);
+}
+
+.route-search-box input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 13.5px;
+  background: transparent;
+  color: var(--text-dark);
+}
+
+.route-type-filter {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.route-type-filter button {
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--text-muted);
+  padding: 9px 14px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.route-type-filter button:hover {
+  border-color: var(--teal-400);
+}
+
+.route-type-filter button.active {
+  background: var(--teal-900);
+  color: white;
+  border-color: var(--teal-900);
+}
+
+/* ============ Day-of-week picker (recurring weekly routes) ============ */
+.day-picker-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.day-picker-btn {
+  flex: 1;
+  min-width: 40px;
+  border: 1px solid var(--border);
+  background: white;
+  border-radius: 8px;
+  padding: 9px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.day-picker-btn.active {
+  background: var(--teal-800);
+  color: white;
+  border-color: var(--teal-800);
+}
+
+.day-picker-hint {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin: 8px 0 0;
+}

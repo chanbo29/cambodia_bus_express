@@ -1,0 +1,181 @@
+.new-footer {
+  --teal-100: #9fe1cb;
+  --teal-600: #0f6e56;
+  background: #085041;
+  color: white;
+  margin-top: 60px;
+  font-family: "Inter", "Poppins", sans-serif;
+  border-top: 3px solid var(--teal-100);
+}
+
+.footer-top {
+  width: 100%;
+  margin: 0;
+  padding: 44px 64px 30px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.2fr 1.2fr;
+  gap: 40px;
+}
+
+.footer-brand-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-logo-img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.footer-logo h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.footer-logo p {
+  color: var(--teal-100);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  margin-top: 3px;
+}
+
+.footer-desc {
+  color: #cfe9df;
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 14px 0 16px;
+  max-width: 340px;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 8px;
+}
+
+.footer-socials a {
+  width: 34px;
+  height: 34px;
+  background: rgba(159, 225, 203, 0.18);
+  color: var(--teal-100);
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.footer-socials a:hover {
+  background: var(--teal-100);
+  color: #04342c;
+  transform: translateY(-2px);
+}
+
+.footer-col h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.footer-col a,
+.footer-col p {
+  color: #cfe9df;
+  font-size: 14.5px;
+  margin: 9px 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  line-height: 1.4;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.footer-col a:hover {
+  color: var(--teal-100);
+  transform: translateX(3px);
+}
+
+.footer-col svg {
+  color: var(--teal-100);
+  flex-shrink: 0;
+}
+
+.footer-branch-btn {
+  margin-top: 10px !important;
+  background: var(--teal-100);
+  color: #04342c !important;
+  padding: 10px 18px;
+  border-radius: 9px;
+  display: inline-flex !important;
+  width: fit-content;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.footer-bottom-new {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  width: 100%;
+  margin: 0;
+  padding: 18px 64px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: #cfe9df;
+  font-size: 13.5px;
+}
+
+.footer-bottom-new div {
+  display: flex;
+  gap: 18px;
+}
+
+.footer-bottom-new a {
+  color: #cfe9df;
+}
+
+.footer-bottom-new a:hover {
+  color: var(--teal-100);
+}
+
+@media (max-width: 1000px) {
+  .footer-top {
+    grid-template-columns: 1fr 1fr;
+    padding: 36px 32px 24px;
+  }
+
+  .footer-bottom-new {
+    flex-direction: column;
+    text-align: center;
+    padding: 16px 32px;
+  }
+
+  .footer-bottom-new div {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 650px) {
+  .footer-top {
+    grid-template-columns: 1fr;
+    padding: 28px 20px 18px;
+  }
+
+  .footer-bottom-new {
+    padding: 16px 20px;
+  }
+
+  .footer-bottom-new div {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

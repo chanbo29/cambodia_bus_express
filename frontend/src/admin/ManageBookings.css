@@ -1,0 +1,234 @@
+.mb-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 18px;
+  max-width: 360px;
+  color: var(--text-muted);
+}
+
+.mb-search input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 13.5px;
+  background: transparent;
+}
+
+.mb-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 52, 44, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 20px;
+}
+
+.mb-detail-card {
+  width: 460px;
+  max-width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--white);
+  border-radius: 18px;
+  padding: 24px;
+}
+
+.mb-detail-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.mb-detail-head h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.mb-detail-head button {
+  background: var(--teal-50);
+  border: none;
+  border-radius: 8px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--teal-800);
+  cursor: pointer;
+}
+
+.mb-detail-code {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--teal-50);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+}
+
+.mb-detail-code span {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.mb-detail-code strong {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--teal-800);
+}
+
+.mb-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.mb-detail-grid > div {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  color: var(--teal-800);
+}
+
+.mb-detail-grid span {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.mb-detail-grid b {
+  font-size: 13px;
+  color: var(--text-dark);
+  font-weight: 600;
+}
+
+@media (max-width: 560px) {
+  .mb-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ============ Filters row (search + date) ============ */
+.mb-filters-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.mb-filters-row .mb-search {
+  flex: 1;
+  min-width: 220px;
+  margin-bottom: 0;
+}
+
+.mb-date-filter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--text-muted);
+}
+
+.mb-date-filter input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 13.5px;
+  color: var(--text-dark);
+}
+
+.mb-date-clear {
+  background: var(--teal-50);
+  border: none;
+  border-radius: 6px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--teal-800);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ============ Pagination ============ */
+.mb-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.mb-pagination span {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.mb-pagination button {
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--teal-800);
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mb-pagination button:hover:not(:disabled) {
+  border-color: var(--teal-400);
+}
+
+.mb-pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ============ Check-in status badge (admin bookings table) ============ */
+.mb-checkin-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 999px;
+}
+
+.mb-checkin-badge.none {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.mb-checkin-badge.reminder {
+  background: #fff7e6;
+  color: #b3760b;
+}
+
+.mb-checkin-badge.urgent {
+  background: #fbeae7;
+  color: #c2473a;
+}
+
+.mb-checkin-badge.departed {
+  background: #f1f0ed;
+  color: var(--text-muted);
+}
+
+.mb-checkin-badge.normal {
+  background: var(--teal-50);
+  color: var(--teal-800);
+}

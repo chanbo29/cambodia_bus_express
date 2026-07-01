@@ -1,0 +1,116 @@
+.news-promo-section {
+  max-width: 1400px;
+  margin: 90px auto 0;
+  padding: 0 64px;
+}
+
+.news-promo-heading {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin: 0 0 24px;
+}
+
+.news-promo-viewport {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Edge fade so cards appear to scroll in/out smoothly rather than cutting off hard */
+.news-promo-fade {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 48px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.news-promo-fade.left {
+  left: 0;
+  background: linear-gradient(90deg, #47ff47, transparent);
+}
+
+.news-promo-fade.right {
+  right: 0;
+  background: linear-gradient(270deg,#47ff47, transparent);
+}
+
+.news-promo-track {
+  display: flex;
+  gap: 22px;
+}
+
+/* Static layout when there are 3 or fewer images */
+.news-promo-track.static-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* Continuous auto-scrolling marquee when there are more than 3 images */
+.news-promo-track.auto-scroll {
+  width: max-content;
+  animation: news-promo-scroll 28s linear infinite;
+}
+
+.news-promo-viewport.scrolling:hover .news-promo-track.auto-scroll {
+  animation-play-state: paused;
+}
+
+@keyframes news-promo-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.news-promo-card {
+  position: relative;
+  flex: 0 0 300px;
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 1 / 1;
+  border: 1px solid var(--border);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.news-promo-track.static-grid .news-promo-card {
+  flex: initial;
+}
+
+.news-promo-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  .news-promo-section {
+    padding: 0 32px;
+  }
+
+  .news-promo-card {
+    flex: 0 0 280px;
+  }
+
+  .news-promo-track.static-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .news-promo-card {
+    flex: 0 0 240px;
+  }
+
+  .news-promo-track.static-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .news-promo-fade {
+    width: 50px;
+  }
+}

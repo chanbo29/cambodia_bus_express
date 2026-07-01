@@ -1,0 +1,578 @@
+/* ============ Base ============ */
+.home-page {
+  --teal-50: #e1f5ee;
+  --teal-100: #9fe1cb;
+  --teal-400: #1d9e75;
+  --teal-600: #0f6e56;
+  --teal-800: #085041;
+  --teal-900: #04342c;
+  --text-dark: #15211d;
+  --text-muted: #62716b;
+  --white: #ffffff;
+  --border: #e6ece9;
+  font-family: "Inter", "Poppins", sans-serif;
+  color: var(--text-dark);
+  background: #fafbfa;
+}
+
+/* ============ Hero ============ */
+.home-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  align-items: stretch;
+  gap: 0;
+  background: var(--teal-900);
+  padding: 0;
+  overflow: hidden;
+}
+
+.hero-dots {
+  position: absolute;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  opacity: 0.35;
+  z-index: 0;
+}
+
+.dots-left {
+  top: 48px;
+  left: 48px;
+}
+
+.dots-right {
+  bottom: 48px;
+  right: 48px;
+}
+
+.hero-dots::before,
+.hero-dots::after {
+  content: "";
+}
+
+.hero-dots {
+  grid-template-columns: repeat(4, 6px);
+}
+
+.hero-dots > * {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--teal-400);
+}
+
+/* Fallback dot pattern using background since original markup is empty divs */
+.hero-dots {
+  background-image: radial-gradient(circle, var(--teal-400) 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+  width: 70px;
+  height: 70px;
+}
+
+.home-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 90px 40px 90px 64px;
+}
+
+.home-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 7px 16px;
+  border-radius: 999px;
+  margin-bottom: 24px;
+  width: fit-content;
+}
+
+.home-tag::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--teal-100);
+  animation: tag-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes tag-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
+}
+
+.home-content h1 {
+  font-size: 46px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--white);
+  margin: 0 0 20px;
+}
+
+.home-content h1 strong {
+  color: var(--teal-100);
+  font-weight: 700;
+  position: relative;
+}
+
+.home-content h1 strong::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 2px;
+  width: 100%;
+  height: 8px;
+  background: rgba(159, 225, 203, 0.18);
+  z-index: -1;
+  border-radius: 4px;
+}
+
+.home-content p {
+  font-size: 15.5px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 440px;
+  margin: 0 0 28px;
+}
+
+.home-book-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--white);
+  color: var(--teal-900);
+  border: none;
+  border-radius: 12px;
+  padding: 14px 26px;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.home-book-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* ============ Hero image carousel ============ */
+.home-bus-img {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  min-height: 460px;
+  border-radius: 0;
+  overflow: hidden;
+}
+
+.home-bus-img::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    90deg,
+    var(--teal-900) 0%,
+    rgba(4, 52, 44, 0.45) 12%,
+    transparent 32%
+  );
+  pointer-events: none;
+}
+
+.home-bus-img img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.home-bus-img img.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.hero-slider-dots {
+  position: absolute;
+  bottom: 18px;
+  right: 18px;
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+.hero-slider-dots button {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.hero-slider-dots button.active {
+  background: var(--white);
+  transform: scale(1.25);
+}
+
+/* ============ Floating glass stat chips on hero image ============ */
+.hero-stat-chip {
+  position: absolute;
+  z-index: 3;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  padding: 12px 18px;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  animation: chip-float 4s ease-in-out infinite;
+}
+
+.hero-stat-chip strong {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.hero-stat-chip span {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-top: 2px;
+}
+
+.hero-stat-chip.top {
+  top: 36px;
+  right: 36px;
+  animation-delay: 0s;
+}
+
+.hero-stat-chip.bottom {
+  bottom: 70px;
+  left: 36px;
+  animation-delay: 1.5s;
+}
+
+@keyframes chip-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ============ Floating search panel ============ */
+.home-search {
+  display: grid;
+  grid-template-columns: 1fr 32px 1fr 1fr 1fr auto;
+  align-items: end;
+  gap: 16px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 24px 30px;
+  margin: -40px 64px 0;
+  max-width: 1336px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 24px 60px rgba(4, 52, 44, 0.14);
+}
+
+.home-search::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teal-400), var(--teal-100));
+  border-radius: 0 0 4px 4px;
+}
+
+.home-search-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.home-search-icon {
+  color: var(--teal-600);
+  flex-shrink: 0;
+}
+
+.home-search-item small {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 3px;
+}
+
+.home-search-item select,
+.home-search-item input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-dark);
+  background: transparent;
+  width: 100%;
+}
+
+.home-swap {
+  align-self: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--teal-50);
+  color: var(--teal-800);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.home-search-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  background: var(--teal-900);
+  color: var(--white);
+  border: none;
+  border-radius: 12px;
+  padding: 13px 22px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.home-search-btn:hover {
+  background: var(--teal-800);
+}
+
+/* ============ Features ============ */
+.home-features {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  max-width: 1400px;
+  margin: 80px auto 0;
+  padding: 0 64px;
+}
+
+.home-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 26px;
+  background: var(--white);
+}
+
+.home-feature-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  background: var(--teal-50);
+  color: var(--teal-800);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.home-feature h3 {
+  font-size: 16.5px;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+
+.home-feature p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.55;
+}
+
+/* ============ Popular routes ============ */
+.popular-routes-section {
+  max-width: 1400px;
+  margin: 90px auto 0;
+  padding: 0 64px 100px;
+}
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 44px;
+}
+
+.section-heading span {
+  display: inline-block;
+  color: var(--teal-600);
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.section-heading h2 {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+
+.section-heading p {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.popular-route-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.popular-route-card {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--white);
+}
+
+.popular-route-card img {
+  width: 100%;
+  height: 175px;
+  object-fit: cover;
+}
+
+.popular-route-body {
+  padding: 22px;
+}
+
+.popular-route-body h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.popular-route-body > div:first-child p {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin: 3px 0 16px;
+}
+
+.route-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.route-meta span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.route-meta strong {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--teal-800);
+}
+
+.popular-route-body button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  background: var(--teal-900);
+  color: var(--white);
+  border: none;
+  border-radius: 12px;
+  padding: 13px;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.popular-route-body button:hover {
+  background: var(--teal-800);
+}
+
+/* ============ Responsive ============ */
+@media (max-width: 1024px) {
+  .home-hero {
+    grid-template-columns: 1fr;
+    padding: 0;
+  }
+
+  .home-content {
+    padding: 50px 32px 40px;
+  }
+
+  .home-bus-img {
+    height: 280px;
+    min-height: 280px;
+    order: -1;
+  }
+
+  .home-search {
+    grid-template-columns: 1fr;
+    margin: 24px 32px 0;
+  }
+
+  .home-swap {
+    display: none;
+  }
+
+  .home-features {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 32px;
+  }
+
+  .popular-routes-section {
+    padding: 0 32px 70px;
+  }
+
+  .popular-route-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .home-content h1 {
+    font-size: 32px;
+  }
+
+  .home-features {
+    grid-template-columns: 1fr;
+  }
+
+  .popular-route-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-stat-chip {
+    display: none;
+  }
+}

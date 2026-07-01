@@ -1,0 +1,164 @@
+.reports-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 30px;
+  font-size: 13.5px;
+}
+
+.reports-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  height: 180px;
+  padding: 10px 4px 0;
+  margin-bottom: 28px;
+  border-bottom: 1px solid var(--border);
+}
+
+.reports-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  gap: 8px;
+}
+
+.reports-bar-track {
+  width: 100%;
+  max-width: 38px;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  background: var(--teal-50);
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+}
+
+.reports-bar-fill {
+  width: 100%;
+  background: var(--teal-800);
+  border-radius: 8px 8px 0 0;
+  min-height: 4px;
+  transition: height 0.3s ease;
+}
+
+.reports-bar-col span {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+@media (max-width: 700px) {
+  .reports-chart {
+    overflow-x: auto;
+  }
+
+  .reports-bar-col {
+    min-width: 36px;
+  }
+}
+
+/* ============ Route stat text (long route names in stat card) ============ */
+.reports-route-stat {
+  font-size: 15px !important;
+  line-height: 1.3;
+}
+
+/* ============ Top routes / vehicle breakdown lists ============ */
+.reports-route-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.reports-route-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.reports-route-row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.reports-route-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.reports-route-revenue {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--teal-800);
+}
+
+.reports-route-bar-track {
+  width: 100%;
+  height: 8px;
+  background: var(--teal-50);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.reports-route-bar-fill {
+  height: 100%;
+  background: var(--teal-800);
+  border-radius: 999px;
+  transition: width 0.3s ease;
+}
+
+.reports-route-bar-fill.alt {
+  background: #b5482f;
+}
+
+.reports-route-bookings {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ============ Day-of-week chart ============ */
+.reports-dow-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  height: 180px;
+  padding: 10px 4px 0;
+}
+
+.reports-dow-chart .reports-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  gap: 6px;
+}
+
+.reports-dow-chart .reports-bar-track {
+  width: 100%;
+  max-width: 44px;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  background: var(--teal-50);
+  border-radius: 8px 8px 0 0;
+  overflow: hidden;
+}
+
+.reports-bar-fill.dow {
+  width: 100%;
+  background: var(--teal-600);
+  border-radius: 8px 8px 0 0;
+  min-height: 4px;
+  transition: height 0.3s ease;
+}
+
+.reports-dow-chart small {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
