@@ -36,6 +36,15 @@ export function LanguageProvider({ children }) {
 
 export function useLanguage() {
   const ctx = useContext(LanguageContext);
-  if (!ctx) throw new Error("useLanguage must be used inside <LanguageProvider>");
+  
+  // Return safe defaults if used outside provider
+  if (!ctx) {
+    return {
+      lang: "en",
+      toggleLang: () => {},
+      t: (key) => key,
+    };
+  }
+  
   return ctx;
 }
