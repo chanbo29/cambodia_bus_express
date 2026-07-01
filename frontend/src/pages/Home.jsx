@@ -22,10 +22,10 @@ import {
 } from "lucide-react";
 
 const HERO_IMAGES = [
-  "https://scontent.fpnh1-2.fna.fbcdn.net/v/t39.30808-6/687818738_122165825672930524_7811700234168784521_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1365&ctp=s2048x1365&_nc_cat=109&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHtLrntpT183iQW-pIgkMKKIzhQ_i-RNDwjOFD-L5E0PET5rWlCHLD4SOGloQ97Q-3uGHCIpgJjRc3lzW1hxaW3&_nc_ohc=Ras1v4X44j8Q7kNvwGqe8Yd&_nc_oc=AdoJ6Z548qRbfNYNbLyu414AfQ8YpDQAbZ0T1mt0fHasZJOE_6FTij87g0YZlDIC0oI&_nc_zt=23&_nc_ht=scontent.fpnh1-2.fna&_nc_gid=Ldc1Vu3Zsk0OJVk1cOSFpw&_nc_ss=7b2a8&oh=00_Af_a9t-MMfcy5z97o0QbiV-B_Axsj2DLrx-9JwMAZzCxEw&oe=6A443831",
-  "https://scontent.fpnh1-1.fna.fbcdn.net/v/t39.30808-6/689300154_122165825588930524_662632099761546958_n.jpg?stp=dst-jpg_tt6&cstp=mx1333x1333&ctp=s1333x1333&_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeF4cwWBsTUxnYLAoRKjqdfaEjZNkyqebqQSNk2TKp5upFhZrFKNHdIiI8eLdslTyGYRZ56z9dJtWWmNMLb482W3&_nc_ohc=1jMvN1124VUQ7kNvwHpefRK&_nc_oc=AdoygY4qsWof-l0Iok36q3DSexEZfHHamIrNNCfvwFLyEme3jZ7L0QGSxRbhvVc_MzM&_nc_zt=23&_nc_ht=scontent.fpnh1-1.fna&_nc_gid=l7PYtMxMeboKOCP3OBsayg&_nc_ss=7b2a8&oh=00_Af9NXtMdqlBXJHE-gyZr0YrcfWf_JmRr9OWs3LKuuRIilw&oe=6A4450AA",
-  "https://scontent.fpnh1-2.fna.fbcdn.net/v/t39.30808-6/687385754_122165825594930524_442183138976551976_n.jpg?stp=dst-jpg_tt6&cstp=mx1333x1333&ctp=s1333x1333&_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeFwePRWPtr2bq_8U3MlphwYFnEMoq_3zggWcQyir_fOCPcSs_SDCPNufeWfNZmlBqXcfCHEkXVYmfn1c2b1Ty2i&_nc_ohc=tj7vvJuKcNkQ7kNvwG7iQjj&_nc_oc=Adqp8adN5vcdf8HiNdxVXCRN7q3btNVets5YfAXKF0RQiPGNL5krFzA-9x9txaNRLuM&_nc_zt=23&_nc_ht=scontent.fpnh1-2.fna&_nc_gid=Bylp-qI7nXmda6aJa-M7Cg&_nc_ss=7b2a8&oh=00_Af92T5YuVD2fCvnyJGN0sNHS3JvhrGZKCu91WfJYWWHWDg&oe=6A444C89",
-  "https://scontent.fpnh1-2.fna.fbcdn.net/v/t39.30808-6/687759227_122165825570930524_5274866822242586995_n.jpg?stp=dst-jpg_tt6&cstp=mx1333x1333&ctp=s1333x1333&_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeE_tnE-MVMn23TjLzkzSBiUjDQXKpkYOhSMNBcqmRg6FKVltOyrXDvTMLTQbbfM1BYrOIeKP5C23kPUebXrPlNF&_nc_ohc=ZSNr7akuB1oQ7kNvwFVrAmm&_nc_oc=Adq_E_jv4M6YitWs3xO9UYQSgWawztBMOmbUaW1l_-Jg5w2Mbx7ygr_dyWnoihBkG4c&_nc_zt=23&_nc_ht=scontent.fpnh1-2.fna&_nc_gid=cZ8kWC5vAthNwP95IwUFmg&_nc_ss=7b2a8&oh=00_Af9jPqQL5IsaK8q_IhxiV_zZ05xuZ9e1z1LMsMvzVdFYOQ&oe=6A4435C1",
+  "https://res.cloudinary.com/jvwlddbl/image/upload/v1782921733/bus_aiiukv.jpg",
+  "https://res.cloudinary.com/jvwlddbl/image/upload/v1782921731/687385754_122165825594930524_442183138976551976_n_pizs2l.jpg",
+  "https://res.cloudinary.com/jvwlddbl/image/upload/v1782921731/687759227_122165825570930524_5274866822242586995_n_iiotta.jpg",
+  "https://res.cloudinary.com/jvwlddbl/image/upload/v1782921731/689300154_122165825588930524_662632099761546958_n_r3ojwy.jpg",
 ];
 
 export default function Home() {

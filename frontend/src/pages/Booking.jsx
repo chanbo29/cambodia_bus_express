@@ -29,8 +29,8 @@ import { createBooking, getSchedules, getBookedSeats, checkPromo } from "../serv
 import { useLanguage } from "../context/LanguageContext";
 
 const DEFAULT_IMAGE_BY_TYPE = {
-  "VIP Van": "https://scontent.fpnh1-2.fna.fbcdn.net/v/t39.30808-6/701088418_122169944768930524_683872958469287165_n.jpg?stp=dst-jpg_tt6&cstp=mx1333x1333&ctp=s1333x1333&_nc_cat=103&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeElSq2mUxnF6E1br1pH3vRP0mM3C2d119DSYzcLZ3XX0O3NwZ547WVcMd2fvo1uxmHh1Z9N8aGfgD7JyDo8JF-2&_nc_ohc=NiRIfwcioyMQ7kNvwE5JB5X&_nc_oc=AdqEsqSZFQNOfjo9H3MpMVuTwT4AsARgQWNxs8-3P0sMdmLxMPuUWEYMpBFWGDFTKSc&_nc_zt=23&_nc_ht=scontent.fpnh1-2.fna&_nc_gid=yKycebA5ec0EzSUCi9li4A&_nc_ss=7b2a8&oh=00_Af-hahoDfuurzKYCAxDTsxDqWAhWwVgp5OAMMRtecNIxhg&oe=6A444034",
-  "Night Bus": "https://scontent.fpnh1-1.fna.fbcdn.net/v/t39.30808-6/701123181_122169944774930524_7382350094244258584_n.jpg?stp=dst-jpg_tt6&cstp=mx1333x1333&ctp=s1333x1333&_nc_cat=104&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHR2dsCxX8pBk2y_KtXDGlM5Wz3kzzxML7lbPeTPPEwvtv-OeRjfsm9iC4Oo6maKvDK8XYl8cV5C8egacxMtfrF&_nc_ohc=VlhjYc5OnY0Q7kNvwHiaoJA&_nc_oc=AdqjrGSwkhJdcZFdjCF1g4Cv0Zu3MvWyQauVnwPDvecwVQB9YB_o-slmnN1kekcGiUs&_nc_zt=23&_nc_ht=scontent.fpnh1-1.fna&_nc_gid=_DLRDtvMIKXNKnv4gd5H9g&_nc_ss=7b2a8&oh=00_Af88QAVgerCtyXEXbLhEu_Vcxr-OKQHIZdpqEw7J-j2knQ&oe=6A443F6A",
+  "VIP Van": "https://res.cloudinary.com/jvwlddbl/image/upload/v1782921731/701088418_122169944768930524_683872958469287165_n_nqmgdm.jpg",
+  "Night Bus": "https://res.cloudinary.com/jvwlddbl/image/upload/v1782921732/701123181_122169944774930524_7382350094244258584_n_dfaapw.jpg",
 };
 
 function getCambodiaTodayStr() {
