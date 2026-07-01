@@ -32,7 +32,7 @@ export default function About() {
 
         <div className="about-hero__image">
           <img
-            src="https://scontent.fpnh1-2.fna.fbcdn.net/v/t39.30808-6/672687353_122162782268930524_6565412347807004389_n.jpg?stp=dst-jpg_tt6&cstp=mx1707x2048&ctp=s1707x2048&_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeExPWGNBcn-rNlW9lVjUClfLe-UWFJAUdQt75RYUkBR1FRft1C5hldqwO9RC2V_in6eJzWkOofzZD0br-3wbiuV&_nc_ohc=lX6vzNvdaM8Q7kNvwEDlXk7&_nc_oc=Adpc56J0d68SCg22ZfeanCNr5OSBdr9ZIFOztRiJ67nfSaomkJXMc97p31hWl55zIkw&_nc_zt=23&_nc_ht=scontent.fpnh1-2.fna&_nc_gid=CF1Tl28kSO9BrXr1RRbudA&_nc_ss=7b2a8&oh=00_Af9oTydyeFfHRKdiyyIWYFnkCMR0YUH1o2Y_vSgSd6DqBA&oe=6A4875E5"
+            src="https://res.cloudinary.com/jvwlddbl/image/upload/v1782926596/NIGHT_BUS_gun15z.png"
             alt="Cambodia Bus Express coach on the highway"
           />
         </div>
@@ -62,7 +62,7 @@ export default function About() {
       <section className="about-mission">
         <div className="about-mission__image">
           <img
-            src="https://scontent.fpnh1-1.fna.fbcdn.net/v/t39.30808-6/702107069_122169944834930524_4887506534900695446_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x1365&ctp=s2048x1365&_nc_cat=105&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeH4Z2uRGLOEJGRGbHnObDeIIb4VHHd00rMhvhUcd3TSszAy9VttETpduTx-hBrxXg_hbWCQUbPWjqTOBl19y9M3&_nc_ohc=jfg5mXqY7xIQ7kNvwFxUIom&_nc_oc=AdrGRP9wZ8jsNsoBQpFwSXxiH00ZwJVCEFA-64VLmwkr0RRDqCv_MEwUogaELpccxZg&_nc_zt=23&_nc_ht=scontent.fpnh1-1.fna&_nc_gid=4iL8y-DWfFRAydPFmw9L9A&_nc_ss=7b2a8&oh=00_Af9t5oDw0tP_n7hSy3RMTrbJRIFpgHzJCUT-SOi0a-IgJQ&oe=6A486D69"
+            src="https://res.cloudinary.com/jvwlddbl/image/upload/v1782926596/VAN_wsmt3p.png"
             alt="Passengers boarding a bus"
           />
         </div>

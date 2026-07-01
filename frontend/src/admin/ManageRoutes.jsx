@@ -55,8 +55,8 @@ const SEATS_BY_TYPE = {
 // Never use Facebook/Instagram CDN links — those are temporary, signed,
 // and expire, which is why images can break unexpectedly.
 const DEFAULT_IMAGE_BY_TYPE = {
-  "VIP Van": "https://res.cloudinary.com/jvwlddbl/image/upload/v1782921731/701088418_122169944768930524_683872958469287165_n_nqmgdm.jpg",
-  "Night Bus": "https://res.cloudinary.com/jvwlddbl/image/upload/v1782921732/701123181_122169944774930524_7382350094244258584_n_dfaapw.jpg",
+  "VIP Van": "https://res.cloudinary.com/jvwlddbl/image/upload/v1782926596/VAN_wsmt3p.png",
+  "Night Bus": "https://res.cloudinary.com/jvwlddbl/image/upload/v1782926596/NIGHT_BUS_gun15z.png",
 };
 
 const emptyForm = {
