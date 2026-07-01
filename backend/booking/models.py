@@ -24,6 +24,7 @@ class Booking(models.Model):
 
     passenger_name = models.CharField(max_length=100)
     phone = models.CharField(max_length=20)
+    email = models.EmailField(blank=True, null=True)
 
     from_city = models.CharField(max_length=100)
     to_city = models.CharField(max_length=100)
@@ -53,21 +54,20 @@ class Booking(models.Model):
 class BusSchedule(models.Model):
     from_city = models.CharField(max_length=100)
     to_city = models.CharField(max_length=100)
-    bus_name = models.CharField(max_length=100, blank=True)  # auto-derived if left blank
+    bus_name = models.CharField(max_length=100, blank=True)
     bus_type = models.CharField(max_length=50)
     departure_time = models.CharField(max_length=50)
     arrival_time = models.CharField(max_length=50)
-    duration = models.CharField(max_length=50, blank=True)  # auto-calculated by frontend
+    duration = models.CharField(max_length=50, blank=True)
     seats = models.IntegerField(default=35)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to="buses/", blank=True, null=True)
+
+    # Changed from ImageField to URLField — images are stored as
+    # external https:// links (Facebook CDN, etc.), not uploaded files.
+    image = models.URLField(max_length=500, blank=True, null=True)
 
     max_uses = models.PositiveIntegerField(null=True, blank=True)
     days_of_week = models.CharField(max_length=20, blank=True)
-    # Comma-separated day numbers, e.g. "1,2,3,4,5" for Mon-Fri.
-    # Convention matches JS Date.getDay(): 0=Sunday, 1=Monday, ... 6=Saturday.
-    # Empty string means "runs every day" (kept for backward compatibility
-    # with routes created before this field existed).
 
     def save(self, *args, **kwargs):
         if not self.bus_name:
@@ -93,7 +93,7 @@ class WeeklySchedule(models.Model):
     to_city = models.CharField(max_length=100)
     day_of_week = models.IntegerField(choices=DAYS)
 
-    bus_count = models.IntegerField(default=1)  # how many buses depart this day
+    bus_count = models.IntegerField(default=1)
     vehicle_type = models.CharField(max_length=50, default="Bus")
     departure_time = models.CharField(max_length=50, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -111,7 +111,7 @@ class Promotion(models.Model):
     code = models.CharField(max_length=30, unique=True)
     description = models.CharField(max_length=200, blank=True)
     discount_percent = models.PositiveIntegerField(default=10)
-    max_uses = models.PositiveIntegerField(null=True, blank=True)  # ← is this here?
+    max_uses = models.PositiveIntegerField(null=True, blank=True)
     active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -124,7 +124,6 @@ class PromoRedemption(models.Model):
     redeemed_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        # This is what actually enforces "1 user can use only 1 time"
         unique_together = ("user", "promotion")
 
     def __str__(self):
