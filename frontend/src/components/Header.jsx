@@ -51,7 +51,7 @@ export default function Header() {
         <nav className="site-nav">
           <NavLink to="/">{t("nav_home")}</NavLink>
           <NavLink to="/booking">{t("nav_booking")}</NavLink>
-          <NavLink to="/schedule">{t("nav_schedule")}</NavLink>
+          {/* <NavLink to="/schedule">{t("nav_schedule")}</NavLink> */}
           <NavLink to="/branch">{t("nav_branch")}</NavLink>
           <NavLink to="/about">{t("nav_about")}</NavLink>
           <NavLink to="/faq">{t("nav_faq")}</NavLink>
@@ -131,10 +131,10 @@ export default function Header() {
           )}
 
           {/* Book Now */}
-          <NavLink to="/booking" className="site-book-btn">
+          {/* <NavLink to="/booking" className="site-book-btn">
             <Ticket size={15} />
             {t("nav_booking")}
-          </NavLink>
+          </NavLink> */}
 
         </div>
       </div>
