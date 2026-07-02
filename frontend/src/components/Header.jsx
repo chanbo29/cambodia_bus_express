@@ -39,6 +39,7 @@ export default function Header() {
             <img
               src="/logo-bus.png"
               alt="Cambodia Bus Express"
+              className="site-logo-img"
             />
           </div>
           <div className="site-logo-text">
@@ -143,7 +144,7 @@ export default function Header() {
       <div className="site-road">
         <div className="road-dashes" />
         <div className="road-bus">
-          <Bus size={18} />
+          🚌
         </div>
         <div className="road-dest" style={{ left: "15%" }}>
           <span className="dest-pin" />
