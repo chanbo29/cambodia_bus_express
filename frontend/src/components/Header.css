@@ -324,8 +324,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 18px;
-  line-height: 1;
+  color: #1D9E75;
   animation: bus-drive 6s linear infinite;
   display: flex;
   align-items: center;

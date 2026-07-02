@@ -5,6 +5,7 @@ import {
   Settings,
   Ticket,
   ChevronDown,
+  Bus,
 } from "lucide-react";
 import { useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
@@ -144,7 +145,7 @@ export default function Header() {
       <div className="site-road">
         <div className="road-dashes" />
         <div className="road-bus">
-          🚌
+          <Bus size={18} />
         </div>
         <div className="road-dest" style={{ left: "15%" }}>
           <span className="dest-pin" />
