@@ -30,8 +30,8 @@ import { useLanguage } from "../context/LanguageContext";
 
 
 const DEFAULT_IMAGE_BY_TYPE = {
-  "VIP Van": "https://res.cloudinary.com/jvwlddbl/image/upload/v1782926596/VAN_wsmt3p.png",
-  "Night Bus": "https://res.cloudinary.com/jvwlddbl/image/upload/v1782926596/NIGHT_BUS_gun15z.png",
+  "VIP Van": "https://res.cloudinary.com/jvwlddbl/image/upload/v1782981287/4074-outside_tjn5vx.png",
+  "Night Bus": "https://res.cloudinary.com/jvwlddbl/image/upload/v1782981286/3477-outside_xnuivm.png",
 };
 
 function getCambodiaTodayStr() {
