@@ -152,15 +152,15 @@ export default function Header() {
           <span className="dest-name">Phnom Penh</span>
         </div>
         <div className="road-dest" style={{ left: "38%" }}>
-          <span className="dest-pin" style={{ animationDelay: "1s" }} />
+          <span className="dest-pin" style={{ animationDelay: "2s" }} />
           <span className="dest-name">Battambang</span>
         </div>
         <div className="road-dest" style={{ left: "60%" }}>
-          <span className="dest-pin" style={{ animationDelay: "2s" }} />
+          <span className="dest-pin" style={{ animationDelay: "4s" }} />
           <span className="dest-name">Siem Reap</span>
         </div>
         <div className="road-dest" style={{ left: "82%" }}>
-          <span className="dest-pin" style={{ animationDelay: "3s" }} />
+          <span className="dest-pin" style={{ animationDelay: "6s" }} />
           <span className="dest-name">Sihanoukville</span>
         </div>
       </div>
