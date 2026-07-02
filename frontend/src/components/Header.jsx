@@ -8,20 +8,10 @@ import {
   Ticket,
   ChevronDown,
   Bus,
-  MapPin,
 } from "lucide-react";
 import { useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import "./Header.css";
-
-const ROUTES = [
-  "Phnom Penh → Siem Reap",
-  "Phnom Penh → Sihanoukville",
-  "Phnom Penh → Battambang",
-  "Siem Reap → Phnom Penh",
-  "Battambang → Siem Reap",
-  "Sihanoukville → Phnom Penh",
-];
 
 export default function Header() {
   const profileImage = localStorage.getItem("profileImage");
@@ -43,13 +33,39 @@ export default function Header() {
   return (
     <header className="site-header">
 
-      {/* ── Main nav bar ── */}
+      {/* ── Top bar: contact info + language toggle ── */}
+      <div className="site-topbar">
+        <div className="site-topbar-left">
+          <span className="topbar-item">
+            <Phone size={12} />
+            023 888 999
+          </span>
+          <span className="topbar-divider" />
+          <span className="topbar-item">
+            <Mail size={12} />
+            cambodiabus168@booking.com
+          </span>
+        </div>
+
+        <div className="site-topbar-right">
+          <button className="lang-toggle" onClick={toggleLang}>
+            <img
+              src={lang === "en" ? "https://flagcdn.com/w40/kh.png" : "https://flagcdn.com/w40/gb.png"}
+              alt={lang === "en" ? "Khmer" : "English"}
+              className="lang-flag-img"
+            />
+            <span className="lang-label">{lang === "en" ? "ភាសាខ្មែរ" : "English"}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ── Bottom bar: logo + nav + user ── */}
       <div className="site-navbar">
 
         {/* Logo */}
         <NavLink to="/" className="site-logo">
           <div className="site-logo-icon">
-            <Bus size={22} />
+            <Bus size={24} />
           </div>
           <div className="site-logo-text">
             <h2>Cambodia Bus</h2>
@@ -63,28 +79,12 @@ export default function Header() {
           <NavLink to="/booking">{t("nav_booking")}</NavLink>
           {/* <NavLink to="/schedule">{t("nav_schedule")}</NavLink> */}
           <NavLink to="/branch">{t("nav_branch")}</NavLink>
+          <NavLink to="/about">{t("nav_about")}</NavLink>
           <NavLink to="/faq">{t("nav_faq")}</NavLink>
         </nav>
 
-        {/* Right */}
+        {/* Right: user + book now */}
         <div className="site-right">
-
-          {/* Cambodia tag */}
-          <span className="country-tag">
-            🇰🇭 Cambodia
-          </span>
-
-          {/* Language toggle */}
-          <button className="lang-toggle" onClick={toggleLang}>
-            <img
-              src={lang === "en" ? "https://flagcdn.com/w40/kh.png" : "https://flagcdn.com/w40/gb.png"}
-              alt={lang === "en" ? "KH" : "EN"}
-              className="lang-flag-img"
-            />
-            <span className="lang-label">{lang === "en" ? "KH" : "EN"}</span>
-          </button>
-
-          {/* User / profile */}
           {token ? (
             <div className="profile-dropdown">
               <button
@@ -99,7 +99,7 @@ export default function Header() {
                   )}
                 </div>
                 <div className="profile-text">
-                  <small>Welcome</small>
+                  <small>{t("nav_home") === "Home" ? "Welcome" : "សូមស្វាគមន៍"}</small>
                   <b>{user?.username || "User"}</b>
                 </div>
                 <ChevronDown size={14} />
@@ -135,27 +135,11 @@ export default function Header() {
             </NavLink>
           )}
 
-          {/* Book now */}
           <NavLink to="/booking" className="site-book-btn">
-            <Ticket size={15} />
             {t("nav_booking")}
           </NavLink>
-
         </div>
       </div>
-
-      {/* ── Scrolling route ticker ── */}
-      <div className="site-ticker">
-        <div className="ticker-track">
-          {[...ROUTES, ...ROUTES].map((route, i) => (
-            <span key={i} className="ticker-item">
-              <MapPin size={11} />
-              {route}
-            </span>
-          ))}
-        </div>
-      </div>
-
     </header>
   );
 }
