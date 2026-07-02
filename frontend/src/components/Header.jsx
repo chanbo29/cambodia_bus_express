@@ -39,7 +39,6 @@ export default function Header() {
             <img
               src="/logo-bus.png"
               alt="Cambodia Bus Express"
-              className="site-logo-img"
             />
           </div>
           <div className="site-logo-text">
