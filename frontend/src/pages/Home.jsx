@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import AppPromoModal from "../components/AppPromoModal";
 import NewsPromotions from "../components/NewsPromotions";
 import "./Home.css";
 import { useLanguage } from "../context/LanguageContext";
