@@ -1,0 +1,636 @@
+/* ══════════════════════════════════════════════
+   GLOBAL MOBILE RESPONSIVE CSS
+   Import this in main.jsx or index.css:
+   import "./mobile.css";
+   
+   Covers: Home, Booking, Schedule, Seat Selection,
+   Passenger Info, Payment, Ticket, TicketHistory,
+   Profile, Login, Register, About, Branch, FAQ,
+   Footer, NewsPromotions
+══════════════════════════════════════════════ */
+
+/* ── Base ────────────────────────────────── */
+* { box-sizing: border-box; }
+
+html, body {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+img { max-width: 100%; height: auto; }
+
+/* ── HOME PAGE ───────────────────────────── */
+@media (max-width: 768px) {
+  /* Hero */
+  .hero-section,
+  .home-hero {
+    padding: 32px 16px !important;
+    min-height: auto !important;
+  }
+
+  .hero-title,
+  .home-hero h1 {
+    font-size: 26px !important;
+    line-height: 1.25 !important;
+  }
+
+  .hero-subtitle,
+  .home-hero p {
+    font-size: 14px !important;
+  }
+
+  /* Search panel */
+  .search-panel,
+  .home-search-box {
+    padding: 20px 16px !important;
+    border-radius: 14px !important;
+  }
+
+  .search-grid,
+  .search-fields {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .search-btn,
+  .home-search-btn {
+    width: 100% !important;
+    padding: 14px !important;
+    font-size: 15px !important;
+  }
+
+  /* Features grid */
+  .features-grid,
+  .home-features {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+    padding: 0 16px !important;
+  }
+
+  .feature-card {
+    padding: 16px 12px !important;
+  }
+
+  /* Popular routes */
+  .routes-grid,
+  .popular-routes-grid {
+    grid-template-columns: 1fr !important;
+    padding: 0 16px !important;
+  }
+
+  /* Section headings */
+  .section-title,
+  .home-section-title {
+    font-size: 20px !important;
+    padding: 0 16px !important;
+  }
+}
+
+/* ── BOOKING PAGE ────────────────────────── */
+@media (max-width: 768px) {
+  .booking-page,
+  .booking-container {
+    padding: 16px !important;
+  }
+
+  /* Step indicators */
+  .booking-steps,
+  .step-indicators {
+    gap: 4px !important;
+    overflow-x: auto !important;
+    padding-bottom: 8px !important;
+  }
+
+  .step-item {
+    min-width: 60px !important;
+    font-size: 11px !important;
+  }
+
+  .step-item .step-label {
+    display: none !important;
+  }
+
+  /* Booking form */
+  .booking-form-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .booking-card,
+  .booking-form {
+    padding: 20px 16px !important;
+    border-radius: 12px !important;
+  }
+
+  /* Seat grid */
+  .seat-grid {
+    gap: 6px !important;
+  }
+
+  .seat-btn,
+  .seat {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 11px !important;
+  }
+
+  /* Price summary */
+  .price-summary,
+  .booking-summary {
+    padding: 16px !important;
+  }
+
+  .booking-next-btn,
+  .booking-action-btn {
+    width: 100% !important;
+    padding: 14px !important;
+    font-size: 15px !important;
+  }
+}
+
+/* ── SCHEDULE PAGE ───────────────────────── */
+@media (max-width: 768px) {
+  .schedule-v2-page { padding: 0 !important; }
+
+  .schedule-v2-hero {
+    padding: 28px 16px !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  .schedule-v2-hero h1 { font-size: 22px !important; }
+
+  .trip-summary-bar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    padding: 16px !important;
+  }
+
+  .schedule-v2-list {
+    padding: 0 12px 20px !important;
+    gap: 14px !important;
+  }
+
+  .schedule-v2-card {
+    flex-direction: column !important;
+    padding: 16px !important;
+    gap: 14px !important;
+  }
+
+  .schedule-card-content { width: 100% !important; }
+
+  .time-line-box {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+
+  .bus-feature-row {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .select-schedule-btn {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 12px !important;
+  }
+
+  .schedule-filter {
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+}
+
+/* ── PASSENGER INFO PAGE ─────────────────── */
+@media (max-width: 768px) {
+  .passenger-page,
+  .passenger-form {
+    padding: 16px !important;
+  }
+
+  .passenger-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .passenger-card {
+    padding: 20px 16px !important;
+  }
+}
+
+/* ── PAYMENT PAGE ────────────────────────── */
+@media (max-width: 768px) {
+  .payment-page { padding: 16px !important; }
+
+  .payment-layout {
+    flex-direction: column !important;
+  }
+
+  .payment-methods {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .payment-method-card {
+    padding: 14px 10px !important;
+  }
+
+  .payment-confirm-btn {
+    width: 100% !important;
+    padding: 14px !important;
+  }
+}
+
+/* ── TICKET PAGE ─────────────────────────── */
+@media (max-width: 768px) {
+  .ticket-page { padding: 16px !important; }
+
+  .ticket-card {
+    max-width: 100% !important;
+    padding: 24px 16px !important;
+  }
+
+  .ticket-print-btn,
+  .ticket-download-btn {
+    width: 100% !important;
+  }
+}
+
+/* ── TICKET HISTORY PAGE ─────────────────── */
+@media (max-width: 768px) {
+  .ticket-history-page { padding: 16px !important; }
+
+  .ticket-history-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .history-card {
+    padding: 16px !important;
+  }
+
+  .history-card-header {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+}
+
+/* ── PROFILE PAGE ────────────────────────── */
+@media (max-width: 768px) {
+  .bp-page { padding: 0 !important; }
+
+  .bp-cover {
+    padding: 28px 16px !important;
+    min-height: 160px !important;
+  }
+
+  .bp-cover h1 { font-size: 22px !important; }
+
+  .bp-layout {
+    flex-direction: column !important;
+    padding: 16px !important;
+    gap: 16px !important;
+  }
+
+  .bp-pass {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .bp-info-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+
+  .bp-edit-card {
+    width: calc(100% - 32px) !important;
+    padding: 24px 16px !important;
+  }
+}
+
+/* ── LOGIN PAGE ──────────────────────────── */
+@media (max-width: 768px) {
+  .login-page {
+    flex-direction: column !important;
+    min-height: auto !important;
+  }
+
+  .login-left {
+    display: none !important;
+  }
+
+  .login-right {
+    width: 100% !important;
+    padding: 32px 24px !important;
+    min-height: 100vh !important;
+  }
+
+  .login-card {
+    max-width: 100% !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .login-form { gap: 14px !important; }
+}
+
+/* ── REGISTER PAGE ───────────────────────── */
+@media (max-width: 768px) {
+  .register-page {
+    flex-direction: column !important;
+  }
+
+  .register-left { display: none !important; }
+
+  .register-right {
+    width: 100% !important;
+    padding: 32px 24px !important;
+  }
+}
+
+/* ── ABOUT PAGE ──────────────────────────── */
+@media (max-width: 900px) {
+  .about-hero {
+    flex-direction: column !important;
+    padding: 40px 24px !important;
+    min-height: auto !important;
+  }
+
+  .about-hero-badge {
+    position: relative !important;
+    right: auto !important;
+    top: auto !important;
+    transform: none !important;
+    margin-top: 24px !important;
+    align-self: flex-start !important;
+  }
+
+  .about-hero-content h1 { font-size: 28px !important; }
+
+  .about-stats {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .about-mission {
+    grid-template-columns: 1fr !important;
+  }
+
+  .about-mission-img { min-height: 240px !important; }
+
+  .about-values-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .about-tl-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
+
+  .about-tl-line,
+  .about-tl-progress { display: none !important; }
+
+  .about-map-section { padding: 40px 20px !important; }
+  .about-values { padding: 40px 20px !important; }
+  .about-timeline { padding: 40px 20px !important; }
+  .about-cta { padding: 48px 20px !important; }
+}
+
+@media (max-width: 560px) {
+  .about-hero-content h1 { font-size: 24px !important; }
+  .about-values-grid { grid-template-columns: 1fr !important; }
+  .about-tl-row { grid-template-columns: 1fr !important; }
+  .about-stats { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* ── BRANCH PAGE ─────────────────────────── */
+@media (max-width: 768px) {
+  .branch-hero { padding: 32px 20px !important; }
+  .branch-hero h1 { font-size: 22px !important; }
+  .branch-search { flex-direction: column !important; gap: 10px !important; }
+  .branch-search button { width: 100% !important; }
+
+  .branch-grid {
+    grid-template-columns: 1fr !important;
+    padding: 16px !important;
+  }
+
+  .branch-card { max-width: 100% !important; }
+}
+
+/* ── FAQ PAGE ────────────────────────────── */
+@media (max-width: 768px) {
+  .faq-page { padding: 0 !important; }
+
+  .faq-header {
+    padding: 32px 20px !important;
+  }
+
+  .faq-header h1 { font-size: 22px !important; }
+
+  .faq-list {
+    padding: 0 16px 24px !important;
+  }
+
+  .faq-item { border-radius: 10px !important; }
+
+  .faq-question {
+    padding: 14px 16px !important;
+    font-size: 13.5px !important;
+    gap: 10px !important;
+  }
+
+  .faq-contact-cta {
+    flex-direction: column !important;
+    padding: 24px 20px !important;
+    gap: 16px !important;
+    text-align: center !important;
+  }
+
+  .faq-telegram-btn { width: 100% !important; justify-content: center !important; }
+}
+
+/* ── FOOTER ──────────────────────────────── */
+@media (max-width: 900px) {
+  .new-footer,
+  .fP { padding: 32px 20px 0 !important; }
+
+  .footer-top,
+  .fP-top {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 28px !important;
+  }
+
+  .footer-brand-box { grid-column: 1 / -1 !important; }
+}
+
+@media (max-width: 560px) {
+  .footer-top,
+  .fP-top {
+    grid-template-columns: 1fr !important;
+  }
+
+  .footer-bottom-new,
+  .fP-bot {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 10px !important;
+    padding: 16px !important;
+  }
+
+  .footer-logo img { width: 36px !important; height: 36px !important; }
+}
+
+/* ── NEWS & PROMOTIONS ───────────────────── */
+@media (max-width: 768px) {
+  .np-section {
+    padding: 0 16px !important;
+  }
+
+  .np-stage {
+    perspective: 700px !important;
+    height: 280px !important;
+  }
+
+  .np-card {
+    width: 180px !important;
+    height: 180px !important;
+    left: -90px !important;
+    top: -90px !important;
+  }
+
+  .np-header {
+    margin-bottom: 24px !important;
+  }
+
+  .np-title { font-size: 20px !important; }
+}
+
+/* ── APP PROMO MODAL ─────────────────────── */
+@media (max-width: 500px) {
+  .apm-card { border-radius: 14px !important; }
+  .apm-banner { padding: 24px 20px 48px !important; }
+  .apm-title { font-size: 20px !important; }
+  .apm-body { padding: 20px 16px 24px !important; }
+  .apm-stores { flex-direction: column !important; }
+  .apm-bottom {
+    flex-direction: column !important;
+    gap: 10px !important;
+    text-align: center !important;
+  }
+}
+
+/* ── ADMIN DASHBOARD ─────────────────────── */
+@media (max-width: 900px) {
+  .admin-layout {
+    flex-direction: column !important;
+  }
+
+  .admin-sidebar {
+    width: 100% !important;
+    height: auto !important;
+    flex-direction: row !important;
+    overflow-x: auto !important;
+    padding: 12px !important;
+    gap: 8px !important;
+  }
+
+  .admin-sidebar .sidebar-link {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+  }
+
+  .admin-content { padding: 16px !important; }
+
+  .admin-stats-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .admin-table {
+    font-size: 12px !important;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 8px 10px !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-stats-grid { grid-template-columns: 1fr !important; }
+
+  .admin-table-wrap { overflow-x: auto !important; }
+}
+
+/* ── GLOBAL UTILITIES ────────────────────── */
+@media (max-width: 768px) {
+  /* Better tap targets */
+  button, a, input[type="button"], input[type="submit"] {
+    min-height: 44px;
+  }
+
+  /* Prevent overflow */
+  .page-container,
+  .container,
+  main {
+    overflow-x: hidden;
+  }
+
+  /* Form inputs */
+  input, select, textarea {
+    font-size: 16px !important; /* prevents iOS zoom on focus */
+    border-radius: 8px !important;
+  }
+
+  /* Cards */
+  .card, .booking-card, .info-card {
+    border-radius: 12px !important;
+  }
+
+  /* Headings */
+  h1 { font-size: 24px !important; }
+  h2 { font-size: 20px !important; }
+  h3 { font-size: 17px !important; }
+
+  /* Section padding */
+  .page-section { padding: 40px 16px !important; }
+}
+
+/* ── VERY SMALL PHONES ───────────────────── */
+@media (max-width: 360px) {
+  .site-logo-text { display: none; }
+
+  .bp-info-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .about-stats {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── SAFE AREAS (iPhone notch) ───────────── */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .site-header {
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .mobile-drawer {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+/* ── TOUCH IMPROVEMENTS ──────────────────── */
+@media (hover: none) {
+  /* Remove hover effects on touch devices */
+  .site-nav a:hover,
+  .dropdown-menu a:hover { background: transparent !important; }
+
+  /* Make active states work on touch */
+  .site-book-btn:active { transform: scale(0.97) !important; }
+  .profile-btn:active { opacity: 0.8 !important; }
+}

@@ -5,6 +5,7 @@ import { LanguageProvider } from "./context/LanguageContext";
 import App from "./App.jsx";
 import "./index.css";
 import "./App.css";
+import "./mobile.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

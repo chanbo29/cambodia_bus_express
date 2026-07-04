@@ -1,47 +1,69 @@
-/* ── Noto Sans Khmer + Inter from Google Fonts ─────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Khmer:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
-
-/* ── CSS Variables ──────────────────────────────────────────── */
-:root {
-  --teal-950: #04342c;
-  --teal-800: #085041;
-  --teal-600: #0f6e56;
-  --teal-100: #9fe1cb;
-  --teal-50: #e1f5ee;
-  --text-dark: #15211d;
-  --text-muted: #62716b;
-  --border: #e6ece9;
-  --white: #ffffff;
-  --font-body: 'Inter', sans-serif;
-  --font-khmer: 'Noto Sans Khmer', sans-serif;
-}
-
-/* ── Base ───────────────────────────────────────────────────── */
-* {
+/* ── Reset & Base ─────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  font-family: var(--font-body);
-  color: var(--text-dark);
-  background: #ffffff;
-  -webkit-font-smoothing: antialiased;
+  font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI",
+    Roboto, Oxygen, sans-serif;
+  background: #fff;
+  color: #15211d;
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
 }
 
-/* ── Khmer language mode ────────────────────────────────────── */
-body.lang-km {
-  font-family: var(--font-khmer);
-}
-
+/* Khmer font support */
 body.lang-km * {
-  font-family: var(--font-khmer) !important;
-  line-height: 1.9 !important;
-  letter-spacing: 0 !important;
+  font-family: "Noto Sans Khmer", -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* ── English language mode ──────────────────────────────────── */
-body.lang-en {
-  font-family: var(--font-body);
+a { color: inherit; }
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input, textarea, select {
+  font-family: inherit;
+}
+
+/* ── Scrollbar ────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f4faf7; }
+::-webkit-scrollbar-thumb { background: #9FE1CB; border-radius: 3px; }
+
+/* ── Utility classes ──────────────────────── */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 16px; }
+}
+
+/* ── Text dark variable ───────────────────── */
+:root {
+  --text-dark: #04342C;
+  --text-muted: #62716b;
+  --teal-light: #e1f5ee;
+  --teal-mid: #9FE1CB;
+  --teal-dark: #04342C;
+  --border-color: #e0ece6;
 }
