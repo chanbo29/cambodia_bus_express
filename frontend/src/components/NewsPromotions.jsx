@@ -1,4 +1,5 @@
-// Replace these with your real promo image URLs
+import { useEffect, useRef, useState } from "react";
+
 
 const PROMO_IMAGES = [
   {
@@ -53,21 +54,50 @@ const PROMO_IMAGES = [
   },
 ];
 
+// How many pixels per second the track moves.
+// Lower = slower, higher = faster.
+const PIXELS_PER_SECOND = 60;
+
 const VISIBLE_WITHOUT_SCROLL = 5;
 
 export default function NewsPromotions() {
+  const trackRef = useRef(null);
+  const [duration, setDuration] = useState(null);
+
   const needsAutoScroll = PROMO_IMAGES.length > VISIBLE_WITHOUT_SCROLL;
 
-  // Duplicate the list so the marquee can loop seamlessly with no visible seam
+  // Duplicate list for seamless loop
   const marqueeItems = needsAutoScroll
     ? [...PROMO_IMAGES, ...PROMO_IMAGES]
     : PROMO_IMAGES;
+
+  useEffect(() => {
+    if (!needsAutoScroll || !trackRef.current) return;
+
+    const calculate = () => {
+      // scrollWidth is the full duplicated track width.
+      // We only need to scroll half of it (one full set).
+      const halfWidth = trackRef.current.scrollWidth / 2;
+      // duration = distance / speed → same speed on every screen size
+      const secs = halfWidth / PIXELS_PER_SECOND;
+      setDuration(secs);
+    };
+
+    // Calculate after first paint so scrollWidth is accurate
+    calculate();
+
+    // Recalculate if the window resizes (e.g. rotation on mobile)
+    window.addEventListener("resize", calculate);
+    return () => window.removeEventListener("resize", calculate);
+  }, [needsAutoScroll]);
 
   return (
     <section className="news-promo-section">
       <h2 className="news-promo-heading">News &amp; Promotions</h2>
 
-      <div className={`news-promo-viewport ${needsAutoScroll ? "scrolling" : ""}`}>
+      <div
+        className={`news-promo-viewport ${needsAutoScroll ? "scrolling" : ""}`}
+      >
         {needsAutoScroll && (
           <>
             <div className="news-promo-fade left" />
@@ -76,11 +106,25 @@ export default function NewsPromotions() {
         )}
 
         <div
-          className={`news-promo-track ${needsAutoScroll ? "auto-scroll" : "static-grid"}`}
+          ref={trackRef}
+          className={`news-promo-track ${
+            needsAutoScroll ? "auto-scroll" : "static-grid"
+          }`}
+          style={
+            needsAutoScroll && duration != null
+              ? { animationDuration: `${duration}s` }
+              : {}
+          }
         >
           {marqueeItems.map((item, i) => (
-            <div className="news-promo-card" key={`${item.title}-${i}`}>
-              <img src={item.src} alt={item.title} />
+            <div
+              className="news-promo-card"
+              key={`${item.src}-${i}`}
+            >
+              <img src={item.src} alt={item.title || "Promotion"} />
+              {item.tag && (
+                <span className="news-promo-tag">{item.tag}</span>
+              )}
             </div>
           ))}
         </div>

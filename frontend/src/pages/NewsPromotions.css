@@ -1,3 +1,9 @@
+/* ══════════════════════════════════════════════
+   NEWS & PROMOTIONS — consistent scroll speed
+   Speed is controlled by PIXELS_PER_SECOND in
+   the JSX, not by animation-duration in CSS.
+══════════════════════════════════════════════ */
+
 .news-promo-section {
   max-width: 1400px;
   margin: 90px auto 0;
@@ -7,77 +13,82 @@
 .news-promo-heading {
   font-size: 24px;
   font-weight: 700;
-  color: var(--text-dark);
+  color: var(--text-dark, #15211d);
   margin: 0 0 24px;
 }
 
+/* ── Viewport ──────────────────────────────── */
 .news-promo-viewport {
   position: relative;
   overflow: hidden;
+  width: 100%;
 }
 
-/* Edge fade so cards appear to scroll in/out smoothly rather than cutting off hard */
+/* Fade edges */
 .news-promo-fade {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 48px;
+  width: 80px;
   z-index: 2;
   pointer-events: none;
 }
 
 .news-promo-fade.left {
   left: 0;
-  background: linear-gradient(90deg, #47ff47, transparent);
+  background: linear-gradient(to right, #ffffff, transparent);
 }
 
 .news-promo-fade.right {
   right: 0;
-  background: linear-gradient(270deg,#47ff47, transparent);
+  background: linear-gradient(to left, #ffffff, transparent);
 }
 
+/* ── Track ─────────────────────────────────── */
 .news-promo-track {
   display: flex;
-  gap: 22px;
+  gap: 18px;
 }
 
-/* Static layout when there are 3 or fewer images */
 .news-promo-track.static-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-/* Continuous auto-scrolling marquee when there are more than 3 images */
+/* animation-duration is set inline via JS for consistent speed */
 .news-promo-track.auto-scroll {
+  flex-wrap: nowrap;
   width: max-content;
-  animation: news-promo-scroll 28s linear infinite;
+  animation: np-scroll linear infinite;
+  animation-duration: 40s; /* safe fallback — JS overrides this */
 }
 
-.news-promo-viewport.scrolling:hover .news-promo-track.auto-scroll {
+/* Pause on hover so users can read cards */
+.news-promo-viewport:hover .news-promo-track.auto-scroll {
   animation-play-state: paused;
 }
 
-@keyframes news-promo-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+@keyframes np-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
 
+/* ── Card ──────────────────────────────────── */
 .news-promo-card {
-  position: relative;
-  flex: 0 0 300px;
+  flex-shrink: 0;
+  width: 260px;
   border-radius: 14px;
   overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
   aspect-ratio: 1 / 1;
-  border: 1px solid var(--border);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
-.news-promo-track.static-grid .news-promo-card {
-  flex: initial;
+.news-promo-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(4, 52, 44, 0.13);
 }
 
 .news-promo-card img {
@@ -85,32 +96,42 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.4s ease;
 }
 
+.news-promo-card:hover img {
+  transform: scale(1.04);
+}
+
+/* tag badge */
+.news-promo-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #04342C;
+  color: #9FE1CB;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+}
+
+/* static grid card sizing */
+.news-promo-track.static-grid .news-promo-card {
+  width: 300px;
+  flex: 0 0 300px;
+}
+
+/* ── Responsive ────────────────────────────── */
 @media (max-width: 1024px) {
-  .news-promo-section {
-    padding: 0 32px;
-  }
-
-  .news-promo-card {
-    flex: 0 0 280px;
-  }
-
-  .news-promo-track.static-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .news-promo-section { padding: 0 32px; }
+  .news-promo-card { width: 220px; }
 }
 
-@media (max-width: 560px) {
-  .news-promo-card {
-    flex: 0 0 240px;
-  }
-
-  .news-promo-track.static-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .news-promo-fade {
-    width: 50px;
-  }
+@media (max-width: 640px) {
+  .news-promo-section { padding: 0 16px; margin-top: 48px; }
+  .news-promo-card { width: 180px; }
+  .news-promo-fade { width: 40px; }
+  .news-promo-heading { font-size: 20px; }
 }
