@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import "./NewsPromotions.css";
+
 
 const PROMO_IMAGES = [
   {
