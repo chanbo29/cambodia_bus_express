@@ -121,7 +121,7 @@ export default function FAQ() {
       {/* ── FAQ accordion ── */}
       <div className="faq-list">
         {filtered.length === 0 ? (
-          <div className="faq-empty">
+          <div className="faq-empty" style={{ gridColumn: "1 / -1" }}>
             <Search size={36} />
             <p>No questions found. Try a different search or category.</p>
           </div>
