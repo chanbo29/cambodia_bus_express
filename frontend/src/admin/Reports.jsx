@@ -167,12 +167,7 @@ export default function Reports() {
           <a className="active">
             <FileBarChart size={20} /> Reports
           </a>
-                    <a
-            className={activeTab === "announcements" ? "active" : ""}
-            onClick={() => setActiveTab("announcements")}
-          >
-            <Megaphone size={20} /> Announcements
-          </a>
+          
         </nav>
       </aside>
 
