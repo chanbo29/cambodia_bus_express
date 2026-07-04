@@ -4,11 +4,17 @@ import axios from "axios";
 import "./Notification.css";
 
 const API = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
-const READ_KEY = "read_announcements";
+
+// Key is unique per user — user1's reads never affect user2
+function getReadKey() {
+  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const uid = user?.id || user?.username || "guest";
+  return `read_announcements_${uid}`;
+}
 
 function getReadIds() {
   try {
-    return JSON.parse(localStorage.getItem(READ_KEY) || "[]");
+    return JSON.parse(localStorage.getItem(getReadKey()) || "[]");
   } catch {
     return [];
   }
@@ -17,7 +23,7 @@ function getReadIds() {
 function markRead(id) {
   const ids = getReadIds();
   if (!ids.includes(id)) {
-    localStorage.setItem(READ_KEY, JSON.stringify([...ids, id]));
+    localStorage.setItem(getReadKey(), JSON.stringify([...ids, id]));
   }
 }
 
