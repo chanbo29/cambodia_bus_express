@@ -1,116 +1,258 @@
-.news-promo-section {
-  max-width: 1400px;
-  margin: 90px auto 0;
-  padding: 0 64px;
+/* ══════════════════════════════════════════════
+   NEWS & PROMOTIONS — 3D Rotating Carousel
+══════════════════════════════════════════════ */
+
+.np-section {
+  max-width: 1200px;
+  margin: 80px auto 0;
+  padding: 0 60px;
 }
 
-.news-promo-heading {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--text-dark);
-  margin: 0 0 24px;
-}
-
-.news-promo-viewport {
-  position: relative;
-  overflow: hidden;
-}
-
-/* Edge fade so cards appear to scroll in/out smoothly rather than cutting off hard */
-.news-promo-fade {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 48px;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.news-promo-fade.left {
-  left: 0;
-  background: linear-gradient(90deg, #47ff47, transparent);
-}
-
-.news-promo-fade.right {
-  right: 0;
-  background: linear-gradient(270deg,#47ff47, transparent);
-}
-
-.news-promo-track {
+/* ── Header ───────────────────────────────── */
+.np-header {
   display: flex;
-  gap: 22px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 36px;
 }
 
-/* Static layout when there are 3 or fewer images */
-.news-promo-track.static-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.np-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #04342C;
 }
 
-/* Continuous auto-scrolling marquee when there are more than 3 images */
-.news-promo-track.auto-scroll {
-  width: max-content;
-  animation: news-promo-scroll 28s linear infinite;
+.np-title span {
+  color: #1D9E75;
 }
 
-.news-promo-viewport.scrolling:hover .news-promo-track.auto-scroll {
-  animation-play-state: paused;
+.np-controls {
+  display: flex;
+  gap: 10px;
 }
 
-@keyframes news-promo-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+.np-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1.5px solid #e0ece6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 18px;
+  color: #04342C;
+  transition: all 0.18s;
+  line-height: 1;
 }
 
-.news-promo-card {
+.np-btn:hover {
+  background: #04342C;
+  color: #9FE1CB;
+  border-color: #04342C;
+  transform: scale(1.05);
+}
+
+/* ── 3D Stage ─────────────────────────────── */
+.np-stage {
+  perspective: 1200px;
+  height: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
-  flex: 0 0 300px;
-  border-radius: 14px;
+  cursor: grab;
+}
+
+.np-stage:active {
+  cursor: grabbing;
+}
+
+.np-carousel {
+  width: 280px;
+  height: 280px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Slides ───────────────────────────────── */
+.np-slide {
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border-radius: 16px;
   overflow: hidden;
-  aspect-ratio: 1 / 1;
-  border: 1px solid var(--border);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  left: -130px;
+  top: -130px;
+  backface-visibility: hidden;
+  transition: filter 0.4s ease, box-shadow 0.4s ease;
+  box-shadow: 0 8px 32px rgba(4, 52, 44, 0.15);
 }
 
-.news-promo-track.static-grid .news-promo-card {
-  flex: initial;
+.np-slide:hover {
+  box-shadow: 0 16px 48px rgba(4, 52, 44, 0.3);
 }
 
-.news-promo-card img {
+.np-slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
+  transition: transform 0.5s ease;
 }
 
-@media (max-width: 1024px) {
-  .news-promo-section {
-    padding: 0 32px;
+.np-slide:hover img {
+  transform: scale(1.05);
+}
+
+/* overlay on hover */
+.np-slide-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(4, 52, 44, 0.75) 0%,
+    rgba(4, 52, 44, 0.2) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.np-slide:hover .np-slide-overlay {
+  opacity: 1;
+}
+
+/* tag badge */
+.np-slide-tag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #04342C;
+  color: #9FE1CB;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: all 0.3s ease;
+  letter-spacing: 0.04em;
+}
+
+.np-slide:hover .np-slide-tag {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* title */
+.np-slide-title {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.3s ease;
+  margin: 0;
+}
+
+.np-slide:hover .np-slide-title {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Dots ─────────────────────────────────── */
+.np-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.np-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: #d4e8df;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.np-dot.active {
+  width: 24px;
+  border-radius: 4px;
+  background: #04342C;
+}
+
+.np-dot:hover {
+  background: #9FE1CB;
+}
+
+/* ── Active info ──────────────────────────── */
+.np-active-info {
+  text-align: center;
+  margin-top: 18px;
+  min-height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.np-active-tag {
+  display: inline-block;
+  background: #e1f5ee;
+  color: #085041;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+}
+
+.np-active-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #04342C;
+  margin: 0;
+}
+
+/* ── Responsive ───────────────────────────── */
+@media (max-width: 768px) {
+  .np-section {
+    padding: 0 24px;
   }
 
-  .news-promo-card {
-    flex: 0 0 280px;
+  .np-stage {
+    perspective: 800px;
+    height: 280px;
   }
 
-  .news-promo-track.static-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .np-carousel {
+    width: 200px;
+    height: 200px;
+  }
+
+  /* Reduce radius on mobile so cards don't go off screen */
+  .np-slide {
+    width: 190px;
+    height: 190px;
+    left: -95px;
+    top: -95px;
   }
 }
 
-@media (max-width: 560px) {
-  .news-promo-card {
-    flex: 0 0 240px;
-  }
-
-  .news-promo-track.static-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .news-promo-fade {
-    width: 50px;
-  }
+@media (max-width: 480px) {
+  .np-title { font-size: 20px; }
+  .np-stage { height: 240px; }
 }
