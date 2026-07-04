@@ -14,11 +14,11 @@
 /* ── Top bar ─────────────────────────────── */
 .site-topbar {
   background: #04342C;
-  height: 36px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
+  padding: 0 36px;
   border-bottom: 1px solid rgba(159,225,203,0.1);
 }
 
@@ -33,7 +33,7 @@
   align-items: center;
   gap: 5px;
   color: #9FE1CB;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .topbar-divider {
@@ -50,11 +50,11 @@
 
 /* ── Nav bar ─────────────────────────────── */
 .site-navbar {
-  height: 62px;
+  height: 72px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 32px;
+  padding: 0 36px;
 }
 
 /* ── Logo ────────────────────────────────── */
@@ -67,9 +67,9 @@
 }
 
 .site-logo-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   background: #04342C;
   border: 1px solid #1D9E75;
   box-shadow: 0 0 12px rgba(29,158,117,0.3);
@@ -87,7 +87,7 @@
 }
 
 .site-logo-text h2 {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   color: #ffffff;
   margin: 0;
@@ -95,7 +95,7 @@
 }
 
 .site-logo-text p {
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
   color: #1D9E75;
   margin: 0;
@@ -111,9 +111,9 @@
 
 .site-nav a {
   color: rgba(255,255,255,0.6);
-  font-size: 13.5px;
+  font-size: 15px;
   font-weight: 500;
-  padding: 7px 12px;
+  padding: 8px 14px;
   border-radius: 8px;
   text-decoration: none;
   transition: color 0.15s, background 0.15s;
@@ -237,13 +237,13 @@
 .site-book-btn {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
   background: #9FE1CB;
   color: #04342C;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
-  padding: 8px 18px;
-  border-radius: 8px;
+  padding: 10px 22px;
+  border-radius: 9px;
   text-decoration: none;
   transition: background 0.15s, transform 0.1s;
   white-space: nowrap;
