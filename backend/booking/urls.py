@@ -9,7 +9,12 @@ from .views import BookingViewSet
 from . import views
 from .views import create_admin
 from .views import AdminUserViewSet
-
+from .views import (
+    AnnouncementListView,
+    AnnouncementCreateView,
+    AnnouncementDeleteView,
+    AnnouncementAdminListView,
+)
 
 
 router = DefaultRouter()
@@ -28,4 +33,8 @@ urlpatterns = [
     path("check-promo/", views.check_promo),
     path("profile/", views.my_profile),
     path("", include(router.urls)),  # <-- this line makes router.register(...) actually work
+    path("announcements/",         AnnouncementListView.as_view()),
+    path("announcements/create/",  AnnouncementCreateView.as_view()),
+    path("announcements/all/",     AnnouncementAdminListView.as_view()),
+    path("announcements/<int:pk>/delete/", AnnouncementDeleteView.as_view()),
 ]

@@ -128,3 +128,31 @@ class PromoRedemption(models.Model):
 
     def __str__(self):
         return f"{self.user.username} used {self.promotion.code}"
+    
+
+# Add this to booking/models.py
+
+from django.utils import timezone
+from datetime import timedelta
+
+class Announcement(models.Model):
+    title   = models.CharField(max_length=200)
+    message = models.TextField()
+    is_active = models.BooleanField(default=True)
+    created_at  = models.DateTimeField(auto_now_add=True)
+    expires_at  = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def save(self, *args, **kwargs):
+        # Auto-set expiry to 30 days from now if not set
+        if not self.expires_at:
+            self.expires_at = timezone.now() + timedelta(days=30)
+        super().save(*args, **kwargs)
+
+    def is_expired(self):
+        return self.expires_at and timezone.now() > self.expires_at
+
+    def __str__(self):
+        return self.title

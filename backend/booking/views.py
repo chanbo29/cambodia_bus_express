@@ -303,3 +303,67 @@ class AdminUserViewSet(viewsets.ModelViewSet):
     serializer_class = AdminUserSerializer
     permission_classes = [IsAdminUser]
     http_method_names = ["get", "patch", "delete"]
+
+
+
+# Add these to booking/views.py
+
+from django.utils import timezone
+from .models import Announcement
+from rest_framework import serializers, generics, permissions
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+
+
+class AnnouncementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Announcement
+        fields = ["id", "title", "message", "created_at", "expires_at", "is_active"]
+        read_only_fields = ["id", "created_at"]
+
+
+class AnnouncementListView(generics.ListAPIView):
+    """
+    GET /api/announcements/
+    Returns all active, non-expired announcements for logged-in users.
+    """
+    serializer_class = AnnouncementSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Announcement.objects.filter(
+            is_active=True,
+            expires_at__gt=timezone.now()   # only non-expired
+        )
+
+
+class AnnouncementCreateView(generics.CreateAPIView):
+    """
+    POST /api/announcements/create/
+    Admin only — create a new announcement.
+    """
+    serializer_class = AnnouncementSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+
+class AnnouncementDeleteView(generics.DestroyAPIView):
+    """
+    DELETE /api/announcements/<id>/delete/
+    Admin only — remove an announcement early.
+    """
+    queryset = Announcement.objects.all()
+    serializer_class = AnnouncementSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+
+class AnnouncementAdminListView(generics.ListAPIView):
+    """
+    GET /api/announcements/all/
+    Admin only — see all announcements including expired ones.
+    """
+    queryset = Announcement.objects.all()
+    serializer_class = AnnouncementSerializer
+    permission_classes = [permissions.IsAdminUser]
