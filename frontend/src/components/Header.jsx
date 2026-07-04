@@ -115,9 +115,9 @@ export default function Header() {
               </NavLink>
             )}
 
-            <NavLink to="/booking" className="site-book-btn desktop-only">
+            {/* <NavLink to="/booking" className="site-book-btn desktop-only">
               <Ticket size={15} />{t("nav_booking")}
-            </NavLink>
+            </NavLink> */}
 
             {/* Hamburger */}
             <button className="hamburger" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu">
