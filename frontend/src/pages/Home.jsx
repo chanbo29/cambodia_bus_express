@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import NewsPromotions from "../components/NewsPromotions";
 import "./Home.css";
 import { useLanguage } from "../context/LanguageContext";
-
 import "./NewsPromotions.css";
 import {
   MapPin,
@@ -73,7 +72,7 @@ export default function Home() {
 
   return (
     <main className="home-page">
-      <AppPromoModal />
+      {/* <AppPromoModal /> */}
 
       <section className="home-hero">
         <div className="hero-dots dots-left"></div>
