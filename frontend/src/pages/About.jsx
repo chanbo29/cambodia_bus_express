@@ -368,7 +368,12 @@ export default function About() {
       <section className="about-cta" id="about-cta">
         <h2>Ready for your next journey?</h2>
         <p>Book your seat in minutes and travel across Cambodia with us.</p>
-        <a href="/booking" className="about-btn-primary">Book Ticket Now →</a>
+        <a href="/booking" className="about-btn-primary" onClick={(e) => {
+          e.preventDefault();
+          window.location.href = "/booking";
+        }}>
+          Book Ticket Now →
+        </a>
       </section>
 
     </div>
