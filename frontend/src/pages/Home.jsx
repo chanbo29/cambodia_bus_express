@@ -4,7 +4,6 @@ import NewsPromotions from "../components/NewsPromotions";
 import "./Home.css";
 import { useLanguage } from "../context/LanguageContext";
 
-import "./AppPromoModal.css";
 import "./NewsPromotions.css";
 import {
   MapPin,
