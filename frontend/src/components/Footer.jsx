@@ -20,8 +20,8 @@ export default function Footer() {
               className="footer-logo-img"
             />
             <div>
-              <h2>BUSTRAVEL</h2>
-              <p>BOOKING EXPRESS</p>
+              <h2>CAMBODIA</h2>
+              <p>BUS EXPRESS</p>
             </div>
           </div>
 
@@ -75,8 +75,8 @@ export default function Footer() {
       <div className="footer-bottom-new">
         <p>© 2026 Cambodia Bus Express. All Rights Reserved.</p>
         <div>
-          <Link to="/privacy">Privacy Policy</Link>
-          <Link to="/terms">Terms &amp; Conditions</Link>
+          <Link to="/faq">Privacy Policy</Link>
+          <Link to="/faq">Terms &amp; Conditions</Link>
         </div>
       </div>
     </footer>
