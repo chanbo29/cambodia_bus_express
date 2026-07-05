@@ -1,74 +1,50 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  User,
-  Mail,
-  Phone,
-  Calendar,
-  Ticket,
-  LogOut,
-  Camera,
-  Pencil,
-  Save,
-  X,
+  User, Mail, Phone, Calendar,
+  Ticket, LogOut, Camera, Pencil, Save, X, Star,
 } from "lucide-react";
 import { getMyProfile, updateMyProfile } from "../services/booking";
 import "./Profile.css";
 
 export default function Profile() {
-  const [profile, setProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [editing, setEditing] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [stamped, setStamped] = useState(false);
-
-  const [form, setForm] = useState({ full_name: "", email: "", phone: "" });
-  const [photo, setPhoto] = useState(null);
+  const [profile, setProfile]   = useState(null);
+  const [loading, setLoading]   = useState(true);
+  const [editing, setEditing]   = useState(false);
+  const [saving, setSaving]     = useState(false);
+  const [form, setForm]         = useState({ full_name: "", email: "", phone: "" });
+  const [photo, setPhoto]       = useState(null);
 
   const photoKey = (p) => `profileImage:${p?.username || p?.email || "unknown"}`;
 
-  useEffect(() => {
-    fetchProfile();
-  }, []);
+  useEffect(() => { fetchProfile(); }, []);
 
   const fetchProfile = () => {
     setLoading(true);
     getMyProfile()
       .then((data) => {
         setProfile(data);
-        setForm({
-          full_name: data.full_name || "",
-          email: data.email || "",
-          phone: data.phone || "",
-        });
+        setForm({ full_name: data.full_name || "", email: data.email || "", phone: data.phone || "" });
         setPhoto(localStorage.getItem(photoKey(data)));
       })
-      .catch((err) => console.log(err))
+      .catch(console.log)
       .finally(() => setLoading(false));
   };
 
   const handleSave = async (e) => {
     e.preventDefault();
     setSaving(true);
-
     try {
       const updated = await updateMyProfile(form);
       setProfile(updated);
       setEditing(false);
-
-      localStorage.setItem(
-        "passengerInfo",
-        JSON.stringify({
-          passengerName: updated.full_name,
-          email: updated.email,
-          phone: updated.phone,
-        })
-      );
+      localStorage.setItem("passengerInfo", JSON.stringify({
+        passengerName: updated.full_name,
+        email: updated.email,
+        phone: updated.phone,
+      }));
     } catch (err) {
-      alert(
-        "Failed to save: " +
-          (err.response?.data ? JSON.stringify(err.response.data) : "Unknown error")
-      );
+      alert("Failed to save: " + (err.response?.data ? JSON.stringify(err.response.data) : "Unknown error"));
     } finally {
       setSaving(false);
     }
@@ -77,13 +53,10 @@ export default function Profile() {
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = () => {
       localStorage.setItem(photoKey(profile), reader.result);
       setPhoto(reader.result);
-      setStamped(false);
-      requestAnimationFrame(() => setStamped(true));
     };
     reader.readAsDataURL(file);
   };
@@ -97,169 +70,130 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="bp-page bp-loading">
-        <div className="bp-loading-ticket">
-          <Ticket size={26} />
-          <span>Loading your pass…</span>
+      <div className="pf-page pf-loading">
+        <div className="pf-loading-box">
+          <Ticket size={28} />
+          <span>Loading your profile…</span>
         </div>
       </div>
     );
   }
 
+  const displayName = profile?.full_name || profile?.username || "User";
+  const joinedYear  = profile?.date_joined ? new Date(profile.date_joined).getFullYear() : "—";
+
   return (
-    <div className="bp-page">
-      <div className="bp-cover">
-        <div className="bp-cover-route">
-          <span className="bp-eyebrow">My Account</span>
-          <h1 className="bp-anim bp-d1">{profile?.full_name || profile?.username}</h1>
-          <p className="bp-anim bp-d2">{profile?.email || "No email saved"}</p>
-        </div>
-        <div className="bp-cover-line" aria-hidden="true" />
-      </div>
+    <div className="pf-page">
+      <div className="pf-container">
 
-      <div className="bp-layout">
-        <aside className="bp-pass bp-anim bp-pass-anim">
-          <div className="bp-pass-top">
-            <div className="bp-photo-wrap">
-              {photo ? (
-                <img src={photo} alt="Profile" className="bp-photo" />
-              ) : (
-                <div className="bp-photo-placeholder">
-                  <User size={42} />
-                </div>
-              )}
+        {/* ── Profile card ── */}
+        <div className="pf-card">
 
-              {stamped && (
-                <span className="bp-stamp" onAnimationEnd={() => setStamped(false)}>
-                  UPDATED
-                </span>
-              )}
+          {/* Thick green top border */}
+          <div className="pf-card-stripe" />
 
-              <label className="bp-photo-btn" title="Change photo">
-                <Camera size={15} />
+          {/* Header row: avatar + info + actions */}
+          <div className="pf-card-head">
+
+            {/* Avatar */}
+            <div className="pf-avatar-wrap">
+              {photo
+                ? <img src={photo} alt="Profile" className="pf-avatar-img" />
+                : <div className="pf-avatar-placeholder"><User size={32} /></div>}
+              <label className="pf-cam-btn" title="Change photo">
+                <Camera size={13} />
                 <input type="file" accept="image/*" onChange={handlePhotoChange} />
               </label>
             </div>
 
-            <h2>{profile?.full_name || profile?.username}</h2>
-            <p className="bp-pass-email">{profile?.email || "No email saved"}</p>
+            {/* Name + pills */}
+            <div className="pf-head-info">
+              <h2>{displayName}</h2>
+              <p>{profile?.email || "No email saved"}</p>
+              <div className="pf-pills">
+                <span className="pf-pill">
+                  <Star size={11} />
+                  Member {joinedYear}
+                </span>
+                <span className="pf-pill">
+                  <Ticket size={11} />
+                  {profile?.username?.toUpperCase() || "PASSENGER"}
+                </span>
+              </div>
+            </div>
 
-            <button className="bp-edit-btn" onClick={() => setEditing(true)}>
-              <Pencil size={14} />
-              Edit Profile
-            </button>
-          </div>
-
-          <div className="bp-perforation" aria-hidden="true">
-            {Array.from({ length: 16 }).map((_, i) => (
-              <span key={i} />
-            ))}
-          </div>
-
-          <div className="bp-pass-bottom">
-            <span className="bp-stub-label">Passenger</span>
-            <span className="bp-stub-code">
-              {(profile?.username || "GUEST").slice(0, 10).toUpperCase()}
-            </span>
-
-            <div className="bp-action-list">
-              <Link to="/history" className="bp-action-row">
-                <Ticket size={17} />
-                Booking History
+            {/* Action buttons */}
+            <div className="pf-head-actions">
+              <button className="pf-btn primary" onClick={() => setEditing(true)}>
+                <Pencil size={14} />
+                Edit Profile
+              </button>
+              <Link to="/history" className="pf-btn secondary">
+                <Ticket size={14} />
+                My Tickets
               </Link>
-              <button className="bp-action-row bp-logout" onClick={logout}>
-                <LogOut size={17} />
-                Logout
+              <button className="pf-btn danger" onClick={logout}>
+                <LogOut size={14} />
               </button>
             </div>
           </div>
-        </aside>
 
-        <main className="bp-content">
-          <div className="bp-anim bp-d2">
-            <h2 className="bp-section-title">Account Information</h2>
-            <p className="bp-section-sub">
-              Your personal information and travel account overview.
-            </p>
+          {/* 2×2 info grid */}
+          <div className="pf-info-grid">
+            <InfoCard icon={<User size={18} />}     label="Username"     value={profile?.username || "—"} />
+            <InfoCard icon={<Mail size={18} />}     label="Email"        value={profile?.email || "Not set"} />
+            <InfoCard icon={<Phone size={18} />}    label="Phone"        value={profile?.phone || "Not set"} />
+            <InfoCard icon={<Calendar size={18} />} label="Member Since" value={joinedYear} />
           </div>
 
-          <div className="bp-info-grid">
-            <InfoCard icon={<User size={19} />} label="Username" value={profile?.username} delay="bp-d2" />
-            <InfoCard icon={<Mail size={19} />} label="Email" value={profile?.email || "Not set"} delay="bp-d3" />
-            <InfoCard icon={<Phone size={19} />} label="Phone" value={profile?.phone || "Not set"} delay="bp-d4" />
-            <InfoCard
-              icon={<Calendar size={19} />}
-              label="Member Since"
-              value={profile?.date_joined ? new Date(profile.date_joined).getFullYear() : "—"}
-              delay="bp-d5"
-            />
-          </div>
-
-          <div className="bp-board bp-anim bp-d5">
-            <div className="bp-board-flicker" aria-hidden="true" />
+          {/* CTA banner */}
+          <div className="pf-cta">
             <div>
               <h3>Recent Booking Activity</h3>
-              <p>Check your bus tickets and travel history.</p>
+              <p>Check your bus tickets and travel history anytime.</p>
             </div>
-            <Link to="/history" className="bp-board-btn">
-              View Ticket History
+            <Link to="/history" className="pf-cta-btn">
+              View Ticket History →
             </Link>
           </div>
-        </main>
+        </div>
       </div>
 
+      {/* ── Edit modal ── */}
       {editing && (
-        <div className="bp-overlay" onClick={() => setEditing(false)}>
-          <form
-            className="bp-edit-card"
-            onClick={(e) => e.stopPropagation()}
-            onSubmit={handleSave}
-          >
-            <div className="bp-edit-head">
+        <div className="pf-overlay" onClick={() => setEditing(false)}>
+          <form className="pf-modal" onClick={(e) => e.stopPropagation()} onSubmit={handleSave}>
+            <div className="pf-modal-head">
               <h2>Edit Profile</h2>
-              <button type="button" onClick={() => setEditing(false)}>
-                <X size={18} />
+              <button type="button" className="pf-modal-close" onClick={() => setEditing(false)}>
+                <X size={16} />
               </button>
             </div>
 
             <label>Full Name</label>
-            <div className="bp-edit-input">
-              <User size={16} />
-              <input
-                value={form.full_name}
-                onChange={(e) => setForm({ ...form, full_name: e.target.value })}
-                placeholder="Your full name"
-              />
+            <div className="pf-modal-input">
+              <User size={15} />
+              <input value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} placeholder="Your full name" />
             </div>
 
             <label>Email Address</label>
-            <div className="bp-edit-input">
-              <Mail size={16} />
-              <input
-                type="email"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                placeholder="you@gmail.com"
-              />
+            <div className="pf-modal-input">
+              <Mail size={15} />
+              <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="you@gmail.com" />
             </div>
 
             <label>Phone Number</label>
-            <div className="bp-edit-input">
-              <Phone size={16} />
-              <input
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                placeholder="012 345 678"
-              />
+            <div className="pf-modal-input">
+              <Phone size={15} />
+              <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="012 345 678" />
             </div>
 
-            <p className="bp-edit-hint">
-              This info will be used to auto-fill your passenger details when
-              booking a ticket.
+            <p className="pf-modal-hint">
+              This info auto-fills your passenger details when booking a ticket.
             </p>
 
-            <button className="bp-edit-save" type="submit" disabled={saving}>
-              <Save size={16} />
+            <button className="pf-modal-save" type="submit" disabled={saving}>
+              <Save size={15} />
               {saving ? "Saving…" : "Save Changes"}
             </button>
           </form>
@@ -269,12 +203,14 @@ export default function Profile() {
   );
 }
 
-function InfoCard({ icon, label, value, delay }) {
+function InfoCard({ icon, label, value }) {
   return (
-    <div className={`bp-info-card bp-anim ${delay}`}>
-      <div className="bp-info-icon">{icon}</div>
-      <span>{label}</span>
-      <b>{value}</b>
+    <div className="pf-info-card">
+      <div className="pf-info-icon">{icon}</div>
+      <div>
+        <span>{label}</span>
+        <b>{value}</b>
+      </div>
     </div>
   );
 }
