@@ -82,14 +82,14 @@ export default function Header() {
             {token && <NotificationBell />}
 
             {/* Language toggle */}
-            <button className="lang-toggle desktop-lang" onClick={toggleLang}>
+            {/* <button className="lang-toggle desktop-lang" onClick={toggleLang}>
               <img
                 src={lang === "en" ? "https://flagcdn.com/w40/kh.png" : "https://flagcdn.com/w40/gb.png"}
                 alt={lang === "en" ? "KH" : "EN"}
                 className="lang-flag-img"
               />
               <span className="lang-label">{lang === "en" ? "KH" : "EN"}</span>
-            </button>
+            </button> */}
 
             {/* Profile / Login */}
             {token ? (
