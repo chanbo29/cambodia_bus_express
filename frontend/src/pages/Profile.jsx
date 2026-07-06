@@ -6,6 +6,7 @@ import {
   DollarSign, UserCircle, ArrowRight
 } from "lucide-react";
 import { getMyProfile, updateMyProfile } from "../services/booking";
+import API from "../services/api";
 import "./Profile.css";
 
 export default function Profile() {
@@ -16,6 +17,8 @@ export default function Profile() {
   const [form, setForm]       = useState({ full_name: "", email: "", phone: "" });
   const [photo, setPhoto]     = useState(null);
   const [mounted, setMounted] = useState(false);
+  const [totalTrips, setTotalTrips]   = useState(null);
+  const [totalSpent, setTotalSpent]   = useState(null);
   const navigate = useNavigate();
 
   const photoKey = (p) =>
@@ -39,6 +42,44 @@ export default function Profile() {
       .catch(console.log)
       .finally(() => setLoading(false));
   };
+
+  // Fetch user's own bookings to compute real stats
+  useEffect(() => {
+    API.get("/my-bookings/")
+      .then((res) => {
+        const bookings = Array.isArray(res.data) ? res.data : [];
+        setTotalTrips(bookings.length);
+        const spent = bookings.reduce(
+          (sum, b) => sum + Number(b.total_price || 0), 0
+        );
+        setTotalSpent(spent.toFixed(2));
+      })
+      .catch(() => {
+        // fallback: try /bookings/ filtered by current user
+        API.get("/bookings/")
+          .then((res) => {
+            const user = JSON.parse(localStorage.getItem("user") || "null");
+            const all  = Array.isArray(res.data) ? res.data : [];
+            const mine = user
+              ? all.filter(
+                  (b) =>
+                    b.user === user.id ||
+                    b.username === user.username ||
+                    b.email === user.email
+                )
+              : all;
+            setTotalTrips(mine.length);
+            const spent = mine.reduce(
+              (sum, b) => sum + Number(b.total_price || 0), 0
+            );
+            setTotalSpent(spent.toFixed(2));
+          })
+          .catch(() => {
+            setTotalTrips(0);
+            setTotalSpent("0.00");
+          });
+      });
+  }, []);
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -207,9 +248,21 @@ export default function Profile() {
             {/* Stat cards */}
             <div className="pf-stats-row">
               {[
-                { icon: <Ticket size={22} />,      label: "Total Trips",   value: "—"  },
-                { icon: <Calendar size={22} />,    label: "Member Since",  value: String(joinedYear) },
-                { icon: <DollarSign size={22} />,  label: "Total Spent",   value: "—"  },
+                {
+                  icon:  <Ticket size={22} />,
+                  label: "Total Trips",
+                  value: totalTrips === null ? "…" : String(totalTrips),
+                },
+                {
+                  icon:  <Calendar size={22} />,
+                  label: "Member Since",
+                  value: String(joinedYear),
+                },
+                {
+                  icon:  <DollarSign size={22} />,
+                  label: "Total Spent",
+                  value: totalSpent === null ? "…" : `$${totalSpent}`,
+                },
               ].map(({ icon, label, value }, i) => (
                 <div
                   key={label}
