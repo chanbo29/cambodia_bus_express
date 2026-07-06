@@ -11,7 +11,6 @@ import Branch from "../pages/Branch";
 import About from "../pages/About";
 import FAQ from "../pages/FAQ";
 
-import AnnouncementsPage from "../admin/AnnouncementsPage";
 import AdminDashboard from "../admin/Dashboard";
 import ManageBookings from "../admin/ManageBookings";
 import ManageBuses from "../admin/ManageBuses";
@@ -38,9 +37,6 @@ export default function AppRoutes() {
 
       {/* Old contact page was replaced by FAQ — redirect any stray links,
           bookmarks, or browser history pointing at /contact */}
-      <Route path="/admin-dashboard/announcements" element={
-        <AdminRoute><AnnouncementsPage /></AdminRoute>
-      } />
       <Route path="/contact" element={<Navigate to="/faq" replace />} />
 
       {/* Logged-in user pages */}

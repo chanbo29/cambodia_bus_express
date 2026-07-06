@@ -21,7 +21,6 @@ import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 import "./Dashboard.css";
 import "./ManageBookings.css";
-import AdminSidebar from "../components/AdminSidebar";
 
 function getCambodiaNow() {
   const str = new Date().toLocaleString("en-US", {
@@ -183,7 +182,6 @@ export default function ManageBookings() {
 
   return (
     <div className="admin-page">
-      <AdminSidebar />
       <aside className="admin-sidebar">
         <div className="admin-logo">
           <div>

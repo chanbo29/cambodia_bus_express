@@ -17,7 +17,6 @@ import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 import "./Dashboard.css";
 import "./Reports.css";
-import AdminSidebar from "../components/AdminSidebar";
 
 const MONTH_NAMES = [
   "January", "February", "March", "April", "May", "June",
@@ -135,7 +134,6 @@ export default function Reports() {
 
   return (
     <div className="admin-page">
-      <AdminSidebar />
       <aside className="admin-sidebar">
         <div className="admin-logo">
           <div>
