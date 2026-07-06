@@ -20,6 +20,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 import "./Dashboard.css";
+import AdminSidebar from "../components/AdminSidebar";
 
 
 const CITIES = [
@@ -279,6 +280,7 @@ export default function ManageRoutes() {
 
   return (
     <div className="admin-page">
+      <AdminSidebar />
       <aside className="admin-sidebar">
         <div className="admin-logo">
           <div>
