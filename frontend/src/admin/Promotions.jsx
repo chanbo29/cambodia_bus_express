@@ -1,230 +1,93 @@
 import { useEffect, useState } from "react";
 import {
-  Tag,
-  Plus,
-  Trash2,
-  Pencil,
-  X,
-  Save,
-  Percent,
-  Bus,
-  MapPin,
-  Ticket,
-  Users,
-  FileBarChart,
-  ClipboardCheck,
+  Tag, Trash2, Pencil, X, Save, Percent,
+  Bus, MapPin, Ticket, FileBarChart, ClipboardCheck, Megaphone,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
 import "./Dashboard.css";
 import "./Promotions.css";
 
-
-const emptyForm = {
-  code: "",
-  description: "",
-  discount_percent: "",
-  max_uses: "",
-  active: true,
-};
+const emptyForm = { code:"", description:"", discount_percent:"", max_uses:"", active:true };
 
 export default function Promotions() {
   const navigate = useNavigate();
-
   const [promotions, setPromotions] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading]       = useState(true);
+  const [form, setForm]             = useState(emptyForm);
+  const [editId, setEditId]         = useState(null);
 
-  const [form, setForm] = useState(emptyForm);
-  const [editId, setEditId] = useState(null);
-
-  useEffect(() => {
-    fetchPromotions();
-  }, []);
+  useEffect(() => { fetchPromotions(); }, []);
 
   const fetchPromotions = () => {
     setLoading(true);
-    API.get("/promotions/")
-      .then((res) => setPromotions(Array.isArray(res.data) ? res.data : []))
-      .catch((err) => console.log(err))
-      .finally(() => setLoading(false));
+    API.get("/promotions/").then((res) => setPromotions(Array.isArray(res.data) ? res.data : [])).catch(console.log).finally(() => setLoading(false));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!form.code || !form.discount_percent) {
-      alert("Please fill in code and discount");
-      return;
-    }
-
-    const payload = {
-      code: form.code.toUpperCase(),
-      description: form.description,
-      discount_percent: Number(form.discount_percent),
-      max_uses: form.max_uses ? Number(form.max_uses) : null,
-      active: form.active,
-    };
-
+    if (!form.code || !form.discount_percent) { alert("Please fill in code and discount"); return; }
+    const payload = { code:form.code.toUpperCase(), description:form.description, discount_percent:Number(form.discount_percent), max_uses:form.max_uses?Number(form.max_uses):null, active:form.active };
     try {
-      if (editId) {
-        await API.put(`/promotions/${editId}/`, payload);
-      } else {
-        await API.post("/promotions/", payload);
-      }
-
-      setForm(emptyForm);
-      setEditId(null);
-      fetchPromotions();
-    } catch (err) {
-      alert(
-        "Failed to save: " +
-          (err.response?.data ? JSON.stringify(err.response.data) : "Unknown error")
-      );
-    }
+      if (editId) await API.put(`/promotions/${editId}/`, payload);
+      else await API.post("/promotions/", payload);
+      setForm(emptyForm); setEditId(null); fetchPromotions();
+    } catch (err) { alert("Failed to save: " + (err.response?.data ? JSON.stringify(err.response.data) : "Unknown error")); }
   };
 
   const handleEdit = (promo) => {
     setEditId(promo.id);
-    setForm({
-      code: promo.code,
-      description: promo.description || "",
-      discount_percent: promo.discount_percent,
-      max_uses: promo.max_uses ?? "",
-      active: promo.active,
-    });
+    setForm({ code:promo.code, description:promo.description||"", discount_percent:promo.discount_percent, max_uses:promo.max_uses??"", active:promo.active });
   };
 
   const handleDelete = async (id) => {
     if (!confirm("Delete this promotion?")) return;
-    try {
-      await API.delete(`/promotions/${id}/`);
-      fetchPromotions();
-    } catch (err) {
-      alert("Failed to delete promotion");
-    }
+    try { await API.delete(`/promotions/${id}/`); fetchPromotions(); }
+    catch { alert("Failed to delete promotion"); }
   };
 
   const toggleActive = async (promo) => {
-    try {
-      await API.patch(`/promotions/${promo.id}/`, { active: !promo.active });
-      fetchPromotions();
-    } catch (err) {
-      alert("Failed to update promotion");
-    }
+    try { await API.patch(`/promotions/${promo.id}/`, { active: !promo.active }); fetchPromotions(); }
+    catch { alert("Failed to update promotion"); }
   };
 
-  const cancelEdit = () => {
-    setEditId(null);
-    setForm(emptyForm);
-  };
+  const cancelEdit = () => { setEditId(null); setForm(emptyForm); };
 
   return (
     <div className="admin-page">
       <aside className="admin-sidebar">
         <div className="admin-logo">
-          <div>
-            <Bus size={32} />
-          </div>
-          <section>
-            <h2>Cambodia Bus</h2>
-            <p>Admin Panel</p>
-          </section>
+          <div><Bus size={32} /></div>
+          <section><h2>Cambodia Bus</h2><p>Admin Panel</p></section>
         </div>
-
         <nav>
-          <a onClick={() => navigate("/admin-dashboard")}>
-            <Bus size={20} /> Dashboard
-          </a>
-          <a onClick={() => navigate("/admin-dashboard/routes")}>
-            <MapPin size={20} /> Routes
-          </a>
-          <a onClick={() => navigate("/admin-dashboard/bookings")}>
-            <Ticket size={20} /> Bookings
-          </a>
-          <a onClick={() => navigate("/admin-dashboard/checkin")}>
-            <ClipboardCheck size={20} /> Check-In
-          </a>
-          {/* <a onClick={() => navigate("/admin-dashboard/users")}>
-            <Users size={20} /> Users
-          </a> */}
-          <a className="active">
-            <Tag size={20} /> Promotions
-          </a>
-          <a onClick={() => navigate("/admin-dashboard/reports")}>
-            <FileBarChart size={20} /> Reports
-          </a>
-          
+          <a onClick={() => navigate("/admin-dashboard")}><Bus size={20} /> Dashboard</a>
+          <a onClick={() => navigate("/admin-dashboard/routes")}><MapPin size={20} /> Routes</a>
+          <a onClick={() => navigate("/admin-dashboard/bookings")}><Ticket size={20} /> Bookings</a>
+          <a onClick={() => navigate("/admin-dashboard/checkin")}><ClipboardCheck size={20} /> Check-In</a>
+          <a className="active"><Tag size={20} /> Promotions</a>
+          <a onClick={() => navigate("/admin-dashboard/reports")}><FileBarChart size={20} /> Reports</a>
+          <a onClick={() => navigate("/admin-dashboard/announcements")}><Megaphone size={20} /> Announcements</a>
         </nav>
       </aside>
 
       <main className="admin-main promo-page">
         <header className="promo-header">
-          <h1>
-            <Tag size={22} />
-            Promotions & Discount Codes
-          </h1>
+          <h1><Tag size={22} />Promotions & Discount Codes</h1>
           <p>Create and manage discount codes for customers.</p>
         </header>
 
         <section className="promo-form-card">
           <div className="promo-card-title">
             <h2>{editId ? "Update Promotion" : "Add New Promotion"}</h2>
-            {editId && (
-              <button className="promo-cancel-btn" onClick={cancelEdit}>
-                <X size={15} />
-                Cancel
-              </button>
-            )}
+            {editId && <button className="promo-cancel-btn" onClick={cancelEdit}><X size={15} />Cancel</button>}
           </div>
-
           <form className="promo-form" onSubmit={handleSubmit}>
-            <div>
-              <label>Promo Code *</label>
-              <input
-                value={form.code}
-                onChange={(e) =>
-                  setForm({ ...form, code: e.target.value.toUpperCase() })
-                }
-                placeholder="WELCOME10"
-              />
-            </div>
-
-            <div>
-              <label>Description</label>
-              <input
-                value={form.description}
-                onChange={(e) => setForm({ ...form, description: e.target.value })}
-                placeholder="10% off for new customers"
-              />
-            </div>
-
-            <div>
-              <label>Discount (%) *</label>
-              <input
-                type="number"
-                value={form.discount_percent}
-                onChange={(e) =>
-                  setForm({ ...form, discount_percent: e.target.value })
-                }
-                placeholder="10"
-              />
-            </div>
-
-            <div>
-              <label>Usage Limit</label>
-              <input
-                type="number"
-                min="1"
-                value={form.max_uses}
-                onChange={(e) => setForm({ ...form, max_uses: e.target.value })}
-                placeholder="Leave blank for unlimited"
-              />
-            </div>
-
-            <button className="promo-save-btn" type="submit">
-              <Save size={17} />
-              {editId ? "Update" : "Add Promotion"}
-            </button>
+            <div><label>Promo Code *</label><input value={form.code} onChange={(e) => setForm({...form,code:e.target.value.toUpperCase()})} placeholder="WELCOME10" /></div>
+            <div><label>Description</label><input value={form.description} onChange={(e) => setForm({...form,description:e.target.value})} placeholder="10% off for new customers" /></div>
+            <div><label>Discount (%) *</label><input type="number" value={form.discount_percent} onChange={(e) => setForm({...form,discount_percent:e.target.value})} placeholder="10" /></div>
+            <div><label>Usage Limit</label><input type="number" min="1" value={form.max_uses} onChange={(e) => setForm({...form,max_uses:e.target.value})} placeholder="Leave blank for unlimited" /></div>
+            <button className="promo-save-btn" type="submit"><Save size={17} />{editId ? "Update" : "Add Promotion"}</button>
           </form>
         </section>
 
@@ -233,46 +96,23 @@ export default function Promotions() {
             <h2>All Promotions</h2>
             <p>{loading ? "Loading..." : `${promotions.length} code(s)`}</p>
           </div>
-
           <div className="promo-grid">
             {promotions.map((promo) => (
-              <div
-                className={`promo-tile ${!promo.active ? "inactive" : ""}`}
-                key={promo.id}
-              >
+              <div className={`promo-tile ${!promo.active ? "inactive" : ""}`} key={promo.id}>
                 <div className="promo-tile-top">
                   <span className="promo-code">{promo.code}</span>
-                  <span className="promo-discount">
-                    <Percent size={13} />
-                    {promo.discount_percent}%
-                  </span>
+                  <span className="promo-discount"><Percent size={13} />{promo.discount_percent}%</span>
                 </div>
-
                 <p className="promo-desc">{promo.description || "No description"}</p>
-
-                <p className="promo-usage-limit">
-                  {promo.max_uses
-                    ? `Limit: ${promo.max_uses} use(s) total`
-                    : "Unlimited uses"}
-                </p>
-
+                <p className="promo-usage-limit">{promo.max_uses ? `Limit: ${promo.max_uses} use(s) total` : "Unlimited uses"}</p>
                 <div className="promo-tile-actions">
-                  <button onClick={() => toggleActive(promo)}>
-                    {promo.active ? "Deactivate" : "Activate"}
-                  </button>
-                  <button onClick={() => handleEdit(promo)}>
-                    <Pencil size={14} />
-                  </button>
-                  <button className="danger" onClick={() => handleDelete(promo.id)}>
-                    <Trash2 size={14} />
-                  </button>
+                  <button onClick={() => toggleActive(promo)}>{promo.active ? "Deactivate" : "Activate"}</button>
+                  <button onClick={() => handleEdit(promo)}><Pencil size={14} /></button>
+                  <button className="danger" onClick={() => handleDelete(promo.id)}><Trash2 size={14} /></button>
                 </div>
               </div>
             ))}
-
-            {!loading && promotions.length === 0 && (
-              <p className="promo-empty">No promotions created yet.</p>
-            )}
+            {!loading && promotions.length === 0 && <p className="promo-empty">No promotions created yet.</p>}
           </div>
         </section>
       </main>
