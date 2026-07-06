@@ -428,3 +428,91 @@ class StaffWorkRecordViewSet(viewsets.ModelViewSet):
         if date:
             qs = qs.filter(date=date)
         return qs
+    
+import datetime
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def public_staff_list(request):
+    """GET /api/public/staff/ — list all staff (no auth needed)"""
+    staff = Staff.objects.all().order_by("name")
+    data  = [{"id":s.id,"name":s.name,"role":s.role,"barcode":s.barcode} for s in staff]
+    return Response(data)
+ 
+ 
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def public_staff_records(request):
+    """GET /api/public/staff-records/?date=2026-07-06 — today's records (no auth)"""
+    date = request.query_params.get("date", str(datetime.date.today()))
+    records = StaffWorkRecord.objects.filter(date=date)
+    data = [{
+        "id":            r.id,
+        "staff":         r.staff_id,
+        "date":          str(r.date),
+        "check_in_time": str(r.check_in_time)  if r.check_in_time  else None,
+        "check_out_time":str(r.check_out_time) if r.check_out_time else None,
+    } for r in records]
+    return Response(data)
+ 
+ 
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def public_staff_checkin(request):
+    """POST /api/public/staff-checkin/ — check in (no auth needed)"""
+    staff_id      = request.data.get("staff")
+    date          = request.data.get("date")
+    check_in_time = request.data.get("check_in_time")
+ 
+    if not all([staff_id, date, check_in_time]):
+        return Response({"error": "staff, date and check_in_time required"}, status=400)
+ 
+    try:
+        staff = Staff.objects.get(id=staff_id)
+    except Staff.DoesNotExist:
+        return Response({"error": "Staff not found"}, status=404)
+ 
+    record, created = StaffWorkRecord.objects.get_or_create(
+        staff=staff, date=date,
+        defaults={"check_in_time": check_in_time}
+    )
+ 
+    if not created and record.check_in_time and not record.check_out_time:
+        return Response({"error": "Already checked in"}, status=400)
+ 
+    if not created and not record.check_in_time:
+        record.check_in_time = check_in_time
+        record.save()
+ 
+    return Response({
+        "id":            record.id,
+        "staff":         record.staff_id,
+        "date":          str(record.date),
+        "check_in_time": str(record.check_in_time)  if record.check_in_time  else None,
+        "check_out_time":str(record.check_out_time) if record.check_out_time else None,
+    })
+ 
+ 
+@api_view(["PATCH"])
+@permission_classes([AllowAny])
+def public_staff_checkout(request, record_id):
+    """PATCH /api/public/staff-checkout/<id>/ — check out (no auth needed)"""
+    check_out_time = request.data.get("check_out_time")
+    if not check_out_time:
+        return Response({"error": "check_out_time required"}, status=400)
+ 
+    try:
+        record = StaffWorkRecord.objects.get(id=record_id)
+    except StaffWorkRecord.DoesNotExist:
+        return Response({"error": "Record not found"}, status=404)
+ 
+    record.check_out_time = check_out_time
+    record.save()
+ 
+    return Response({
+        "id":            record.id,
+        "staff":         record.staff_id,
+        "date":          str(record.date),
+        "check_in_time": str(record.check_in_time)  if record.check_in_time  else None,
+        "check_out_time":str(record.check_out_time) if record.check_out_time else None,
+    })
