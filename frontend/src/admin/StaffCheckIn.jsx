@@ -5,7 +5,7 @@ import {
   Clock, CheckCircle2, LogOut, AlertTriangle,
   UserPlus, Trash2, X, Delete, Pencil,
   Download, Printer, Link, BarChart2,
-  ChevronRight, Calendar, TrendingUp,
+  ChevronRight, Calendar, TrendingUp, Table2,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import * as XLSX from "xlsx";
@@ -397,7 +397,7 @@ export default function StaffCheckIn() {
               </div>
               <div className="sci-header-right">
                 <button className="mb-export-btn excel" onClick={handleExcelExport} disabled={exporting||loading}>
-                  <FileSpreadsheet size={15}/>{exporting?"…":"Excel"}
+                  <Table2 size={15}/>{exporting?"…":"Excel"}
                 </button>
               </div>
             </header>
