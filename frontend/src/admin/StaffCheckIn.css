@@ -415,3 +415,125 @@
   .sci-staff-grid { grid-template-columns: 1fr; }
   .pin-btn { height: 48px; font-size: 18px; }
 }
+
+/* ── QR section in scan card ──────────────── */
+.sci-qr-section {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: center;
+  text-align: left;
+}
+
+.sci-qr-left h2 { font-size: 20px; font-weight: 700; color: #04342C; margin: 0 0 8px; }
+.sci-qr-left p  { font-size: 14px; color: #62716b; margin: 0 0 14px; line-height: 1.6; }
+
+.sci-qr-url-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f4faf7;
+  border: 1px solid #e0ece6;
+  border-radius: 9px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.sci-qr-url-row code {
+  font-size: 12px;
+  color: #04342C;
+  flex: 1;
+  word-break: break-all;
+}
+
+.sci-copy-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #04342C;
+  color: #9FE1CB;
+  border: none;
+  border-radius: 7px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+.sci-copy-btn:hover { background: #085041; }
+
+.sci-qr-btn-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.sci-qr-action {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 16px;
+  border-radius: 9px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+
+.sci-qr-action.download {
+  background: #04342C;
+  color: #9FE1CB;
+  border: none;
+}
+.sci-qr-action.download:hover { background: #085041; }
+
+.sci-qr-action.print {
+  background: #fff;
+  color: #04342C;
+  border: 1.5px solid #e0ece6;
+}
+.sci-qr-action.print:hover { border-color: #9FE1CB; background: #f4faf7; }
+
+/* QR print card */
+.sci-qr-right { flex-shrink: 0; }
+
+.sci-qr-print-card {
+  border: 2.5px solid #04342C;
+  border-radius: 16px;
+  padding: 18px 18px 14px;
+  text-align: center;
+  width: 190px;
+  position: relative;
+  overflow: hidden;
+}
+
+.sci-qr-print-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg,#04342C,#1D9E75,#9FE1CB);
+}
+
+.sci-qr-print-card img {
+  width: 155px;
+  height: 155px;
+  display: block;
+  margin: 0 auto 10px;
+  border-radius: 6px;
+}
+
+.sci-qr-brand     { font-size: 12px; font-weight: 700; color: #04342C; margin-bottom: 3px; }
+.sci-qr-brand-sub { font-size: 11px; color: #62716b; }
+
+@media (max-width: 700px) {
+  .sci-qr-section { grid-template-columns: 1fr; }
+  .sci-qr-right   { display: flex; justify-content: center; }
+  .sci-qr-btn-row { flex-direction: column; }
+  .sci-qr-action  { width: 100%; justify-content: center; }
+}
