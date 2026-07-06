@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
-import { CheckCircle2, LogOut, Clock, MapPin, Lock, AlertTriangle } from "lucide-react";
+import {
+  CheckCircle2, LogOut, Clock,
+  MapPin, Lock, AlertTriangle, Delete,
+} from "lucide-react";
 import "./StaffScan.css";
 
-// ── CONFIG — change these to your office location ─────────────
+// ── CONFIG ─────────────────────────────────────────────────────
 const OFFICE = {
-  lat:    11.5831,   // ← your office latitude
-  lng:    104.8808,  // ← your office longitude
-  radius: 50,       // ← metres allowed from office
+  lat:    11.5830,   // ← your office latitude
+  lng:    104.8779,  // ← your office longitude
+  radius: 100,       // ← metres allowed from office
 };
-// ── Time windows ───────────────────────────────────────────────
 const WINDOWS = {
-  checkin:  { start: { h: 6,  m: 0  }, end: { h: 9,  m: 30 } }, // 6:00–9:30 AM
-  checkout: { start: { h: 15, m: 0  }, end: { h: 21, m: 0  } }, // 3:00–9:00 PM
+  checkin:  { start: { h: 6,  m: 0 }, end: { h: 9,  m: 30 } },
+  checkout: { start: { h: 15, m: 0 }, end: { h: 21, m: 0  } },
 };
-
 const WORK_START = { hour: 8, minute: 0 };
 const BASE = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+const PIN_KEYS = ["1","2","3","4","5","6","7","8","9","clear","0","del"];
 
 // ── Helpers ────────────────────────────────────────────────────
 function getCambodiaDate() {
@@ -28,95 +30,70 @@ function getCambodiaTime() {
   });
 }
 function getCambodiaHM() {
-  const t = getCambodiaTime();
-  const [h, m] = t.split(":").map(Number);
+  const [h, m] = getCambodiaTime().split(":").map(Number);
   return { h, m, total: h * 60 + m };
 }
-
-function inWindow(window) {
+function inWindow(w) {
   const { total } = getCambodiaHM();
-  const start = window.start.h * 60 + window.start.m;
-  const end   = window.end.h   * 60 + window.end.m;
-  return total >= start && total <= end;
+  return total >= w.start.h * 60 + w.start.m && total <= w.end.h * 60 + w.end.m;
 }
-
-function fmtWindow(w) {
-  const fmt = ({ h, m }) =>
-    `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
-  return `${fmt(w.start)} – ${fmt(w.end)}`;
+function fmtW(w) {
+  const f = ({ h, m }) => `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}`;
+  return `${f(w.start)} – ${f(w.end)}`;
 }
-
-// Haversine distance in metres between two GPS coords
 function distanceMetres(lat1, lng1, lat2, lng2) {
-  const R  = 6371000;
-  const dL = (lat2 - lat1) * Math.PI / 180;
-  const dl  = (lng2 - lng1) * Math.PI / 180;
-  const a  =
-    Math.sin(dL / 2) ** 2 +
-    Math.cos(lat1 * Math.PI / 180) *
-    Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dl / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const R = 6371000, dL = (lat2-lat1)*Math.PI/180, dl = (lng2-lng1)*Math.PI/180;
+  const a = Math.sin(dL/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dl/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 }
-
 function getArrivalStatus(t) {
   if (!t) return null;
   const [h, m] = t.split(":").map(Number);
-  const diff = h * 60 + m - (WORK_START.hour * 60 + WORK_START.minute);
-  if (diff <= 0)   return { level:"great",    emoji:"🎉", title:"Good Job!",         msg:"You arrived on time! Keep it up!",           color:"#1D9E75" };
-  if (diff <= 5)   return { level:"careful",  emoji:"⚠️",  title:"Be Careful!",       msg:`${diff} min late. Try to be on time.`,       color:"#d97706" };
-  if (diff <= 30)  return { level:"warning",  emoji:"😬", title:"Warning!",           msg:`${diff} mins late. Being noted.`,            color:"#ea580c" };
-  if (diff <= 120) return { level:"boss",     emoji:"👀", title:"Boss is Watching!",  msg:`${diff} mins late! See your supervisor.`,    color:"#dc2626" };
-  return             { level:"critical", emoji:"🆘", title:"Very Late!",          msg:`${Math.floor(diff/60)}h ${diff%60}m late!`, color:"#7f1d1d" };
+  const diff = h*60+m - (WORK_START.hour*60+WORK_START.minute);
+  if (diff <= 0)   return { level:"great",    emoji:"🎉", title:"Good Job!",         msg:"You arrived on time! Keep it up!",         color:"#1D9E75" };
+  if (diff <= 5)   return { level:"careful",  emoji:"⚠️",  title:"Be Careful!",       msg:`${diff} min late. Try to be on time.`,     color:"#d97706" };
+  if (diff <= 30)  return { level:"warning",  emoji:"😬", title:"Warning!",           msg:`${diff} mins late. Being noted.`,          color:"#ea580c" };
+  if (diff <= 120) return { level:"boss",     emoji:"👀", title:"Boss is Watching!",  msg:`${diff} mins late! See your supervisor.`,  color:"#dc2626" };
+  return             { level:"critical", emoji:"🆘", title:"Very Late!",          msg:`${Math.floor(diff/60)}h ${diff%60}m late!`,color:"#7f1d1d" };
 }
-
-async function apiFetch(path, options = {}) {
+async function apiFetch(path, opts = {}) {
   const res = await fetch(`${BASE}${path}`, {
-    headers: { "Content-Type": "application/json" },
-    ...options,
+    headers: { "Content-Type": "application/json" }, ...opts,
   });
   if (!res.ok) throw new Error(await res.text());
   return res.json();
 }
 
-// GPS states: "checking" | "allowed" | "denied" | "far" | "error"
+// ── Main component ─────────────────────────────────────────────
 export default function StaffScan() {
-  const [staffList, setStaffList] = useState([]);
-  const [records, setRecords]     = useState([]);
-  const [loading, setLoading]     = useState(true);
-  const [clock, setClock]         = useState(getCambodiaTime());
+  const [staffList, setStaffList]   = useState([]);
+  const [records, setRecords]       = useState([]);
+  const [loading, setLoading]       = useState(true);
+  const [clock, setClock]           = useState(getCambodiaTime());
+  const [gpsState, setGpsState]     = useState("checking");
+  const [gpsDist, setGpsDist]       = useState(null);
+  const [timeState, setTimeState]   = useState(null);
 
-  // GPS
-  const [gpsState, setGpsState]     = useState("checking"); // checking|allowed|denied|far|error
-  const [gpsDistance, setGpsDistance] = useState(null);
-
-  // Time window
-  const [timeState, setTimeState]   = useState(null); // null|"checkin_ok"|"checkout_ok"|"locked"
-
-  // Steps
+  // Steps: select → pin → result
   const [step, setStep]                   = useState("select");
   const [selectedStaff, setSelectedStaff] = useState(null);
   const [actionType, setActionType]       = useState(null);
   const [result, setResult]               = useState(null);
   const [processing, setProcessing]       = useState(false);
 
-  // Clock tick
+  // PIN
+  const [pin, setPin]         = useState("");
+  const [pinError, setPinError] = useState("");
+  const [pinShake, setPinShake] = useState(false);
+
   useEffect(() => {
-    const t = setInterval(() => {
-      setClock(getCambodiaTime());
-      checkTimeWindow();
-    }, 1000);
+    const t = setInterval(() => { setClock(getCambodiaTime()); updateTimeState(); }, 1000);
     return () => clearInterval(t);
   }, []);
 
-  // GPS check on mount
-  useEffect(() => {
-    checkGPS();
-    checkTimeWindow();
-    fetchAll();
-  }, []);
+  useEffect(() => { checkGPS(); updateTimeState(); fetchAll(); }, []);
 
-  const checkTimeWindow = () => {
+  const updateTimeState = () => {
     if (inWindow(WINDOWS.checkin))       setTimeState("checkin_ok");
     else if (inWindow(WINDOWS.checkout)) setTimeState("checkout_ok");
     else                                 setTimeState("locked");
@@ -124,21 +101,14 @@ export default function StaffScan() {
 
   const checkGPS = () => {
     setGpsState("checking");
-    if (!navigator.geolocation) {
-      setGpsState("error"); return;
-    }
+    if (!navigator.geolocation) { setGpsState("error"); return; }
     navigator.geolocation.getCurrentPosition(
       (pos) => {
-        const dist = Math.round(
-          distanceMetres(pos.coords.latitude, pos.coords.longitude, OFFICE.lat, OFFICE.lng)
-        );
-        setGpsDistance(dist);
-        setGpsState(dist <= OFFICE.radius ? "allowed" : "far");
+        const d = Math.round(distanceMetres(pos.coords.latitude, pos.coords.longitude, OFFICE.lat, OFFICE.lng));
+        setGpsDist(d);
+        setGpsState(d <= OFFICE.radius ? "allowed" : "far");
       },
-      (err) => {
-        if (err.code === 1) setGpsState("denied");
-        else                setGpsState("error");
-      },
+      (err) => setGpsState(err.code === 1 ? "denied" : "error"),
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   };
@@ -146,7 +116,7 @@ export default function StaffScan() {
   const fetchAll = async () => {
     setLoading(true);
     try {
-      const today  = getCambodiaDate();
+      const today = getCambodiaDate();
       const [s, r] = await Promise.all([
         apiFetch("/public/staff/"),
         apiFetch(`/public/staff-records/?date=${today}`),
@@ -157,7 +127,7 @@ export default function StaffScan() {
     finally { setLoading(false); }
   };
 
-  const getStaffStatus = (staff) => {
+  const getStatus = (staff) => {
     const rec = records.find((r) => r.staff === staff.id && r.date === getCambodiaDate());
     if (!rec)               return "absent";
     if (!rec.check_out_time) return "in";
@@ -166,19 +136,38 @@ export default function StaffScan() {
   const todayRec = (staff) =>
     records.find((r) => r.staff === staff.id && r.date === getCambodiaDate());
 
+  // Select name → go to PIN step
   const handleSelectStaff = (staff) => {
     const rec = todayRec(staff);
     setSelectedStaff(staff);
-    if (rec && !rec.check_out_time)  setActionType("checkout");
-    else if (rec?.check_out_time)   { setResult({ type:"already", record:rec }); setStep("result"); return; }
-    else                             setActionType("checkin");
-    setStep("confirm");
+    setPin(""); setPinError("");
+    if (rec && !rec.check_out_time)     setActionType("checkout");
+    else if (rec?.check_out_time)       { setResult({ type:"already", record:rec }); setStep("result"); return; }
+    else                                setActionType("checkin");
+    setStep("pin");
   };
 
-  const handleConfirm = async () => {
+  // PIN pad key handler
+  const handlePinKey = (key) => {
+    setPinError("");
+    if (key === "clear") { setPin(""); return; }
+    if (key === "del")   { setPin((p) => p.slice(0,-1)); return; }
+    if (pin.length >= 4) return;
+    setPin((p) => p + key);
+  };
+
+  // Verify PIN → confirm
+  const handlePinSubmit = async () => {
+    if (pin.length < 4) { setPinError("Please enter all 4 digits."); return; }
+    if (pin !== String(selectedStaff.pin)) {
+      setPinError("❌ Wrong PIN. Try again.");
+      setPinShake(true);
+      setTimeout(() => setPinShake(false), 500);
+      setPin(""); return;
+    }
     setProcessing(true);
     try {
-      const now = getCambodiaTime().slice(0, 5);
+      const now = getCambodiaTime().slice(0,5);
       if (actionType === "checkin") {
         const data = await apiFetch("/public/staff-checkin/", {
           method: "POST",
@@ -193,145 +182,88 @@ export default function StaffScan() {
         });
         setResult({ type:"checkout", record:data });
       }
-      setStep("result");
-      fetchAll();
+      setStep("result"); fetchAll();
     } catch (err) { alert("Failed: " + err.message); }
     finally { setProcessing(false); }
   };
 
   const reset = () => {
     setStep("select"); setSelectedStaff(null);
-    setActionType(null); setResult(null); setProcessing(false);
+    setActionType(null); setResult(null);
+    setPin(""); setPinError(""); setProcessing(false);
   };
 
-  // ── Render blocked states ─────────────────────────────────────
-
-  // GPS checking spinner
-  if (gpsState === "checking") {
-    return (
-      <div className="ss-page">
-        <SsHeader clock={clock}/>
-        <div className="ss-gate">
-          <div className="ss-gate-icon checking">
-            <MapPin size={32}/>
-          </div>
-          <h2>Checking your location…</h2>
-          <p>Please allow location access when your browser asks.</p>
-          <div className="ss-spinner" style={{margin:"16px auto 0"}}/>
-        </div>
+  // ── GPS / time gate screens ───────────────────────────────────
+  if (gpsState === "checking") return (
+    <GatePage clock={clock}>
+      <div className="ss-gate-icon checking"><MapPin size={32}/></div>
+      <h2>Checking your location…</h2>
+      <p>Please allow location access when your browser asks.</p>
+      <div className="ss-spinner" style={{margin:"14px auto 0"}}/>
+    </GatePage>
+  );
+  if (gpsState === "denied") return (
+    <GatePage clock={clock}>
+      <div className="ss-gate-icon blocked"><Lock size={32}/></div>
+      <h2>Location access denied</h2>
+      <p>Enable location access in your browser settings, then try again.</p>
+      <button className="ss-retry-btn" onClick={checkGPS}>Try again</button>
+    </GatePage>
+  );
+  if (gpsState === "far") return (
+    <GatePage clock={clock}>
+      <div className="ss-gate-icon blocked"><MapPin size={32}/></div>
+      <h2>You're not at the office</h2>
+      <p>You are <strong>{gpsDist}m</strong> away. Must be within <strong>{OFFICE.radius}m</strong>.</p>
+      <div className="ss-distance-bar">
+        <div className="ss-distance-fill" style={{width:`${Math.min((OFFICE.radius/gpsDist)*100,100)}%`}}/>
       </div>
-    );
-  }
-
-  // GPS denied
-  if (gpsState === "denied") {
-    return (
-      <div className="ss-page">
-        <SsHeader clock={clock}/>
-        <div className="ss-gate">
-          <div className="ss-gate-icon blocked"><Lock size={32}/></div>
-          <h2>Location access denied</h2>
-          <p>You must allow location access to check in.<br/>Open your browser settings and enable location for this page.</p>
-          <button className="ss-retry-btn" onClick={checkGPS}>Try again</button>
-        </div>
+      <p className="ss-distance-label">{OFFICE.radius}m allowed · {gpsDist}m away</p>
+      <button className="ss-retry-btn" onClick={checkGPS}>Check again</button>
+    </GatePage>
+  );
+  if (gpsState === "error") return (
+    <GatePage clock={clock}>
+      <div className="ss-gate-icon blocked"><AlertTriangle size={32}/></div>
+      <h2>Location unavailable</h2>
+      <p>Make sure GPS is enabled on your device.</p>
+      <button className="ss-retry-btn" onClick={checkGPS}>Try again</button>
+    </GatePage>
+  );
+  if (timeState === "locked") return (
+    <GatePage clock={clock}>
+      <div className="ss-gate-icon locked"><Clock size={32}/></div>
+      <h2>Check-in is closed</h2>
+      <p>Attendance is only open during:</p>
+      <div className="ss-window-list">
+        <div className="ss-window-item"><CheckCircle2 size={15}/> Check-in: <strong>{fmtW(WINDOWS.checkin)}</strong></div>
+        <div className="ss-window-item"><LogOut size={15}/> Check-out: <strong>{fmtW(WINDOWS.checkout)}</strong></div>
       </div>
-    );
-  }
+      <div className="ss-time-now">Current time: {getCambodiaTime().slice(0,5)}</div>
+    </GatePage>
+  );
 
-  // Too far from office
-  if (gpsState === "far") {
-    return (
-      <div className="ss-page">
-        <SsHeader clock={clock}/>
-        <div className="ss-gate">
-          <div className="ss-gate-icon blocked"><MapPin size={32}/></div>
-          <h2>You're not at the office</h2>
-          <p>
-            You are <strong>{gpsDistance}m</strong> from the office.<br/>
-            Check-in is only allowed within <strong>{OFFICE.radius}m</strong> of the workplace.
-          </p>
-          <div className="ss-distance-bar">
-            <div
-              className="ss-distance-fill"
-              style={{ width: `${Math.min((OFFICE.radius / gpsDistance) * 100, 100)}%` }}
-            />
-          </div>
-          <p className="ss-distance-label">
-            {OFFICE.radius}m allowed · {gpsDistance}m away
-          </p>
-          <button className="ss-retry-btn" onClick={checkGPS}>Check again</button>
-        </div>
-      </div>
-    );
-  }
-
-  // GPS error
-  if (gpsState === "error") {
-    return (
-      <div className="ss-page">
-        <SsHeader clock={clock}/>
-        <div className="ss-gate">
-          <div className="ss-gate-icon blocked"><AlertTriangle size={32}/></div>
-          <h2>Location unavailable</h2>
-          <p>Could not get your location. Please make sure GPS is enabled on your device.</p>
-          <button className="ss-retry-btn" onClick={checkGPS}>Try again</button>
-        </div>
-      </div>
-    );
-  }
-
-  // Time window locked
-  if (timeState === "locked") {
-    const now = getCambodiaHM();
-    return (
-      <div className="ss-page">
-        <SsHeader clock={clock}/>
-        <div className="ss-gate">
-          <div className="ss-gate-icon locked"><Clock size={32}/></div>
-          <h2>Check-in is closed</h2>
-          <p>The attendance system is only available during:</p>
-          <div className="ss-window-list">
-            <div className="ss-window-item">
-              <CheckCircle2 size={16}/> Check-in: <strong>{fmtWindow(WINDOWS.checkin)}</strong>
-            </div>
-            <div className="ss-window-item">
-              <LogOut size={16}/> Check-out: <strong>{fmtWindow(WINDOWS.checkout)}</strong>
-            </div>
-          </div>
-          <div className="ss-time-now">Current time: {getCambodiaTime().slice(0,5)}</div>
-        </div>
-      </div>
-    );
-  }
-
-  // ── Main scan UI (GPS ok + time window ok) ────────────────────
+  // ── Main UI ───────────────────────────────────────────────────
   return (
     <div className="ss-page">
-      <SsHeader clock={clock} gpsDistance={gpsDistance} timeState={timeState}/>
+      <Header clock={clock} gpsDist={gpsDist} timeState={timeState}/>
 
-      {/* SELECT NAME */}
+      {/* ── SELECT NAME ── */}
       {step === "select" && (
         <div className="ss-body">
           <div className="ss-title-row">
             <h2>Tap Your Name</h2>
-            <p>
-              {timeState === "checkin_ok"  ? "Select your name to check in" : "Select your name to check out"}
-            </p>
+            <p>{timeState === "checkin_ok" ? "Select your name to check in" : "Select your name to check out"}</p>
           </div>
-
-          {/* GPS + time indicators */}
           <div className="ss-indicators">
-            <div className="ss-indicator ok">
-              <MapPin size={13}/> {gpsDistance}m from office
-            </div>
-            <div className={`ss-indicator ${timeState === "checkin_ok" ? "ok" : "checkout"}`}>
+            <div className="ss-indicator ok"><MapPin size={13}/> {gpsDist}m from office</div>
+            <div className={`ss-indicator ${timeState === "checkin_ok" ? "ok" : "amber"}`}>
               <Clock size={13}/>
               {timeState === "checkin_ok"
-                ? `Check-in open until ${fmtWindow(WINDOWS.checkin).split("–")[1].trim()}`
-                : `Check-out open until ${fmtWindow(WINDOWS.checkout).split("–")[1].trim()}`}
+                ? `Check-in open until ${fmtW(WINDOWS.checkin).split("–")[1].trim()}`
+                : `Check-out open until ${fmtW(WINDOWS.checkout).split("–")[1].trim()}`}
             </div>
           </div>
-
           {loading ? (
             <div className="ss-loading"><div className="ss-spinner"/><span>Loading…</span></div>
           ) : staffList.length === 0 ? (
@@ -339,82 +271,88 @@ export default function StaffScan() {
           ) : (
             <div className="ss-staff-grid">
               {staffList.map((staff) => {
-                const status = getStaffStatus(staff);
-                const rec    = todayRec(staff);
-                // In checkout window, dim already-done and absent staff
+                const status   = getStatus(staff);
+                const rec      = todayRec(staff);
                 const disabled =
                   (timeState === "checkout_ok" && status !== "in") ||
                   (timeState === "checkin_ok"  && status === "out");
                 return (
-                  <button
-                    key={staff.id}
-                    className={`ss-staff-btn ${status} ${disabled ? "disabled" : ""}`}
-                    onClick={() => !disabled && handleSelectStaff(staff)}
-                    disabled={disabled}
-                  >
+                  <button key={staff.id} className={`ss-staff-btn ${status} ${disabled?"disabled":""}`}
+                    onClick={() => !disabled && handleSelectStaff(staff)} disabled={disabled}>
                     <div className="ss-staff-av">{staff.name[0].toUpperCase()}</div>
                     <div className="ss-staff-info">
                       <span className="ss-staff-name">{staff.name}</span>
                       <span className="ss-staff-role">{staff.role}</span>
                     </div>
                     <div className="ss-staff-badge">
-                      {status === "in" && (
-                        <span className="ss-badge in">
-                          <CheckCircle2 size={13}/> In · {rec?.check_in_time?.slice(0,5)}
-                        </span>
-                      )}
-                      {status === "out" && (
-                        <span className="ss-badge out">
-                          <LogOut size={13}/> Done
-                        </span>
-                      )}
-                      {status === "absent" && !disabled && (
-                        <span className="ss-badge absent">
-                          <Clock size={13}/> Tap to check in
-                        </span>
-                      )}
-                      {status === "absent" && disabled && (
-                        <span className="ss-badge out">Not checked in</span>
-                      )}
+                      {status==="in"     && <span className="ss-badge in"><CheckCircle2 size={12}/> In · {rec?.check_in_time?.slice(0,5)}</span>}
+                      {status==="out"    && <span className="ss-badge out"><LogOut size={12}/> Done</span>}
+                      {status==="absent" && !disabled && <span className="ss-badge absent"><Clock size={12}/> Tap to check in</span>}
+                      {status==="absent" && disabled  && <span className="ss-badge out">Not checked in</span>}
                     </div>
                   </button>
                 );
               })}
             </div>
           )}
-
-          <p className="ss-footer-note">
-            {getCambodiaDate()} · Work starts {String(WORK_START.hour).padStart(2,"0")}:{String(WORK_START.minute).padStart(2,"0")} AM
-          </p>
+          <p className="ss-footer-note">{getCambodiaDate()} · Work starts {String(WORK_START.hour).padStart(2,"0")}:{String(WORK_START.minute).padStart(2,"0")} AM</p>
         </div>
       )}
 
-      {/* CONFIRM */}
-      {step === "confirm" && selectedStaff && (
+      {/* ── PIN STEP ── */}
+      {step === "pin" && selectedStaff && (
         <div className="ss-body ss-center">
-          <div className="ss-confirm-card">
-            <div className="ss-confirm-av">{selectedStaff.name[0].toUpperCase()}</div>
+          <div className={`ss-pin-card ${pinShake ? "shake" : ""}`}>
+
+            <div className="ss-pin-av">{selectedStaff.name[0].toUpperCase()}</div>
             <h2>{selectedStaff.name}</h2>
-            <p className="ss-confirm-role">{selectedStaff.role}</p>
-            <div className="ss-confirm-time">{clock}</div>
-            <div className={`ss-confirm-action-label ${actionType}`}>
-              {actionType === "checkin" ? "✅ Check In" : "👋 Check Out"}
+            <p className="ss-pin-role">{selectedStaff.role}</p>
+            <div className="ss-pin-time">{clock}</div>
+
+            <div className={`ss-pin-action ${actionType}`}>
+              {actionType === "checkin" ? "🔐 Enter PIN to Check In" : "🔐 Enter PIN to Check Out"}
             </div>
-            <div className="ss-confirm-btns">
+
+            {/* PIN dots */}
+            <div className="ss-pin-dots">
+              {[0,1,2,3].map((i) => (
+                <div key={i} className={`ss-pin-dot ${i < pin.length ? "filled" : ""}`}/>
+              ))}
+            </div>
+
+            {pinError && <p className="ss-pin-error">{pinError}</p>}
+
+            {/* PIN pad */}
+            <div className="ss-pin-pad">
+              {PIN_KEYS.map((key) => (
+                <button
+                  key={key}
+                  className={`ss-pin-btn ${key==="clear"||key==="del" ? "action":""} ${key==="0"?"zero":""}`}
+                  onClick={() => handlePinKey(key)}
+                >
+                  {key === "clear" ? "Clear" : key === "del" ? <Delete size={18}/> : key}
+                </button>
+              ))}
+            </div>
+
+            <div className="ss-pin-btns">
               <button className="ss-back-btn" onClick={reset}>← Back</button>
               <button
                 className={`ss-confirm-btn ${actionType}`}
-                onClick={handleConfirm}
-                disabled={processing}
+                onClick={handlePinSubmit}
+                disabled={pin.length < 4 || processing}
               >
-                {processing ? "Please wait…" : actionType === "checkin" ? "Confirm Check-In" : "Confirm Check-Out"}
+                {processing ? "Please wait…"
+                  : actionType === "checkin"
+                    ? <><CheckCircle2 size={16}/> Confirm Check-In</>
+                    : <><LogOut size={16}/> Confirm Check-Out</>}
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* RESULT */}
+      {/* ── RESULT ── */}
       {step === "result" && result && selectedStaff && (
         <div className="ss-body ss-center">
           <div className="ss-result-card">
@@ -455,24 +393,32 @@ export default function StaffScan() {
 }
 
 // ── Sub-components ─────────────────────────────────────────────
-function SsHeader({ clock, gpsDistance, timeState }) {
+function Header({ clock, gpsDist, timeState }) {
   return (
     <header className="ss-header">
       <div className="ss-header-logo">
-        <div className="ss-header-bus">🚌</div>
-        <div>
-          <h1>Cambodia Bus Express</h1>
-          <p>Staff attendance system</p>
-        </div>
+        <span className="ss-header-bus">🚌</span>
+        <div><h1>Cambodia Bus Express</h1><p>Staff attendance system</p></div>
       </div>
       <div className="ss-header-right">
-        {gpsDistance != null && (
-          <div className="ss-header-gps">
-            <MapPin size={13}/> {gpsDistance}m
-          </div>
-        )}
+        {gpsDist != null && <div className="ss-header-gps"><MapPin size={13}/> {gpsDist}m</div>}
         <div className="ss-clock">{clock}</div>
       </div>
     </header>
+  );
+}
+
+function GatePage({ clock, children }) {
+  return (
+    <div className="ss-page">
+      <header className="ss-header">
+        <div className="ss-header-logo">
+          <span className="ss-header-bus">🚌</span>
+          <div><h1>Cambodia Bus Express</h1><p>Staff attendance system</p></div>
+        </div>
+        <div className="ss-clock">{clock}</div>
+      </header>
+      <div className="ss-gate">{children}</div>
+    </div>
   );
 }
