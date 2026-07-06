@@ -36,7 +36,11 @@ export default function Profile() {
           email:     data.email     || "",
           phone:     data.phone     || "",
         });
-        setPhoto(localStorage.getItem(photoKey(data)));
+      setPhoto(
+        localStorage.getItem(photoKey(data)) ||
+        localStorage.getItem("profileImage") ||
+        null
+      );
         setTimeout(() => setMounted(true), 60);
       })
       .catch(console.log)
@@ -113,8 +117,13 @@ export default function Profile() {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
+      // Save with user-specific key (profile page)
       localStorage.setItem(photoKey(profile), reader.result);
+      // Also save to generic key so Header picks it up instantly
+      localStorage.setItem("profileImage", reader.result);
       setPhoto(reader.result);
+      // Tell Header to re-render without a page refresh
+      window.dispatchEvent(new Event("profileImageUpdated"));
     };
     reader.readAsDataURL(file);
   };
@@ -209,6 +218,17 @@ export default function Profile() {
 
             {/* Buttons */}
             <div className="pf-left-btns">
+              <button
+                className="pf-left-btn primary"
+                onClick={() => setEditing(true)}
+              >
+                <Pencil size={15} />
+                Edit Profile
+              </button>
+              <Link to="/history" className="pf-left-btn ghost">
+                <Ticket size={15} />
+                My Tickets
+              </Link>
               <button className="pf-left-btn danger" onClick={logout}>
                 <LogOut size={15} />
                 Logout

@@ -3,20 +3,35 @@ import {
   User, LogOut, Settings, Ticket, ChevronDown,
   Menu, X, Phone, Mail
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
 import NotificationBell from "./Notification";
 import "./Header.css";
 
 export default function Header() {
-  const profileImage = localStorage.getItem("profileImage");
+  const [profileImage, setProfileImage] = useState(
+    localStorage.getItem("profileImage") || null
+  );
   const [showDropdown, setShowDropdown] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const navigate = useNavigate();
+  const [mobileOpen, setMobileOpen]     = useState(false);
+  const navigate  = useNavigate();
   const { lang, toggleLang, t } = useLanguage();
 
   const token = localStorage.getItem("access");
-  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const user  = JSON.parse(localStorage.getItem("user") || "null");
+
+  // Re-read profileImage whenever Profile page updates it
+  useEffect(() => {
+    const handler = () => {
+      setProfileImage(localStorage.getItem("profileImage") || null);
+    };
+    window.addEventListener("profileImageUpdated", handler);
+    window.addEventListener("storage", handler);
+    return () => {
+      window.removeEventListener("profileImageUpdated", handler);
+      window.removeEventListener("storage", handler);
+    };
+  }, []);
 
   const logout = () => {
     localStorage.removeItem("access");
@@ -162,7 +177,7 @@ export default function Header() {
             <div className="mobile-nav-links">
               <NavLink to="/" onClick={closeAll}>{t("nav_home")}</NavLink>
               <NavLink to="/booking" onClick={closeAll}>{t("nav_booking")}</NavLink>
-              {/* <NavLink to="/schedule" onClick={closeAll}>{t("nav_schedule")}</NavLink> */}
+              <NavLink to="/schedule" onClick={closeAll}>{t("nav_schedule")}</NavLink>
               <NavLink to="/branch" onClick={closeAll}>{t("nav_branch")}</NavLink>
               <NavLink to="/about" onClick={closeAll}>{t("nav_about")}</NavLink>
               <NavLink to="/faq" onClick={closeAll}>{t("nav_faq")}</NavLink>
