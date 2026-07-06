@@ -12,7 +12,7 @@ const OFFICE = {
   radius: 50,       // ← metres allowed from office
 };
 const WINDOWS = {
-  checkin:  { start: { h: 6,  m: 0 }, end: { h: 9,  m: 30 } },
+  checkin:  { start: { h: 1,  m: 0 }, end: { h: 9,  m: 30 } },
   checkout: { start: { h: 15, m: 0 }, end: { h: 21, m: 0  } },
 };
 const WORK_START = { hour: 8, minute: 0 };
