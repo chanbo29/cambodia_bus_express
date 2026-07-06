@@ -22,7 +22,7 @@ export default function AdminSidebar() {
   const isActive = (item) =>
     item.exact
       ? location.pathname === item.path
-      : location.pathname.startsWith(item.path);
+      : location.pathname === item.path;
 
   return (
     <aside className="admin-sidebar">
