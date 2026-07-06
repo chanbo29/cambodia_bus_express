@@ -280,3 +280,138 @@
   .sci-staff-grid { grid-template-columns: 1fr; }
   .pin-btn { height: 48px; font-size: 18px; }
 }
+
+/* ── Staff card action buttons ────────────── */
+.sci-staff-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.sci-qr-btn {
+  width: 30px; height: 30px;
+  border-radius: 7px;
+  background: #e1f5ee; border: 1px solid #9FE1CB;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: #04342C; transition: background 0.15s;
+}
+.sci-qr-btn:hover { background: #c8e8d8; }
+
+.sci-edit-btn {
+  width: 30px; height: 30px;
+  border-radius: 7px;
+  background: #f0f9ff; border: 1px solid #bae6fd;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: #0369a1; transition: background 0.15s;
+}
+.sci-edit-btn:hover { background: #e0f2fe; }
+
+.sci-delete-btn {
+  width: 30px; height: 30px;
+  background: #fff5f5; border: 1px solid #fecaca;
+  border-radius: 7px; padding: 0;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: #c24; transition: background 0.15s;
+}
+.sci-delete-btn:hover { background: #ffe4e4; }
+
+/* ── QR Code modal ────────────────────────── */
+.qr-modal { max-width: 360px; }
+
+.qr-card {
+  background: #fff;
+  border: 2.5px solid #04342C;
+  border-radius: 16px;
+  padding: 24px 24px 18px;
+  text-align: center;
+  margin: 16px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.qr-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #04342C, #1D9E75, #9FE1CB);
+}
+
+.qr-img {
+  width: 180px; height: 180px;
+  display: block; margin: 0 auto 12px;
+  border-radius: 8px;
+}
+
+.qr-card-name { font-size: 16px; font-weight: 700; color: #04342C; margin-bottom: 3px; }
+.qr-card-role { font-size: 12.5px; color: #62716b; margin-bottom: 8px; }
+.qr-card-id   { font-size: 12px; background: #e1f5ee; color: #085041; padding: 3px 10px; border-radius: 5px; }
+
+.qr-hint { font-size: 12.5px; color: #9FB8AE; margin: 0; }
+
+.sci-qr-action-btn {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  gap: 7px; padding: 11px;
+  border-radius: 10px; border: none;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+  transition: all 0.15s;
+}
+.sci-qr-action-btn.download { background: #04342C; color: #9FE1CB; }
+.sci-qr-action-btn.download:hover { background: #085041; }
+.sci-qr-action-btn.print { background: #f4faf7; color: #04342C; border: 1.5px solid #e0ece6; }
+.sci-qr-action-btn.print:hover { border-color: #9FE1CB; background: #e1f5ee; }
+
+/* ── PIN pad ──────────────────────────────── */
+.pin-modal { max-width: 340px; }
+.pin-label { font-size: 13px; font-weight: 700; color: #04342C; margin-bottom: 14px; }
+.pin-dots  { display: flex; justify-content: center; gap: 14px; margin-bottom: 8px; }
+.pin-dot   { width: 16px; height: 16px; border-radius: 50%; border: 2px solid #e0ece6; background: #fff; transition: all 0.15s; }
+.pin-dot.filled { background: #04342C; border-color: #04342C; transform: scale(1.1); }
+.pin-error { font-size: 12.5px; color: #dc2626; margin-bottom: 10px; min-height: 18px; font-weight: 500; }
+.pin-pad   { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 16px; }
+.pin-btn   { height: 54px; border-radius: 12px; border: 1.5px solid #e0ece6; background: #fff; font-size: 20px; font-weight: 700; color: #04342C; cursor: pointer; transition: all 0.12s; display: flex; align-items: center; justify-content: center; font-family: inherit; }
+.pin-btn:hover  { background: #f4faf7; border-color: #9FE1CB; }
+.pin-btn:active { background: #e1f5ee; transform: scale(0.94); }
+.pin-btn.action { font-size: 13px; color: #62716b; }
+.pin-btn.zero   { grid-column: 2; }
+
+/* Shake */
+.sci-modal.shake { animation: sci-shake 0.4s ease; }
+@keyframes sci-shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-10px)} 40%{transform:translateX(10px)} 60%{transform:translateX(-8px)} 80%{transform:translateX(8px)} }
+
+/* Status modal */
+.status-modal     { max-width: 420px; }
+.sci-status-emoji { font-size: 56px; margin-bottom: 12px; line-height: 1; }
+.sci-status-time-box { display: flex; gap: 24px; justify-content: center; background: #f4faf7; border: 1px solid #e0ece6; border-radius: 12px; padding: 14px 24px; margin: 16px 0 12px; }
+.sci-status-time-box > div { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.sci-status-time-box span   { font-size: 11px; color: #62716b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+.sci-status-time-box strong { font-size: 18px; font-weight: 700; color: #04342C; }
+.sci-status-msg { font-size: 14px; line-height: 1.6; font-weight: 600; }
+
+/* Add/edit form */
+.sci-add-form label { display: block; font-size: 12px; font-weight: 700; color: #62716b; text-transform: uppercase; letter-spacing: 0.07em; margin: 14px 0 6px; }
+.sci-add-form input,
+.sci-add-form select { width: 100%; border: 1.5px solid #e0ece6; border-radius: 9px; padding: 11px 14px; font-size: 14px; color: #04342C; outline: none; font-family: inherit; background: #fff; transition: border-color 0.15s; }
+.sci-add-form input:focus,
+.sci-add-form select:focus { border-color: #9FE1CB; }
+
+/* Action buttons */
+.sci-modal-actions { display: flex; gap: 10px; }
+.sci-cancel { flex: 1; padding: 12px; border-radius: 10px; border: 1.5px solid #e0ece6; background: #fff; color: #62716b; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; transition: border-color 0.15s; }
+.sci-cancel:hover { border-color: #9FE1CB; }
+.sci-confirm { flex: 2; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border-radius: 10px; border: none; font-size: 14px; font-weight: 700; cursor: pointer; font-family: inherit; transition: all 0.15s; width: 100%; }
+.sci-confirm.checkin  { background: #04342C; color: #9FE1CB; }
+.sci-confirm.checkout { background: #085041; color: #9FE1CB; }
+.sci-confirm:hover:not(:disabled) { opacity: 0.88; transform: translateY(-1px); }
+.sci-confirm:disabled { opacity: 0.4; cursor: not-allowed; }
+
+@media (max-width: 768px) {
+  .sci-header-right { flex-direction: column; align-items: flex-end; gap: 8px; }
+  .sci-clock { font-size: 18px; padding: 6px 12px; }
+  .sci-scan-input-row { flex-direction: column; }
+  .sci-staff-grid { grid-template-columns: 1fr; }
+  .pin-btn { height: 48px; font-size: 18px; }
+}
