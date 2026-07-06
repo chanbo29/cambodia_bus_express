@@ -1,10 +1,6 @@
-// src/pages/AnnouncementsPage.jsx
-// Add this route in AppRoutes.jsx:
-// <Route path="/admin-dashboard/announcements" element={<AdminRoute><AnnouncementsPage /></AdminRoute>} />
-
 import AdminSidebar from "../components/AdminSidebar";
 import AnnouncementPanel from "../components/AnnouncementPanel";
-import "../pages/Dashboard.css";
+import "./Dashboard.css";
 
 export default function AnnouncementsPage() {
   return (
