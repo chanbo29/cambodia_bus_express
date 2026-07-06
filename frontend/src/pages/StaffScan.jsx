@@ -9,7 +9,7 @@ import "./StaffScan.css";
 const OFFICE = {
   lat:    11.5830,   // ← your office latitude
   lng:    104.8779,  // ← your office longitude
-  radius: 100,       // ← metres allowed from office
+  radius: 50,       // ← metres allowed from office
 };
 const WINDOWS = {
   checkin:  { start: { h: 6,  m: 0 }, end: { h: 9,  m: 30 } },
