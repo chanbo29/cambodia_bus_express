@@ -161,6 +161,7 @@ export default function Profile() {
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
     localStorage.removeItem("user");
+    localStorage.removeItem("profileImage"); // ← clear so next user starts fresh
     window.location.href = "/";
   };
 
