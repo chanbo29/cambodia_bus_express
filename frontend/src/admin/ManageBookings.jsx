@@ -3,8 +3,10 @@ import {
   Bus, MapPin, Ticket, Users, Tag, FileBarChart,
   Search, Eye, Trash2, X, User, Phone, Calendar,
   Clock, CreditCard, ClipboardCheck, Megaphone,
+  Download, FileSpreadsheet,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import * as XLSX from "xlsx";
 import API from "../services/api";
 import "./Dashboard.css";
 import "./ManageBookings.css";
@@ -49,22 +51,165 @@ function getCheckInStatus(item) {
   const days = Math.floor(diffMinutes / (60 * 24));
   const hours = Math.floor((diffMinutes % (60 * 24)) / 60);
   const minutes = diffMinutes % 60;
-  let label;
-  if (days >= 1) label = `${days}d ${hours}h remaining`;
-  else if (hours >= 1) label = `${hours}h ${minutes}m remaining`;
-  else label = `${minutes}m remaining`;
-  return { label, urgency: "normal" };
+  if (days >= 1) return { label: `${days}d ${hours}h remaining`, urgency: "normal" };
+  if (hours >= 1) return { label: `${hours}h ${minutes}m remaining`, urgency: "normal" };
+  return { label: `${minutes}m remaining`, urgency: "normal" };
 }
+
+// ── Export helpers ─────────────────────────────────────────────
+
+function buildExportRows(data) {
+  return data.map((b) => ({
+    "Booking Code":    b.booking_code      || "",
+    "Passenger Name":  b.passenger_name    || "",
+    "Phone":           b.phone             || "",
+    "Email":           b.email             || "",
+    "From":            b.from_city         || "",
+    "To":              b.to_city           || "",
+    "Travel Date":     b.travel_date       || "",
+    "Departure Time":  b.departure_time    || "",
+    "Seat Numbers":    b.seat_numbers      || "",
+    "Vehicle Type":    b.vehicle_type      || "",
+    "Total Price ($)": Number(b.total_price || 0),
+    "Checked In":      b.checked_in ? "Yes" : "No",
+    "Booked At":       b.created_at
+      ? new Date(b.created_at).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })
+      : "",
+  }));
+}
+
+function exportCSV(data, filename) {
+  const rows  = buildExportRows(data);
+  if (rows.length === 0) { alert("No data to export."); return; }
+  const keys  = Object.keys(rows[0]);
+  const csv   = [
+    keys.join(","),
+    ...rows.map((r) =>
+      keys.map((k) => `"${String(r[k]).replace(/"/g, '""')}"`).join(",")
+    ),
+  ].join("\n");
+  const blob  = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url   = URL.createObjectURL(blob);
+  const a     = document.createElement("a");
+  a.href      = url;
+  a.download  = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportExcel(data, filename) {
+  const rows = buildExportRows(data);
+  if (rows.length === 0) { alert("No data to export."); return; }
+
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.json_to_sheet(rows);
+
+  // ── Column widths ──────────────────────────────────────────
+  ws["!cols"] = [
+    { wch: 16 }, // Booking Code
+    { wch: 22 }, // Passenger Name
+    { wch: 14 }, // Phone
+    { wch: 26 }, // Email
+    { wch: 14 }, // From
+    { wch: 14 }, // To
+    { wch: 13 }, // Travel Date
+    { wch: 15 }, // Departure Time
+    { wch: 14 }, // Seat Numbers
+    { wch: 14 }, // Vehicle Type
+    { wch: 16 }, // Total Price
+    { wch: 12 }, // Checked In
+    { wch: 22 }, // Booked At
+  ];
+
+  // ── Header row styling ─────────────────────────────────────
+  const headerRange = XLSX.utils.decode_range(ws["!ref"]);
+  for (let col = headerRange.s.c; col <= headerRange.e.c; col++) {
+    const cellAddr = XLSX.utils.encode_cell({ r: 0, c: col });
+    if (!ws[cellAddr]) continue;
+    ws[cellAddr].s = {
+      font:      { bold: true, color: { rgb: "FFFFFF" }, sz: 11 },
+      fill:      { fgColor: { rgb: "04342C" } },
+      alignment: { horizontal: "center", vertical: "center" },
+      border: {
+        top:    { style: "thin", color: { rgb: "1D9E75" } },
+        bottom: { style: "thin", color: { rgb: "1D9E75" } },
+        left:   { style: "thin", color: { rgb: "1D9E75" } },
+        right:  { style: "thin", color: { rgb: "1D9E75" } },
+      },
+    };
+  }
+
+  // ── Data rows alternating color ────────────────────────────
+  for (let row = 1; row <= headerRange.e.r; row++) {
+    const isEven = row % 2 === 0;
+    for (let col = headerRange.s.c; col <= headerRange.e.c; col++) {
+      const cellAddr = XLSX.utils.encode_cell({ r: row, c: col });
+      if (!ws[cellAddr]) continue;
+      ws[cellAddr].s = {
+        fill:      { fgColor: { rgb: isEven ? "F4FAF7" : "FFFFFF" } },
+        alignment: { horizontal: col === 10 ? "right" : "left", vertical: "center" },
+        border: {
+          top:    { style: "hair", color: { rgb: "E0ECE6" } },
+          bottom: { style: "hair", color: { rgb: "E0ECE6" } },
+          left:   { style: "hair", color: { rgb: "E0ECE6" } },
+          right:  { style: "hair", color: { rgb: "E0ECE6" } },
+        },
+      };
+    }
+  }
+
+  // ── Summary sheet ──────────────────────────────────────────
+  const totalRevenue   = data.reduce((sum, b) => sum + Number(b.total_price || 0), 0);
+  const totalPassengers = data.reduce((sum, b) => {
+    const count = b.seat_numbers
+      ? b.seat_numbers.split(",").filter(Boolean).length : 1;
+    return sum + count;
+  }, 0);
+  const uniqueRoutes = new Set(data.map((b) => `${b.from_city} → ${b.to_city}`)).size;
+  const checkedIn    = data.filter((b) => b.checked_in).length;
+
+  const summaryData = [
+    { "Metric": "Total Bookings",    "Value": data.length },
+    { "Metric": "Total Passengers",  "Value": totalPassengers },
+    { "Metric": "Total Revenue",     "Value": `$${totalRevenue.toFixed(2)}` },
+    { "Metric": "Avg Ticket Price",  "Value": data.length > 0 ? `$${(totalRevenue / data.length).toFixed(2)}` : "$0.00" },
+    { "Metric": "Unique Routes",     "Value": uniqueRoutes },
+    { "Metric": "Checked In",        "Value": checkedIn },
+    { "Metric": "Not Checked In",    "Value": data.length - checkedIn },
+    { "Metric": "Export Date",       "Value": new Date().toLocaleString() },
+  ];
+
+  const ws2 = XLSX.utils.json_to_sheet(summaryData);
+  ws2["!cols"] = [{ wch: 22 }, { wch: 20 }];
+
+  // Style summary headers
+  ["A1", "B1"].forEach((addr) => {
+    if (!ws2[addr]) return;
+    ws2[addr].s = {
+      font: { bold: true, color: { rgb: "FFFFFF" }, sz: 11 },
+      fill: { fgColor: { rgb: "04342C" } },
+      alignment: { horizontal: "center" },
+    };
+  });
+
+  XLSX.utils.book_append_sheet(wb, ws2, "Summary");
+  XLSX.utils.book_append_sheet(wb, ws,  "Bookings");
+
+  XLSX.writeFile(wb, filename, { bookType: "xlsx", cellStyles: true });
+}
+
+// ── Component ──────────────────────────────────────────────────
 
 export default function ManageBookings() {
   const navigate = useNavigate();
-  const [bookings, setBookings] = useState([]);
-  const [loading, setLoading]   = useState(true);
-  const [search, setSearch]     = useState("");
-  const [dateFilter, setDateFilter] = useState("");
-  const [page, setPage]         = useState(1);
+  const [bookings, setBookings]         = useState([]);
+  const [loading, setLoading]           = useState(true);
+  const [search, setSearch]             = useState("");
+  const [dateFilter, setDateFilter]     = useState("");
+  const [page, setPage]                 = useState(1);
   const PAGE_SIZE = 20;
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected]         = useState(null);
+  const [exporting, setExporting]       = useState(false);
 
   useEffect(() => {
     fetchBookings();
@@ -107,6 +252,21 @@ export default function ManageBookings() {
 
   const totalRevenue = bookings.reduce((sum, b) => sum + Number(b.total_price || 0), 0);
 
+  const dateTag  = dateFilter || new Date().toISOString().slice(0, 10);
+  const exportData = filtered; // export whatever is currently filtered
+
+  const handleExcelExport = () => {
+    setExporting(true);
+    setTimeout(() => {
+      exportExcel(exportData, `Cambodia_Bus_Bookings_${dateTag}.xlsx`);
+      setExporting(false);
+    }, 100);
+  };
+
+  const handleCSVExport = () => {
+    exportCSV(exportData, `Cambodia_Bus_Bookings_${dateTag}.csv`);
+  };
+
   return (
     <div className="admin-page">
       <aside className="admin-sidebar">
@@ -127,7 +287,32 @@ export default function ManageBookings() {
 
       <main className="admin-main">
         <header className="admin-header">
-          <div><h1>Manage Bookings</h1><p>View, inspect, and remove customer bookings.</p></div>
+          <div>
+            <h1>Manage Bookings</h1>
+            <p>View, inspect, and remove customer bookings.</p>
+          </div>
+
+          {/* Export buttons */}
+          <div className="mb-export-row">
+            <button
+              className="mb-export-btn excel"
+              onClick={handleExcelExport}
+              disabled={exporting || filtered.length === 0}
+              title="Export to Excel with styling + summary sheet"
+            >
+              <FileSpreadsheet size={16} />
+              {exporting ? "Exporting…" : "Export Excel"}
+            </button>
+            <button
+              className="mb-export-btn csv"
+              onClick={handleCSVExport}
+              disabled={filtered.length === 0}
+              title="Export to CSV"
+            >
+              <Download size={16} />
+              Export CSV
+            </button>
+          </div>
         </header>
 
         <section className="admin-stats">
@@ -140,18 +325,37 @@ export default function ManageBookings() {
         <section className="admin-card">
           <div className="card-title">
             <h2>All Bookings</h2>
-            <p>{loading ? "Loading..." : `Showing ${paginated.length} of ${filtered.length} (page ${page} of ${totalPages})`}</p>
+            <p>
+              {loading
+                ? "Loading..."
+                : `Showing ${paginated.length} of ${filtered.length} (page ${page} of ${totalPages})`}
+              {filtered.length !== bookings.length && (
+                <span className="mb-filter-badge"> — filtered</span>
+              )}
+            </p>
           </div>
 
           <div className="mb-filters-row">
             <div className="mb-search">
               <Search size={18} />
-              <input placeholder="Search by code, passenger, or route..." value={search} onChange={(e) => setSearch(e.target.value)} />
+              <input
+                placeholder="Search by code, passenger, or route..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
             </div>
             <div className="mb-date-filter">
               <Calendar size={16} />
-              <input type="date" value={dateFilter} onChange={(e) => setDateFilter(e.target.value)} />
-              {dateFilter && <button className="mb-date-clear" onClick={() => setDateFilter("")} title="Clear"><X size={14} /></button>}
+              <input
+                type="date"
+                value={dateFilter}
+                onChange={(e) => setDateFilter(e.target.value)}
+              />
+              {dateFilter && (
+                <button className="mb-date-clear" onClick={() => setDateFilter("")} title="Clear">
+                  <X size={14} />
+                </button>
+              )}
             </div>
           </div>
 
@@ -208,7 +412,10 @@ export default function ManageBookings() {
               <h2>Booking Details</h2>
               <button onClick={() => setSelected(null)}><X size={18} /></button>
             </div>
-            <div className="mb-detail-code"><span>Booking Code</span><strong>{selected.booking_code}</strong></div>
+            <div className="mb-detail-code">
+              <span>Booking Code</span>
+              <strong>{selected.booking_code}</strong>
+            </div>
             <div className="mb-detail-grid">
               <div><User size={15} /><span>Passenger</span><b>{selected.passenger_name || "N/A"}</b></div>
               <div><Phone size={15} /><span>Phone</span><b>{selected.phone || "N/A"}</b></div>
