@@ -209,17 +209,6 @@ export default function Profile() {
 
             {/* Buttons */}
             <div className="pf-left-btns">
-              {/* <button
-                className="pf-left-btn primary"
-                onClick={() => setEditing(true)}
-              >
-                <Pencil size={15} />
-                Edit Profile
-              </button>
-              <Link to="/history" className="pf-left-btn ghost">
-                <Ticket size={15} />
-                My Tickets
-              </Link> */}
               <button className="pf-left-btn danger" onClick={logout}>
                 <LogOut size={15} />
                 Logout
