@@ -3,7 +3,7 @@ import { CheckCircle2, LogOut, Clock, X, Delete } from "lucide-react";
 import API from "../services/api";
 import "./StaffScan.css";
 
-const WORK_START = { hour: 8, minute: 0 };
+const WORK_START = { hour: 21, minute: 0 };
 const SCAN_URL   = "https://cambodia-bus-express.vercel.app/staff-scan";
 
 function getCambodiaDate() {
