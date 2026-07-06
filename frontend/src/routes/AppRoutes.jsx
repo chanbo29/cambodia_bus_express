@@ -21,7 +21,6 @@ import Promotions from "../admin/Promotions";
 import Reports from "../admin/Reports";
 import AnnouncementsPage from "../admin/AnnouncementsPage";
 import StaffCheckIn from "../admin/StaffCheckIn";
-import StaffScan from "../pages/StaffScan";
 
 import ProtectedRoute from "./ProtectedRoute";
 import AdminRoute from "../components/AdminRoute";
@@ -30,17 +29,14 @@ export default function AppRoutes() {
   return (
     <Routes>
       {/* Public */}
-      <Route path="/"           element={<Home />} />
-      <Route path="/schedule"   element={<Schedule />} />
-      <Route path="/login"      element={<Login />} />
-      <Route path="/register"   element={<Register />} />
-      <Route path="/branch"     element={<Branch />} />
-      <Route path="/about"      element={<About />} />
-      <Route path="/faq"        element={<FAQ />} />
-      <Route path="/contact"    element={<Navigate to="/faq" replace />} />
-
-      {/* Staff scan — public, no login required */}
-      <Route path="/staff-scan" element={<StaffScan />} />
+      <Route path="/"         element={<Home />} />
+      <Route path="/schedule" element={<Schedule />} />
+      <Route path="/login"    element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/branch"   element={<Branch />} />
+      <Route path="/about"    element={<About />} />
+      <Route path="/faq"      element={<FAQ />} />
+      <Route path="/contact"  element={<Navigate to="/faq" replace />} />
 
       {/* Logged-in */}
       <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
