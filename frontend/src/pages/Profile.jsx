@@ -209,7 +209,7 @@ export default function Profile() {
 
             {/* Buttons */}
             <div className="pf-left-btns">
-              <button
+              {/* <button
                 className="pf-left-btn primary"
                 onClick={() => setEditing(true)}
               >
@@ -219,7 +219,7 @@ export default function Profile() {
               <Link to="/history" className="pf-left-btn ghost">
                 <Ticket size={15} />
                 My Tickets
-              </Link>
+              </Link> */}
               <button className="pf-left-btn danger" onClick={logout}>
                 <LogOut size={15} />
                 Logout
