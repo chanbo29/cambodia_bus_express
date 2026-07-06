@@ -8,12 +8,27 @@ from django.contrib.auth.models import User
 from .models import UserProfile
 
 
-class UserProfileSerializer(serializers.Serializer):
-    username = serializers.CharField(read_only=True)
-    email = serializers.EmailField(required=False, allow_blank=True)
-    full_name = serializers.CharField(required=False, allow_blank=True)
-    phone = serializers.CharField(required=False, allow_blank=True)
-    date_joined = serializers.DateTimeField(read_only=True)
+class UserProfileSerializer(serializers.ModelSerializer):
+    username    = serializers.CharField(source="user.username", read_only=True)
+    email       = serializers.EmailField(source="user.email")
+    date_joined = serializers.DateTimeField(source="user.date_joined", read_only=True)
+    is_staff    = serializers.BooleanField(source="user.is_staff", read_only=True)
+    is_superuser= serializers.BooleanField(source="user.is_superuser", read_only=True)
+ 
+    class Meta:
+        model  = UserProfile
+        fields = [
+            "username", "email", "date_joined",
+            "full_name", "phone", "profile_image",  # ← ADD profile_image HERE
+            "is_staff", "is_superuser",
+        ]
+ 
+    def update(self, instance, validated_data):
+        user_data = validated_data.pop("user", {})
+        if "email" in user_data:
+            instance.user.email = user_data["email"]
+            instance.user.save()
+        return super().update(instance, validated_data)
     
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:

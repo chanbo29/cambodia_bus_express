@@ -36,11 +36,24 @@ export default function Profile() {
           email:     data.email     || "",
           phone:     data.phone     || "",
         });
-      setPhoto(
-        localStorage.getItem(photoKey(data)) ||
-        localStorage.getItem("profileImage") ||
-        null
-      );
+
+        // Backend image takes priority — syncs across all devices
+        const serverImage = data.profile_image || null;
+        const localImage  =
+          localStorage.getItem(photoKey(data)) ||
+          localStorage.getItem("profileImage") ||
+          null;
+
+        const img = serverImage || localImage;
+        setPhoto(img);
+
+        // Keep localStorage in sync so Header updates immediately
+        if (serverImage) {
+          localStorage.setItem("profileImage", serverImage);
+          localStorage.setItem(photoKey(data), serverImage);
+          window.dispatchEvent(new Event("profileImageUpdated"));
+        }
+
         setTimeout(() => setMounted(true), 60);
       })
       .catch(console.log)
@@ -116,14 +129,21 @@ export default function Profile() {
     const file = e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = () => {
-      // Save with user-specific key (profile page)
-      localStorage.setItem(photoKey(profile), reader.result);
-      // Also save to generic key so Header picks it up instantly
-      localStorage.setItem("profileImage", reader.result);
-      setPhoto(reader.result);
-      // Tell Header to re-render without a page refresh
+    reader.onload = async () => {
+      const base64 = reader.result;
+
+      // Show immediately in UI
+      setPhoto(base64);
+      localStorage.setItem("profileImage", base64);
+      localStorage.setItem(photoKey(profile), base64);
       window.dispatchEvent(new Event("profileImageUpdated"));
+
+      // Save to backend so it syncs across all devices
+      try {
+        await updateMyProfile({ profile_image: base64 });
+      } catch (err) {
+        console.log("Failed to save profile image to server:", err);
+      }
     };
     reader.readAsDataURL(file);
   };

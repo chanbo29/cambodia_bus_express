@@ -3,12 +3,13 @@ import uuid
 from django.contrib.auth.models import User
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
-    full_name = models.CharField(max_length=150, blank=True)
-    phone = models.CharField(max_length=30, blank=True)
-
+    user        = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    phone       = models.CharField(max_length=20, blank=True)
+    full_name   = models.CharField(max_length=100, blank=True)
+    profile_image = models.TextField(blank=True)  # ← ADD THIS LINE (stores base64 or URL)
+ 
     def __str__(self):
-        return f"Profile of {self.user.username}"
+        return self.user.username
     
 class Booking(models.Model):
 
