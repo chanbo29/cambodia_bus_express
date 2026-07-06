@@ -11,7 +11,7 @@ import API from "../services/api";
 import "./Dashboard.css";
 import "./StaffCheckIn.css";
 
-const WORK_START = { hour: 8, minute: 0 };
+const WORK_START = { hour: 21, minute: 0 };
 const SCAN_URL   = "https://cambodia-bus-express.vercel.app/staff-scan";
 const QR_IMG     = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(SCAN_URL)}&bgcolor=FFFFFF&color=04342C&margin=10`;
 
