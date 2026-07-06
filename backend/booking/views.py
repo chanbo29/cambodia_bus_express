@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import generics
+from rest_framework import permissions
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
@@ -130,7 +131,7 @@ class MyBookingsView(generics.ListAPIView):
     def get_queryset(self):
         return Booking.objects.filter(user=self.request.user)
     
-    
+
 @api_view(["GET"])
 def routes(request):
     return Response([
