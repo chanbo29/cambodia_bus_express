@@ -44,45 +44,61 @@ def reset_admin(request):
         return HttpResponse("Admin password reset successfully!")
     except User.DoesNotExist:
         return HttpResponse("Admin not found.")
-@api_view(["GET", "PUT"])
+@api_view(["GET", "PUT", "PATCH"])
 @permission_classes([IsAuthenticated])
 def my_profile(request):
     user = request.user
     profile, _ = UserProfile.objects.get_or_create(user=user)
  
     if request.method == "GET":
-        data = {
-            "username": user.username,
-            "email": user.email,
-            "full_name": profile.full_name,
-            "phone": profile.phone,
-            "date_joined": user.date_joined,
-        }
-        return Response(data)
+        return Response({
+            "username":      user.username,
+            "email":         user.email,
+            "full_name":     profile.full_name,
+            "phone":         profile.phone,
+            "profile_image": profile.profile_image,   # ← include image
+            "date_joined":   user.date_joined,
+            "is_staff":      user.is_staff,
+            "is_superuser":  user.is_superuser,
+        })
  
-    # PUT — update email (on User) and full_name/phone (on UserProfile)
-    serializer = UserProfileSerializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
+    # PUT or PATCH — update whatever fields are sent
+    data = request.data
  
-    if "email" in serializer.validated_data:
-        user.email = serializer.validated_data["email"]
+    if "email" in data:
+        user.email = data["email"]
         user.save()
  
-    if "full_name" in serializer.validated_data:
-        profile.full_name = serializer.validated_data["full_name"]
+    if "full_name" in data:
+        profile.full_name = data["full_name"]
  
-    if "phone" in serializer.validated_data:
-        profile.phone = serializer.validated_data["phone"]
+    if "phone" in data:
+        profile.phone = data["phone"]
+ 
+    if "profile_image" in data:
+        profile.profile_image = data["profile_image"]  # ← save image
  
     profile.save()
  
     return Response({
-        "username": user.username,
-        "email": user.email,
-        "full_name": profile.full_name,
-        "phone": profile.phone,
-        "date_joined": user.date_joined,
+        "username":      user.username,
+        "email":         user.email,
+        "full_name":     profile.full_name,
+        "phone":         profile.phone,
+        "profile_image": profile.profile_image,
+        "date_joined":   user.date_joined,
+        "is_staff":      user.is_staff,
+        "is_superuser":  user.is_superuser,
     })
+
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class   = UserProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
+ 
+    def get_object(self):
+        profile, _ = UserProfile.objects.get_or_create(user=self.request.user)
+        return profile
+    
 class BookingListCreateView(generics.ListCreateAPIView):
     serializer_class = BookingSerializer
     permission_classes = [IsAuthenticated]
