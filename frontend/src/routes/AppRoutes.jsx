@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-
 import Home from "../pages/Home";
 import Booking from "../pages/Booking";
 import Schedule from "../pages/Schedule";
@@ -10,6 +9,7 @@ import Register from "../pages/Register";
 import Branch from "../pages/Branch";
 import About from "../pages/About";
 import FAQ from "../pages/FAQ";
+import StaffScan from "../pages/StaffScan";
 
 import AdminDashboard from "../admin/Dashboard";
 import ManageBookings from "../admin/ManageBookings";
@@ -21,7 +21,7 @@ import Promotions from "../admin/Promotions";
 import Reports from "../admin/Reports";
 import AnnouncementsPage from "../admin/AnnouncementsPage";
 import StaffCheckIn from "../admin/StaffCheckIn";
-import StaffScan from "../pages/StaffScan";
+import StaffReport from "../admin/StaffReport";
 
 import ProtectedRoute from "./ProtectedRoute";
 import AdminRoute from "../components/AdminRoute";
@@ -29,7 +29,6 @@ import AdminRoute from "../components/AdminRoute";
 export default function AppRoutes() {
   return (
     <Routes>
-      {/* Public */}
       <Route path="/"           element={<Home />} />
       <Route path="/schedule"   element={<Schedule />} />
       <Route path="/login"      element={<Login />} />
@@ -39,24 +38,23 @@ export default function AppRoutes() {
       <Route path="/faq"        element={<FAQ />} />
       <Route path="/contact"    element={<Navigate to="/faq" replace />} />
 
-      {/* Staff scan — public, no login required */}
+      {/* Public — no login */}
       <Route path="/staff-scan" element={<StaffScan />} />
 
-      {/* Logged-in */}
       <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
       <Route path="/history" element={<ProtectedRoute><TicketHistory /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
-      {/* Admin */}
-      <Route path="/admin-dashboard"               element={<AdminRoute><AdminDashboard /></AdminRoute>} />
-      <Route path="/admin-dashboard/bookings"      element={<AdminRoute><ManageBookings /></AdminRoute>} />
-      <Route path="/admin-dashboard/buses"         element={<AdminRoute><ManageBuses /></AdminRoute>} />
-      <Route path="/admin-dashboard/routes"        element={<AdminRoute><ManageRoutes /></AdminRoute>} />
-      <Route path="/admin-dashboard/users"         element={<AdminRoute><ManageUsers /></AdminRoute>} />
-      <Route path="/admin-dashboard/promotions"    element={<AdminRoute><Promotions /></AdminRoute>} />
-      <Route path="/admin-dashboard/reports"       element={<AdminRoute><Reports /></AdminRoute>} />
-      <Route path="/admin-dashboard/checkin"       element={<AdminRoute><StaffCheckIn /></AdminRoute>} />
-      <Route path="/admin-dashboard/announcements" element={<AdminRoute><AnnouncementsPage /></AdminRoute>} />
+      <Route path="/admin-dashboard"                    element={<AdminRoute><AdminDashboard /></AdminRoute>} />
+      <Route path="/admin-dashboard/bookings"           element={<AdminRoute><ManageBookings /></AdminRoute>} />
+      <Route path="/admin-dashboard/buses"              element={<AdminRoute><ManageBuses /></AdminRoute>} />
+      <Route path="/admin-dashboard/routes"             element={<AdminRoute><ManageRoutes /></AdminRoute>} />
+      <Route path="/admin-dashboard/users"              element={<AdminRoute><ManageUsers /></AdminRoute>} />
+      <Route path="/admin-dashboard/promotions"         element={<AdminRoute><Promotions /></AdminRoute>} />
+      <Route path="/admin-dashboard/reports"            element={<AdminRoute><Reports /></AdminRoute>} />
+      <Route path="/admin-dashboard/checkin"            element={<AdminRoute><StaffCheckIn /></AdminRoute>} />
+      <Route path="/admin-dashboard/staff-report"       element={<AdminRoute><StaffReport /></AdminRoute>} />
+      <Route path="/admin-dashboard/announcements"      element={<AdminRoute><AnnouncementsPage /></AdminRoute>} />
     </Routes>
   );
 }

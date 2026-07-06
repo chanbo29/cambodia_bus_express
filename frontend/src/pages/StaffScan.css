@@ -373,3 +373,42 @@
 .ss-pin-btn.zero   { grid-column: 2; }
 
 .ss-pin-btns { display: flex; gap: 10px; }
+
+/* ── Search box ────────────────────────────── */
+.ss-search-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  border: 2px solid #e0ece6;
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  transition: border-color .15s;
+}
+.ss-search-box:focus-within { border-color: #9FE1CB; }
+
+.ss-search-icon { color: #9FB8AE; flex-shrink: 0; }
+
+.ss-search-input {
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  color: #04342C;
+  font-family: inherit;
+  outline: none;
+  flex: 1;
+}
+.ss-search-input::placeholder { color: #9FB8AE; }
+
+.ss-search-clear {
+  background: #f4faf7;
+  border: 1px solid #e0ece6;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #62716b;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.ss-search-clear:hover { background: #e1f5ee; }

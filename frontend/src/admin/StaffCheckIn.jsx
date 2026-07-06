@@ -178,6 +178,9 @@ export default function StaffCheckIn() {
           <a onClick={()=>navigate("/admin-dashboard/routes")}><MapPin size={20}/> Routes</a>
           <a onClick={()=>navigate("/admin-dashboard/bookings")}><Ticket size={20}/> Bookings</a>
           <a className="active"><ClipboardCheck size={20}/> Check-In</a>
+          <a onClick={() => navigate("/admin-dashboard/staff-report")}>
+            <FileBarChart size={20}/> Staff Report
+          </a>
           <a onClick={()=>navigate("/admin-dashboard/promotions")}><Tag size={20}/> Promotions</a>
           <a onClick={()=>navigate("/admin-dashboard/reports")}><FileBarChart size={20}/> Reports</a>
           <a onClick={()=>navigate("/admin-dashboard/announcements")}><Megaphone size={20}/> Announcements</a>
