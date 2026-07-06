@@ -210,17 +210,6 @@ export default function Reports() {
   };
 
   const handleCSVExport = () => {
-    // Export monthly summary as CSV
-    const allRows = [
-      { "Sheet": "Summary",         ...summaryRows[0] },
-      ...summaryRows.slice(1).map((r) => ({ "Sheet": "", ...r })),
-      {},
-      { "Sheet": "Monthly Revenue", "Metric": "Month", "Value": "Bookings / Revenue" },
-      ...monthlyRows.map((r) => ({ "Sheet": "", "Metric": r["Month"], "Value": `${r["Bookings"]} bookings / ${r["Revenue"]}` })),
-      {},
-      { "Sheet": "Top Routes", "Metric": "Route", "Value": "Bookings / Revenue" },
-      ...routeRows.map((r) => ({ "Sheet": "", "Metric": r["Route"], "Value": `${r["Bookings"]} bookings / ${r["Revenue"]}` })),
-    ];
     exportCSV(summaryRows, `Cambodia_Bus_Summary_${todayStr}.csv`);
   };
 
@@ -359,4 +348,4 @@ export default function Reports() {
       </main>
     </div>
   );
-}s
+}
