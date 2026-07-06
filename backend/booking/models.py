@@ -171,6 +171,7 @@ class Staff(models.Model):
     name    = models.CharField(max_length=100)
     barcode = models.CharField(max_length=50, unique=True)
     role    = models.CharField(max_length=50, choices=ROLE_CHOICES, default="Staff")
+    pin     = models.CharField(max_length=4, default="0000")   # ← 4-digit PIN
     created_at = models.DateTimeField(auto_now_add=True)
  
     def __str__(self):

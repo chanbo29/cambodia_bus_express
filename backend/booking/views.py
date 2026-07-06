@@ -394,13 +394,17 @@ class AnnouncementAdminListView(generics.ListAPIView):
 
 
 
+from rest_framework import viewsets
 from .models import Staff, StaffWorkRecord
  
 class StaffSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Staff
-        fields = ["id", "name", "barcode", "role", "created_at"]
+        fields = ["id", "name", "barcode", "role", "pin", "created_at"]
         read_only_fields = ["id", "created_at"]
+        extra_kwargs = {
+            "pin": {"write_only": False}  # frontend needs pin to verify locally
+        }
  
 class StaffWorkRecordSerializer(serializers.ModelSerializer):
     class Meta:
