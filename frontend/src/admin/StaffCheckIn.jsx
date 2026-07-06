@@ -12,7 +12,7 @@ import "./Dashboard.css";
 import "./StaffCheckIn.css";
 
 // ── Status logic ───────────────────────────────────────────────
-const WORK_START = { hour: 8, minute: 0 }; // 8:00 AM — change as needed
+const WORK_START = { hour: 7, minute: 0 };
 
 function getCambodiaDate() {
   return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Phnom_Penh" });
