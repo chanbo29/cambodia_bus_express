@@ -123,7 +123,14 @@ class BookingViewSet(viewsets.ModelViewSet):
                 redeem_promo_or_raise(self.request.user, promo_code)
             serializer.save(user=self.request.user)
 
+class MyBookingsView(generics.ListAPIView):
+    serializer_class = BookingSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        return Booking.objects.filter(user=self.request.user)
+    
+    
 @api_view(["GET"])
 def routes(request):
     return Response([

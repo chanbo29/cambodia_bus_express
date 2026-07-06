@@ -4,6 +4,7 @@ from .views import BookingListCreateView
 from .views import BusScheduleListCreateView
 from .views import  BusScheduleViewSet
 from .views import  PromotionViewSet
+from .views import MyBookingsView
 from rest_framework.routers import DefaultRouter
 from .views import BookingViewSet
 from . import views
@@ -27,6 +28,7 @@ urlpatterns = [
     path("reset-admin/", views.reset_admin),
     path("routes/", routes),
     path("bookings/", BookingListCreateView.as_view()),
+    path("my-bookings/", MyBookingsView.as_view()),
     path("schedules/", BusScheduleListCreateView.as_view()),
     path("create-admin/", views.create_admin),
     path("booked-seats/", views.booked_seats),
