@@ -391,3 +391,36 @@ class AnnouncementAdminListView(generics.ListAPIView):
     queryset = Announcement.objects.all()
     serializer_class = AnnouncementSerializer
     permission_classes = [permissions.IsAdminUser]
+
+
+
+from .models import Staff, StaffWorkRecord
+ 
+class StaffSerializer(serializers.ModelSerializer):
+    class Meta:
+        model  = Staff
+        fields = ["id", "name", "barcode", "role", "created_at"]
+        read_only_fields = ["id", "created_at"]
+ 
+class StaffWorkRecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model  = StaffWorkRecord
+        fields = ["id", "staff", "date", "check_in_time", "check_out_time", "created_at"]
+        read_only_fields = ["id", "created_at"]
+ 
+class StaffViewSet(viewsets.ModelViewSet):
+    queryset           = Staff.objects.all().order_by("name")
+    serializer_class   = StaffSerializer
+    permission_classes = [IsAdminUser]
+ 
+class StaffWorkRecordViewSet(viewsets.ModelViewSet):
+    queryset           = StaffWorkRecord.objects.all().order_by("-date")
+    serializer_class   = StaffWorkRecordSerializer
+    permission_classes = [IsAdminUser]
+ 
+    def get_queryset(self):
+        qs   = super().get_queryset()
+        date = self.request.query_params.get("date")
+        if date:
+            qs = qs.filter(date=date)
+        return qs

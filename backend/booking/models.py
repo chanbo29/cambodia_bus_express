@@ -157,3 +157,36 @@ class Announcement(models.Model):
 
     def __str__(self):
         return self.title
+    
+
+class Staff(models.Model):
+    ROLE_CHOICES = [
+        ("Staff",    "Staff"),
+        ("Driver",   "Driver"),
+        ("Cashier",  "Cashier"),
+        ("Manager",  "Manager"),
+        ("Security", "Security"),
+        ("Cleaner",  "Cleaner"),
+    ]
+    name    = models.CharField(max_length=100)
+    barcode = models.CharField(max_length=50, unique=True)
+    role    = models.CharField(max_length=50, choices=ROLE_CHOICES, default="Staff")
+    created_at = models.DateTimeField(auto_now_add=True)
+ 
+    def __str__(self):
+        return f"{self.name} ({self.barcode})"
+ 
+ 
+class StaffWorkRecord(models.Model):
+    staff          = models.ForeignKey(Staff, on_delete=models.CASCADE, related_name="records")
+    date           = models.DateField()
+    check_in_time  = models.TimeField(null=True, blank=True)
+    check_out_time = models.TimeField(null=True, blank=True)
+    created_at     = models.DateTimeField(auto_now_add=True)
+ 
+    class Meta:
+        unique_together = ("staff", "date")
+        ordering        = ["-date", "check_in_time"]
+ 
+    def __str__(self):
+        return f"{self.staff.name} — {self.date}"

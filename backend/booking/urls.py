@@ -16,6 +16,7 @@ from .views import (
     AnnouncementDeleteView,
     AnnouncementAdminListView,
 )
+from .views import StaffViewSet, StaffWorkRecordViewSet
 
 
 router = DefaultRouter()
@@ -23,6 +24,8 @@ router.register("bookings", BookingViewSet, basename="booking")
 router.register("schedules", BusScheduleViewSet, basename="schedule")
 router.register("promotions", PromotionViewSet, basename="promotion")
 router.register("users", AdminUserViewSet, basename="user")
+router.register(r"staff",         StaffViewSet,          basename="staff")
+router.register(r"staff-records", StaffWorkRecordViewSet, basename="staff-records")
 
 urlpatterns = [
     path("reset-admin/", views.reset_admin),
