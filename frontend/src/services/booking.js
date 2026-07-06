@@ -32,14 +32,20 @@ export const checkPromo = async (code) => {
   return response.data;
 };
 
-// GET the logged-in user's profile (username, email, full_name, phone)
+// GET the logged-in user's profile
 export const getMyProfile = async () => {
   const response = await API.get("/profile/");
   return response.data;
 };
 
-// PUT to update email / full_name / phone
+// PUT to update full profile (all fields)
 export const updateMyProfile = async (payload) => {
   const response = await API.put("/profile/", payload);
+  return response.data;
+};
+
+// PATCH to update partial profile (e.g. just profile_image)
+export const patchMyProfile = async (payload) => {
+  const response = await API.patch("/profile/", payload);
   return response.data;
 };

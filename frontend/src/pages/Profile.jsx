@@ -5,7 +5,7 @@ import {
   Camera, Pencil, Save, X, Star, Settings,
   DollarSign, UserCircle, ArrowRight
 } from "lucide-react";
-import { getMyProfile, updateMyProfile } from "../services/booking";
+import { getMyProfile, updateMyProfile, patchMyProfile } from "../services/booking";
 import API from "../services/api";
 import "./Profile.css";
 
@@ -128,6 +128,13 @@ export default function Profile() {
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+
+    // Warn if image is too large (> 1MB compressed to base64 ~= 1.33MB)
+    if (file.size > 800000) {
+      alert("Image too large. Please choose an image under 800KB.");
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = async () => {
       const base64 = reader.result;
@@ -138,11 +145,13 @@ export default function Profile() {
       localStorage.setItem(photoKey(profile), base64);
       window.dispatchEvent(new Event("profileImageUpdated"));
 
-      // Save to backend so it syncs across all devices
+      // Save to backend via PATCH (partial update — only sends profile_image)
       try {
-        await updateMyProfile({ profile_image: base64 });
+        await patchMyProfile({ profile_image: base64 });
+        console.log("✓ Profile image saved to server");
       } catch (err) {
-        console.log("Failed to save profile image to server:", err);
+        console.error("✗ Failed to save profile image:", err.response?.data || err.message);
+        alert("Photo saved locally but failed to sync to server. Try a smaller image.");
       }
     };
     reader.readAsDataURL(file);
