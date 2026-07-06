@@ -11,7 +11,7 @@ import Branch from "../pages/Branch";
 import About from "../pages/About";
 import FAQ from "../pages/FAQ";
 
-import AnnouncementsPage from "../pages/AnnouncementPage";
+import AnnouncementsPage from "../pages/AnnouncementsPage";
 import AdminDashboard from "../admin/Dashboard";
 import ManageBookings from "../admin/ManageBookings";
 import ManageBuses from "../admin/ManageBuses";
