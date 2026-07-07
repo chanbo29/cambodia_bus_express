@@ -4,9 +4,10 @@ import {
   MapPin, Lock, AlertTriangle, Delete, Search,
 } from "lucide-react";
 import "./StaffScan.css";
+
 const OFFICE    = { lat: 11.5827, lng: 104.8974, radius: 150 };
 const WINDOWS   = {
-  checkin:  { start: { h: 1,  m: 0 }, end: { h: 9,  m: 30 } },
+  checkin:  { start: { h: 6,  m: 0 }, end: { h: 9,  m: 30 } },
   checkout: { start: { h: 15, m: 0 }, end: { h: 21, m: 0  } },
 };
 const WORK_START = { hour: 8, minute: 0 };
@@ -148,11 +149,24 @@ export default function StaffScan() {
 
   const handlePinSubmit = async () => {
     if (pin.length < 4) { setPinError("Please enter all 4 digits."); return; }
-    if (pin !== String(selectedStaff.pin)) {
-      setPinError("❌ Wrong PIN. Try again.");
-      setPinShake(true); setTimeout(() => setPinShake(false), 500);
-      setPin(""); return;
+
+    // Verify PIN server-side — pin never exposed in public API response
+    try {
+      const res = await apiFetch("/public/verify-pin/", {
+        method: "POST",
+        body: JSON.stringify({ staff_id: selectedStaff.id, pin }),
+      });
+      if (!res.valid) {
+        setPinError("❌ Wrong PIN. Try again.");
+        setPinShake(true); setTimeout(() => setPinShake(false), 500);
+        setPin(""); return;
+      }
+    } catch {
+      setPinError("Server error. Try again.");
+      return;
     }
+
+    // PIN correct — proceed
     setProcessing(true);
     try {
       const now = getCambodiaTime().slice(0,5);

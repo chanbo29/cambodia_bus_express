@@ -516,3 +516,18 @@ def public_staff_checkout(request, record_id):
         "check_in_time": str(record.check_in_time)  if record.check_in_time  else None,
         "check_out_time":str(record.check_out_time) if record.check_out_time else None,
     })
+
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def public_verify_pin(request):
+    """POST /api/public/verify-pin/ — verify staff PIN without exposing it"""
+    staff_id = request.data.get("staff_id")
+    pin      = request.data.get("pin")
+    if not staff_id or not pin:
+        return Response({"error": "staff_id and pin required"}, status=400)
+    try:
+        staff = Staff.objects.get(id=staff_id)
+    except Staff.DoesNotExist:
+        return Response({"valid": False}, status=200)
+    return Response({"valid": str(staff.pin) == str(pin)})
