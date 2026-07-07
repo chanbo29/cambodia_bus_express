@@ -1,18 +1,8 @@
 import { useEffect, useState } from "react";
 import {
-  Bus,
-  MapPin,
-  Clock,
-  DollarSign,
-  Users,
-  Ticket,
-  TrendingUp,
-  Tag,
-  FileBarChart,
-  CalendarClock,
-  ArrowUpRight,
-  ClipboardCheck,
-  Megaphone,
+  Bus, MapPin, Clock, DollarSign, Users, Ticket,
+  TrendingUp, Tag, FileBarChart, CalendarClock,
+  ArrowUpRight, ClipboardCheck, Megaphone,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import API from "../services/api";
@@ -20,16 +10,11 @@ import "./Dashboard.css";
 import AnnouncementPanel from "../components/AnnouncementPanel";
 
 function getCambodiaTodayStr() {
-  return new Date().toLocaleDateString("en-CA", {
-    timeZone: "Asia/Phnom_Penh",
-  });
+  return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Phnom_Penh" });
 }
 
 function getCambodiaNow() {
-  const str = new Date().toLocaleString("en-US", {
-    timeZone: "Asia/Phnom_Penh",
-    hour12: false,
-  });
+  const str = new Date().toLocaleString("en-US", { timeZone: "Asia/Phnom_Penh", hour12: false });
   return new Date(str);
 }
 
@@ -45,9 +30,7 @@ function parseDepartureTime(value) {
     return { hours, minutes };
   }
   const hmMatch = value.match(/^(\d{1,2}):(\d{2})$/);
-  if (hmMatch) {
-    return { hours: Number(hmMatch[1]), minutes: Number(hmMatch[2]) };
-  }
+  if (hmMatch) return { hours: Number(hmMatch[1]), minutes: Number(hmMatch[2]) };
   return null;
 }
 
@@ -63,23 +46,13 @@ function getDepartureStatus(departureTimeStr) {
   return "upcoming";
 }
 
-// ── Tab component for sidebar nav ─────────────────────────────
-function SidebarLink({ icon, label, path, active, onClick }) {
-  return (
-    <a className={active ? "active" : ""} onClick={onClick}>
-      {icon} {label}
-    </a>
-  );
-}
-
 export default function Dashboard() {
   const navigate = useNavigate();
-
-  const [bookings, setBookings]         = useState([]);
-  const [schedules, setSchedules]       = useState([]);
-  const [loading, setLoading]           = useState(true);
+  const [bookings, setBookings]   = useState([]);
+  const [schedules, setSchedules] = useState([]);
+  const [loading, setLoading]     = useState(true);
   const [departureFilter, setDepartureFilter] = useState("all");
-  const [activeTab, setActiveTab]       = useState("dashboard"); // dashboard | announcements
+  const [activeTab, setActiveTab] = useState("dashboard");
 
   useEffect(() => {
     Promise.all([API.get("/bookings/"), API.get("/schedules/")])
@@ -87,50 +60,35 @@ export default function Dashboard() {
         setBookings(Array.isArray(bookingsRes.data) ? bookingsRes.data : []);
         setSchedules(Array.isArray(schedulesRes.data) ? schedulesRes.data : []);
       })
-      .catch((err) => console.log(err))
+      .catch(console.log)
       .finally(() => setLoading(false));
   }, []);
 
-  const today = getCambodiaTodayStr();
-
-  const totalRevenue = bookings.reduce(
-    (sum, b) => sum + Number(b.total_price || 0), 0
-  );
-
+  const today         = getCambodiaTodayStr();
+  const totalRevenue  = bookings.reduce((sum, b) => sum + Number(b.total_price || 0), 0);
   const todaysBookings = bookings.filter((b) => b.travel_date === today);
-
   const totalPassengers = bookings.reduce((sum, b) => {
     const count = b.seat_numbers
-      ? b.seat_numbers.split(",").map((s) => s.trim()).filter(Boolean).length
-      : 1;
+      ? b.seat_numbers.split(",").map((s) => s.trim()).filter(Boolean).length : 1;
     return sum + count;
   }, 0);
 
-  const todaysDepartures = schedules
-    .map((s) => {
-      const bookedToday = bookings.filter(
-        (b) =>
-          b.travel_date === today &&
-          b.from_city === s.from_city &&
-          b.to_city === s.to_city &&
-          b.departure_time === s.departure_time
-      );
-      const bookedSeats = bookedToday.reduce((sum, b) => {
-        const count = b.seat_numbers
-          ? b.seat_numbers.split(",").map((x) => x.trim()).filter(Boolean).length
-          : 1;
-        return sum + count;
-      }, 0);
-      return { ...s, bookedSeats };
-    })
-    .sort((a, b) => (a.departure_time > b.departure_time ? 1 : -1));
+  const todaysDepartures = schedules.map((s) => {
+    const bookedToday = bookings.filter(
+      (b) => b.travel_date === today && b.from_city === s.from_city &&
+             b.to_city === s.to_city && b.departure_time === s.departure_time
+    );
+    const bookedSeats = bookedToday.reduce((sum, b) => {
+      const count = b.seat_numbers
+        ? b.seat_numbers.split(",").map((x) => x.trim()).filter(Boolean).length : 1;
+      return sum + count;
+    }, 0);
+    return { ...s, bookedSeats };
+  }).sort((a, b) => (a.departure_time > b.departure_time ? 1 : -1));
 
-  const filteredDepartures =
-    departureFilter === "all"
-      ? todaysDepartures
-      : todaysDepartures.filter(
-          (d) => getDepartureStatus(d.departure_time) === departureFilter
-        );
+  const filteredDepartures = departureFilter === "all"
+    ? todaysDepartures
+    : todaysDepartures.filter((d) => getDepartureStatus(d.departure_time) === departureFilter);
 
   const departureCounts = {
     all:      todaysDepartures.length,
@@ -146,7 +104,7 @@ export default function Dashboard() {
   return (
     <div className="admin-page">
 
-      {/* ── Sidebar ─────────────────────────────────────────── */}
+      {/* ── Sidebar ── */}
       <aside className="admin-sidebar">
         <div className="admin-logo">
           <div><Bus size={32} /></div>
@@ -159,7 +117,7 @@ export default function Dashboard() {
         <nav>
           <a
             className={activeTab === "dashboard" ? "active" : ""}
-            onClick={() => { setActiveTab("dashboard"); navigate("/admin-dashboard"); }}
+            onClick={() => setActiveTab("dashboard")}
           >
             <Bus size={20} /> Dashboard
           </a>
@@ -170,7 +128,7 @@ export default function Dashboard() {
             <Ticket size={20} /> Bookings
           </a>
           <a onClick={() => navigate("/admin-dashboard/checkin")}>
-            <ClipboardCheck size={20} /> Staff-CheckIn
+            <ClipboardCheck size={20} /> Check-In
           </a>
           <a onClick={() => navigate("/admin-dashboard/promotions")}>
             <Tag size={20} /> Promotions
@@ -179,7 +137,7 @@ export default function Dashboard() {
             <FileBarChart size={20} /> Reports
           </a>
 
-          {/* ── Announcements tab ── */}
+          {/* ── Announcements ── */}
           <a
             className={activeTab === "announcements" ? "active" : ""}
             onClick={() => setActiveTab("announcements")}
@@ -189,11 +147,11 @@ export default function Dashboard() {
         </nav>
       </aside>
 
-      {/* ── Main content ────────────────────────────────────── */}
+      {/* ── Main content ── */}
       <main className="admin-main">
 
-        {/* ══ ANNOUNCEMENTS TAB ══════════════════════════════ */}
-        {activeTab === "announcements" ? (
+        {/* ══ ANNOUNCEMENTS TAB ══ */}
+        {activeTab === "announcements" && (
           <>
             <header className="admin-header">
               <div>
@@ -205,187 +163,136 @@ export default function Dashboard() {
               <AnnouncementPanel />
             </div>
           </>
-        ) : (
+        )}
 
-        /* ══ DASHBOARD TAB ════════════════════════════════ */
-        <>
-          <header className="admin-header">
-            <div>
-              <h1>Admin Dashboard</h1>
-              <p>Overview of bookings, routes, and today's activity.</p>
-            </div>
-          </header>
-
-          {/* Stats row 1 */}
-          <section className="admin-stats">
-            <div>
-              <DollarSign />
-              <span>Total Revenue</span>
-              <h3>${totalRevenue.toFixed(2)}</h3>
-            </div>
-            <div>
-              <Ticket />
-              <span>Total Bookings</span>
-              <h3>{bookings.length}</h3>
-            </div>
-            <div>
-              <Users />
-              <span>Passengers Served</span>
-              <h3>{totalPassengers}</h3>
-            </div>
-            <div>
-              <MapPin />
-              <span>Active Routes</span>
-              <h3>{schedules.length}</h3>
-            </div>
-          </section>
-
-          {/* Stats row 2 */}
-          <section className="admin-stats">
-            <div>
-              <CalendarClock />
-              <span>Today's Bookings</span>
-              <h3>{todaysBookings.length}</h3>
-            </div>
-            <div>
-              <TrendingUp />
-              <span>Today's Revenue</span>
-              <h3>
-                ${todaysBookings
-                  .reduce((sum, b) => sum + Number(b.total_price || 0), 0)
-                  .toFixed(2)}
-              </h3>
-            </div>
-            <div>
-              <Bus />
-              <span>Departures Today</span>
-              <h3>{todaysDepartures.length}</h3>
-            </div>
-            <div>
-              <Clock />
-              <span>Avg. Ticket Price</span>
-              <h3>
-                ${bookings.length > 0
-                  ? (totalRevenue / bookings.length).toFixed(2)
-                  : "0.00"}
-              </h3>
-            </div>
-          </section>
-
-          {/* 2-column grid */}
-          <div className="dashboard-grid-2col">
-
-            {/* Today's departures */}
-            <section className="admin-card">
-              <div className="card-title">
-                <h2>Today's Departures</h2>
-                <p>{loading ? "Loading..." : `${filteredDepartures.length} shown`}</p>
+        {/* ══ DASHBOARD TAB ══ */}
+        {activeTab === "dashboard" && (
+          <>
+            <header className="admin-header">
+              <div>
+                <h1>Admin Dashboard</h1>
+                <p>Overview of bookings, routes, and today's activity.</p>
               </div>
+            </header>
 
-              <div className="departure-filter-tabs">
-                {["all", "upcoming", "boarding", "departed"].map((f) => (
-                  <button
-                    key={f}
-                    className={departureFilter === f ? "active" : ""}
-                    onClick={() => setDepartureFilter(f)}
-                  >
-                    {f.charAt(0).toUpperCase() + f.slice(1)} ({departureCounts[f]})
-                  </button>
-                ))}
+            <section className="admin-stats">
+              <div><DollarSign /><span>Total Revenue</span><h3>${totalRevenue.toFixed(2)}</h3></div>
+              <div><Ticket /><span>Total Bookings</span><h3>{bookings.length}</h3></div>
+              <div><Users /><span>Passengers Served</span><h3>{totalPassengers}</h3></div>
+              <div><MapPin /><span>Active Routes</span><h3>{schedules.length}</h3></div>
+            </section>
+
+            <section className="admin-stats">
+              <div><CalendarClock /><span>Today's Bookings</span><h3>{todaysBookings.length}</h3></div>
+              <div>
+                <TrendingUp /><span>Today's Revenue</span>
+                <h3>${todaysBookings.reduce((sum, b) => sum + Number(b.total_price || 0), 0).toFixed(2)}</h3>
               </div>
+              <div><Bus /><span>Departures Today</span><h3>{todaysDepartures.length}</h3></div>
+              <div>
+                <Clock /><span>Avg. Ticket Price</span>
+                <h3>${bookings.length > 0 ? (totalRevenue / bookings.length).toFixed(2) : "0.00"}</h3>
+              </div>
+            </section>
 
-              <div className="route-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Route</th>
-                      <th>Type</th>
-                      <th>Departs</th>
-                      <th>Booked / Seats</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredDepartures.map((d) => {
-                      const status = getDepartureStatus(d.departure_time);
-                      return (
-                        <tr key={d.id}>
-                          <td>
-                            <strong>{d.from_city}</strong>
-                            <span>→ {d.to_city}</span>
-                          </td>
-                          <td>{d.bus_type}</td>
-                          <td>{d.departure_time}</td>
-                          <td>{d.bookedSeats} / {d.seats}</td>
-                          <td>
-                            <span className={`departure-status-badge ${status}`}>
-                              {status === "departed" && "Departed"}
-                              {status === "boarding" && "Boarding"}
-                              {status === "upcoming" && "Upcoming"}
-                            </span>
+            <div className="dashboard-grid-2col">
+
+              {/* Today's departures */}
+              <section className="admin-card">
+                <div className="card-title">
+                  <h2>Today's Departures</h2>
+                  <p>{loading ? "Loading..." : `${filteredDepartures.length} shown`}</p>
+                </div>
+                <div className="departure-filter-tabs">
+                  {["all","upcoming","boarding","departed"].map((f) => (
+                    <button
+                      key={f}
+                      className={departureFilter === f ? "active" : ""}
+                      onClick={() => setDepartureFilter(f)}
+                    >
+                      {f.charAt(0).toUpperCase() + f.slice(1)} ({departureCounts[f]})
+                    </button>
+                  ))}
+                </div>
+                <div className="route-table" style={{
+                  maxHeight: 320,
+                  overflowY: "auto",
+                  borderRadius: "0 0 10px 10px",
+                }}>
+                  <table style={{ position: "relative" }}>
+                    <thead style={{ position: "sticky", top: 0, zIndex: 2 }}>
+                      <tr>
+                        <th>Route</th><th>Type</th><th>Departs</th>
+                        <th>Booked / Seats</th><th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredDepartures.map((d) => {
+                        const status = getDepartureStatus(d.departure_time);
+                        return (
+                          <tr key={d.id}>
+                            <td><strong>{d.from_city}</strong><span>→ {d.to_city}</span></td>
+                            <td>{d.bus_type}</td>
+                            <td>{d.departure_time}</td>
+                            <td>{d.bookedSeats} / {d.seats}</td>
+                            <td>
+                              <span className={`departure-status-badge ${status}`}>
+                                {status === "departed" ? "Departed" : status === "boarding" ? "Boarding" : "Upcoming"}
+                              </span>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                      {!loading && filteredDepartures.length === 0 && (
+                        <tr>
+                          <td colSpan="5" className="empty-table">
+                            {departureFilter === "all"
+                              ? "No departures scheduled today"
+                              : `No ${departureFilter} departures right now`}
                           </td>
                         </tr>
-                      );
-                    })}
-                    {!loading && filteredDepartures.length === 0 && (
-                      <tr>
-                        <td colSpan="5" className="empty-table">
-                          {departureFilter === "all"
-                            ? "No departures scheduled today"
-                            : `No ${departureFilter} departures right now`}
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </section>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
 
-            {/* Recent bookings */}
-            <section className="admin-card">
-              <div className="card-title">
-                <h2>Recent Bookings</h2>
-                <button
-                  className="view-all-btn"
-                  onClick={() => navigate("/admin-dashboard/bookings")}
-                >
-                  View all <ArrowUpRight size={14} />
-                </button>
-              </div>
+              {/* Recent bookings */}
+              <section className="admin-card">
+                <div className="card-title">
+                  <h2>Recent Bookings</h2>
+                  <button className="view-all-btn" onClick={() => navigate("/admin-dashboard/bookings")}>
+                    View all <ArrowUpRight size={14} />
+                  </button>
+                </div>
+                <div className="route-table" style={{
+                  maxHeight: 320,
+                  overflowY: "auto",
+                  borderRadius: "0 0 10px 10px",
+                }}>
+                  <table>
+                    <thead style={{ position: "sticky", top: 0, zIndex: 2 }}>
+                      <tr><th>Code</th><th>Route</th><th>Passenger</th><th>Total</th></tr>
+                    </thead>
+                    <tbody>
+                      {recentBookings.map((b) => (
+                        <tr key={b.id}>
+                          <td>{b.booking_code}</td>
+                          <td><strong>{b.from_city}</strong><span>→ {b.to_city}</span></td>
+                          <td>{b.passenger_name}</td>
+                          <td>${b.total_price}</td>
+                        </tr>
+                      ))}
+                      {!loading && recentBookings.length === 0 && (
+                        <tr><td colSpan="4" className="empty-table">No bookings yet</td></tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
 
-              <div className="route-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Code</th>
-                      <th>Route</th>
-                      <th>Passenger</th>
-                      <th>Total</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {recentBookings.map((b) => (
-                      <tr key={b.id}>
-                        <td>{b.booking_code}</td>
-                        <td>
-                          <strong>{b.from_city}</strong>
-                          <span>→ {b.to_city}</span>
-                        </td>
-                        <td>{b.passenger_name}</td>
-                        <td>${b.total_price}</td>
-                      </tr>
-                    ))}
-                    {!loading && recentBookings.length === 0 && (
-                      <tr>
-                        <td colSpan="4" className="empty-table">No bookings yet</td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          </div>
-        </>
+            </div>
+          </>
         )}
 
       </main>
