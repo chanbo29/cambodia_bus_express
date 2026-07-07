@@ -4,8 +4,7 @@ import {
   MapPin, Lock, AlertTriangle, Delete, Search,
 } from "lucide-react";
 import "./StaffScan.css";
-
-const OFFICE    = { lat: 11.5564, lng: 104.9282, radius: 150 };
+const OFFICE    = { lat: 11.5827, lng: 104.8974, radius: 150 };
 const WINDOWS   = {
   checkin:  { start: { h: 1,  m: 0 }, end: { h: 9,  m: 30 } },
   checkout: { start: { h: 15, m: 0 }, end: { h: 21, m: 0  } },
