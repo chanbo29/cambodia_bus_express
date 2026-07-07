@@ -26,7 +26,7 @@ router.register("promotions", PromotionViewSet, basename="promotion")
 router.register("users", AdminUserViewSet, basename="user")
 router.register(r"staff",         StaffViewSet,           basename="staff")
 router.register(r"staff-records", StaffWorkRecordViewSet, basename="staff-records")
-from .views import public_staff_list, public_staff_records, public_staff_checkin, public_staff_checkout, public_verify_pin
+from .views import public_staff_list, public_staff_records, public_staff_checkin, public_staff_checkout, public_verify_pin, public_booking_checkin, public_booking_lookup
 
 urlpatterns = [
     path("reset-admin/", views.reset_admin),
@@ -48,4 +48,6 @@ urlpatterns = [
     path("public/staff-checkin/",            public_staff_checkin),
     path("public/staff-checkout/<int:record_id>/", public_staff_checkout),
     path("public/verify-pin/", public_verify_pin),
+    path("public/booking/", public_booking_lookup),
+    path("public/booking/<int:booking_id>/checkin/", public_booking_checkin),
 ]

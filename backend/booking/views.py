@@ -531,3 +531,40 @@ def public_verify_pin(request):
     except Staff.DoesNotExist:
         return Response({"valid": False}, status=200)
     return Response({"valid": str(staff.pin) == str(pin)})
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def public_booking_lookup(request):
+    """GET /api/public/booking/?code=CBE-XXXX — no auth required"""
+    code = request.query_params.get("code", "").strip().upper()
+    if not code:
+        return Response({"error": "code is required"}, status=400)
+    try:
+        booking = Booking.objects.get(booking_code__iexact=code)
+        return Response({
+            "id":             booking.id,
+            "booking_code":   booking.booking_code,
+            "passenger_name": booking.passenger_name,
+            "phone":          booking.phone,
+            "from_city":      booking.from_city,
+            "to_city":        booking.to_city,
+            "travel_date":    str(booking.travel_date),
+            "departure_time": booking.departure_time,
+            "seat_numbers":   booking.seat_numbers,
+            "total_price":    str(booking.total_price),
+            "checked_in":     booking.checked_in,
+        })
+    except Booking.DoesNotExist:
+        return Response({"error": "Booking not found"}, status=404)
+
+@api_view(["PATCH"])
+@permission_classes([AllowAny])
+def public_booking_checkin(request, booking_id):
+    """PATCH /api/public/booking/<id>/checkin/ — mark checked_in=True"""
+    try:
+        booking = Booking.objects.get(id=booking_id)
+        booking.checked_in = True
+        booking.save()
+        return Response({"success": True, "checked_in": True})
+    except Booking.DoesNotExist:
+        return Response({"error": "Booking not found"}, status=404)

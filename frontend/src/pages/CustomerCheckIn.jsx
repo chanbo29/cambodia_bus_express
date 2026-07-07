@@ -9,12 +9,24 @@ import "./CustomerCheckIn.css";
 
 const BASE = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
 
-async function apiFetch(path, opts = {}) {
+async function publicGet(path) {
   const res = await fetch(`${BASE}${path}`, {
-    headers: { "Content-Type": "application/json" }, ...opts,
+    headers: { "Content-Type": "application/json" },
   });
-  if (!res.ok) throw new Error(await res.text());
-  return res.json();
+  const data = await res.json();
+  if (!res.ok) throw new Error(data?.error || data?.detail || "Request failed");
+  return data;
+}
+
+async function publicPatch(path, body = {}) {
+  const res = await fetch(`${BASE}${path}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data?.error || data?.detail || "Request failed");
+  return data;
 }
 
 function getCambodiaTime() {
@@ -160,13 +172,15 @@ export default function CustomerCheckIn() {
     const cleaned = raw.trim().toUpperCase();
     setLoading(true); setError("");
     try {
-      const list = await apiFetch("/bookings/");
-      const found = list.find(b => b.booking_code?.toUpperCase() === cleaned);
-      if (!found) throw new Error(`"${cleaned}" not found. Check your code and try again.`);
+      // Public endpoint — no auth required
+      const found = await publicGet(`/public/booking/?code=${encodeURIComponent(cleaned)}`);
       setBooking(found);
       setStep("result");
     } catch (err) {
-      setError(err.message || "Booking not found.");
+      const msg = err.message?.includes("not found")
+        ? `"${cleaned}" not found. Check your code and try again.`
+        : err.message || "Something went wrong. Please try again.";
+      setError(msg);
       setStep("error");
     } finally { setLoading(false); }
   };
@@ -175,14 +189,13 @@ export default function CustomerCheckIn() {
     if (!booking) return;
     setLoading(true);
     try {
-      await apiFetch(`/bookings/${booking.id}/`, {
-        method: "PATCH",
-        body: JSON.stringify({ checked_in: true }),
-      });
+      // Public check-in endpoint — no auth required
+      await publicPatch(`/public/booking/${booking.id}/checkin/`);
       setBooking(b => ({ ...b, checked_in: true }));
       setStep("success");
-    } catch { setError("Check-in failed. Please ask staff."); }
-    finally { setLoading(false); }
+    } catch (err) {
+      setError(err.message || "Check-in failed. Please ask staff.");
+    } finally { setLoading(false); }
   };
 
   const reset = () => {
