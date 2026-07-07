@@ -10,6 +10,7 @@ import Branch from "../pages/Branch";
 import About from "../pages/About";
 import FAQ from "../pages/FAQ";
 import StaffScan from "../pages/StaffScan";
+import CustomerCheckIn from "../pages/CustomerCheckIn";
 
 import AdminDashboard from "../admin/Dashboard";
 import ManageBookings from "../admin/ManageBookings";
@@ -39,7 +40,8 @@ export default function AppRoutes() {
       <Route path="/contact"    element={<Navigate to="/faq" replace />} />
 
       {/* Public — no login */}
-      <Route path="/staff-scan" element={<StaffScan />} />
+      <Route path="/staff-scan"       element={<StaffScan />} />
+      <Route path="/customer-checkin" element={<CustomerCheckIn />} />
 
       <Route path="/booking" element={<ProtectedRoute><Booking /></ProtectedRoute>} />
       <Route path="/history" element={<ProtectedRoute><TicketHistory /></ProtectedRoute>} />

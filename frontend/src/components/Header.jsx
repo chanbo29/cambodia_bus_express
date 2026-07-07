@@ -165,7 +165,7 @@ export default function Header() {
                     <Link to="/history" onClick={closeAll}>
                       <Ticket size={15} />{t("nav_history")}
                     </Link>
-                    <Link to="/admin-dashboard/checkin" onClick={closeAll}>
+                    <Link to="/customer-checkin" onClick={closeAll}>
                       <ClipboardCheck size={15} />Customer Check-In
                     </Link>
                     <button onClick={logout}>
