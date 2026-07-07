@@ -1,7 +1,7 @@
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import {
   User, LogOut, Settings, Ticket, ChevronDown,
-  Menu, X, Phone, Mail
+  Menu, X, Phone, Mail, ClipboardCheck
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
@@ -150,9 +150,14 @@ export default function Header() {
                 {showDropdown && (
                   <div className="dropdown-menu">
                     {(user?.is_staff || user?.is_superuser) && (
-                      <Link to="/admin-dashboard" onClick={closeAll}>
-                        <Settings size={15} />Admin Dashboard
-                      </Link>
+                      <>
+                        <Link to="/admin-dashboard" onClick={closeAll}>
+                          <Settings size={15} />Admin Dashboard
+                        </Link>
+                        <Link to="/admin-dashboard/checkin" onClick={closeAll}>
+                          <ClipboardCheck size={15} />Manage Check-In
+                        </Link>
+                      </>
                     )}
                     <Link to="/profile" onClick={closeAll}>
                       <User size={15} />{t("profile_account")}
