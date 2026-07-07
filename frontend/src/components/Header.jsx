@@ -110,7 +110,7 @@ export default function Header() {
           <nav className="site-nav desktop-nav">
             <NavLink to="/">{t("nav_home")}</NavLink>
             <NavLink to="/booking">{t("nav_booking")}</NavLink>
-            <NavLink to="/schedule">{t("nav_schedule")}</NavLink>
+            {/* <NavLink to="/schedule">{t("nav_schedule")}</NavLink> */}
             <NavLink to="/branch">{t("nav_branch")}</NavLink>
             <NavLink to="/about">{t("nav_about")}</NavLink>
             <NavLink to="/faq">{t("nav_faq")}</NavLink>
@@ -123,14 +123,14 @@ export default function Header() {
             {token && <NotificationBell />}
 
             {/* Language toggle */}
-            <button className="lang-toggle desktop-lang" onClick={toggleLang}>
+            {/* <button className="lang-toggle desktop-lang" onClick={toggleLang}>
               <img
                 src={lang === "en" ? "https://flagcdn.com/w40/kh.png" : "https://flagcdn.com/w40/gb.png"}
                 alt={lang === "en" ? "KH" : "EN"}
                 className="lang-flag-img"
-              />
-              <span className="lang-label">{lang === "en" ? "KH" : "EN"}</span>
-            </button>
+              /> */}
+              {/* <span className="lang-label">{lang === "en" ? "KH" : "EN"}</span> */}
+            {/* </button> */}
 
             {/* Profile / Login */}
             {token ? (
@@ -157,6 +157,9 @@ export default function Header() {
                         <Link to="/admin-dashboard/checkin" onClick={closeAll}>
                           <ClipboardCheck size={15} />Manage Check-In
                         </Link>
+                        <Link to="/customer-checkin" onClick={closeAll}>
+                      <ClipboardCheck size={15} />Customer Check-In
+                    </Link>
                       </>
                     )}
                     <Link to="/profile" onClick={closeAll}>
@@ -164,9 +167,6 @@ export default function Header() {
                     </Link>
                     <Link to="/history" onClick={closeAll}>
                       <Ticket size={15} />{t("nav_history")}
-                    </Link>
-                    <Link to="/customer-checkin" onClick={closeAll}>
-                      <ClipboardCheck size={15} />Customer Check-In
                     </Link>
                     <button onClick={logout}>
                       <LogOut size={15} />{t("nav_logout")}
@@ -180,9 +180,9 @@ export default function Header() {
               </NavLink>
             )}
 
-            <NavLink to="/booking" className="site-book-btn desktop-only">
+            {/* <NavLink to="/booking" className="site-book-btn desktop-only">
               <Ticket size={15} />{t("nav_booking")}
-            </NavLink>
+            </NavLink> */}
 
             {/* Hamburger */}
             <button className="hamburger" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu">
@@ -211,7 +211,7 @@ export default function Header() {
             <div className="mobile-nav-links">
               <NavLink to="/" onClick={closeAll}>{t("nav_home")}</NavLink>
               <NavLink to="/booking" onClick={closeAll}>{t("nav_booking")}</NavLink>
-              <NavLink to="/schedule" onClick={closeAll}>{t("nav_schedule")}</NavLink>
+              // <NavLink to="/schedule" onClick={closeAll}>{t("nav_schedule")}</NavLink>
               <NavLink to="/branch" onClick={closeAll}>{t("nav_branch")}</NavLink>
               <NavLink to="/about" onClick={closeAll}>{t("nav_about")}</NavLink>
               <NavLink to="/faq" onClick={closeAll}>{t("nav_faq")}</NavLink>
@@ -244,9 +244,9 @@ export default function Header() {
                   <User size={16} />{t("nav_login")}
                 </Link>
               )}
-              <NavLink to="/booking" className="site-book-btn mobile-book-btn" onClick={closeAll}>
-                <Ticket size={16} />{t("nav_booking")}
-              </NavLink>
+              // <NavLink to="/booking" className="site-book-btn mobile-book-btn" onClick={closeAll}>
+              //   <Ticket size={16} />{t("nav_booking")}
+              // </NavLink>
             </div>
           </nav>
         </div>
