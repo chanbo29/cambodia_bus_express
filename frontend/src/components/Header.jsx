@@ -28,9 +28,8 @@ export default function Header() {
     window.addEventListener("profileImageUpdated", handler);
     window.addEventListener("storage", handler);
 
-    // Always fetch from backend on mount — don't trust stale localStorage
-    // This ensures each user sees their own photo, not a previous user's
-    const token = localStorage.getItem("access");
+    // Fetch profile image from backend — only when logged in
+    const token       = localStorage.getItem("access");
     const currentUser = JSON.parse(localStorage.getItem("user") || "null");
 
     if (token && currentUser) {
@@ -38,9 +37,11 @@ export default function Header() {
         `${import.meta.env.VITE_API_URL || "http://localhost:8000/api"}/profile/`,
         { headers: { Authorization: `Bearer ${token}` } }
       )
-        .then((r) => r.json())
+        .then((r) => {
+          if (!r.ok) throw new Error("not authenticated");
+          return r.json();
+        })
         .then((data) => {
-          // Only apply if same user is still logged in
           const stillLoggedIn = JSON.parse(localStorage.getItem("user") || "null");
           if (stillLoggedIn?.username === currentUser?.username) {
             const img = data?.profile_image || null;
@@ -48,7 +49,7 @@ export default function Header() {
             setProfileImage(img);
           }
         })
-        .catch(() => {});
+        .catch(() => {}); // silently ignore 401 / network errors
     }
 
     return () => {
@@ -109,7 +110,7 @@ export default function Header() {
           <nav className="site-nav desktop-nav">
             <NavLink to="/">{t("nav_home")}</NavLink>
             <NavLink to="/booking">{t("nav_booking")}</NavLink>
-            {/* <NavLink to="/schedule">{t("nav_schedule")}</NavLink> */}
+            <NavLink to="/schedule">{t("nav_schedule")}</NavLink>
             <NavLink to="/branch">{t("nav_branch")}</NavLink>
             <NavLink to="/about">{t("nav_about")}</NavLink>
             <NavLink to="/faq">{t("nav_faq")}</NavLink>
@@ -122,14 +123,14 @@ export default function Header() {
             {token && <NotificationBell />}
 
             {/* Language toggle */}
-            {/* <button className="lang-toggle desktop-lang" onClick={toggleLang}>
+            <button className="lang-toggle desktop-lang" onClick={toggleLang}>
               <img
                 src={lang === "en" ? "https://flagcdn.com/w40/kh.png" : "https://flagcdn.com/w40/gb.png"}
                 alt={lang === "en" ? "KH" : "EN"}
                 className="lang-flag-img"
               />
               <span className="lang-label">{lang === "en" ? "KH" : "EN"}</span>
-            </button> */}
+            </button>
 
             {/* Profile / Login */}
             {token ? (
@@ -171,9 +172,9 @@ export default function Header() {
               </NavLink>
             )}
 
-            {/* <NavLink to="/booking" className="site-book-btn desktop-only">
+            <NavLink to="/booking" className="site-book-btn desktop-only">
               <Ticket size={15} />{t("nav_booking")}
-            </NavLink> */}
+            </NavLink>
 
             {/* Hamburger */}
             <button className="hamburger" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu">
@@ -202,7 +203,7 @@ export default function Header() {
             <div className="mobile-nav-links">
               <NavLink to="/" onClick={closeAll}>{t("nav_home")}</NavLink>
               <NavLink to="/booking" onClick={closeAll}>{t("nav_booking")}</NavLink>
-              {/* <NavLink to="/schedule" onClick={closeAll}>{t("nav_schedule")}</NavLink> */}
+              <NavLink to="/schedule" onClick={closeAll}>{t("nav_schedule")}</NavLink>
               <NavLink to="/branch" onClick={closeAll}>{t("nav_branch")}</NavLink>
               <NavLink to="/about" onClick={closeAll}>{t("nav_about")}</NavLink>
               <NavLink to="/faq" onClick={closeAll}>{t("nav_faq")}</NavLink>
@@ -235,9 +236,9 @@ export default function Header() {
                   <User size={16} />{t("nav_login")}
                 </Link>
               )}
-              {/* <NavLink to="/booking" className="site-book-btn mobile-book-btn" onClick={closeAll}>
+              <NavLink to="/booking" className="site-book-btn mobile-book-btn" onClick={closeAll}>
                 <Ticket size={16} />{t("nav_booking")}
-              </NavLink> */}
+              </NavLink>
             </div>
           </nav>
         </div>

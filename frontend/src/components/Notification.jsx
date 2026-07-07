@@ -45,19 +45,22 @@ export default function NotificationBell() {
   const ref = useRef(null);
 
   const fetchAnnouncements = async () => {
+    const token = localStorage.getItem("access");
+    if (!token) return; // not logged in — skip
     try {
-      const token = localStorage.getItem("access");
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await axios.get(`${API}/announcements/`, { headers });
+      const res = await axios.get(`${API}/announcements/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setAnnouncements(res.data || []);
     } catch (err) {
-      console.error("Failed to fetch announcements", err);
+      if (err?.response?.status !== 401) {
+        console.error("Failed to fetch announcements", err);
+      }
     }
   };
 
   useEffect(() => {
     fetchAnnouncements();
-    // Refresh every 2 minutes
     const interval = setInterval(fetchAnnouncements, 120000);
     return () => clearInterval(interval);
   }, []);
