@@ -170,7 +170,7 @@ export default function Dashboard() {
             <Ticket size={20} /> Bookings
           </a>
           <a onClick={() => navigate("/admin-dashboard/checkin")}>
-            <ClipboardCheck size={20} /> Check-In
+            <ClipboardCheck size={20} /> Staff-CheckIn
           </a>
           <a onClick={() => navigate("/admin-dashboard/promotions")}>
             <Tag size={20} /> Promotions

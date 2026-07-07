@@ -88,7 +88,7 @@ export default function ManageUsers() {
             <Ticket size={20} /> Bookings
           </a>
           <a onClick={() => navigate("/admin-dashboard/checkin")}>
-            <ClipboardCheck size={20} /> Check-In
+            <ClipboardCheck size={20} />Staff-CheckIn
           </a>
           <a className="active">
             <Users size={20} /> Users

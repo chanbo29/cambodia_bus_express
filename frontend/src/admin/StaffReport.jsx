@@ -188,7 +188,7 @@ export default function StaffReport() {
           <a onClick={()=>navigate("/admin-dashboard")}><Bus size={20}/> Dashboard</a>
           <a onClick={()=>navigate("/admin-dashboard/routes")}><MapPin size={20}/> Routes</a>
           <a onClick={()=>navigate("/admin-dashboard/bookings")}><Ticket size={20}/> Bookings</a>
-          <a onClick={()=>navigate("/admin-dashboard/checkin")}><ClipboardCheck size={20}/> Check-In</a>
+          <a onClick={()=>navigate("/admin-dashboard/checkin")}><ClipboardCheck size={20}/> Staff-CheckIn</a>
           <a onClick={()=>navigate("/admin-dashboard/promotions")}><Tag size={20}/> Promotions</a>
           <a className="active"><FileBarChart size={20}/> Reports</a>
           <a onClick={()=>navigate("/admin-dashboard/announcements")}><Megaphone size={20}/> Announcements</a>
