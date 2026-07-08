@@ -684,3 +684,127 @@
   font-size: 12px !important;
   margin: 8px 0 20px !important;
 }
+
+/* ── Mobile ───────────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .cci2-header {
+    padding: 12px 16px;
+  }
+
+  .cci2-brand h1 {
+    font-size: 14px;
+  }
+
+  .cci2-brand p {
+    font-size: 11px;
+  }
+
+  .cci2-clock {
+    font-size: 12px;
+  }
+
+  .cci2-breadcrumb {
+    padding: 10px 14px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .cci2-step-pills {
+    gap: 6px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+  }
+
+  .cci2-pill {
+    flex-shrink: 0;
+    padding: 5px 10px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .cci2-body {
+    padding: 20px 14px;
+  }
+
+  .cci2-bus-icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .cci2-home-hero h2 {
+    font-size: 20px;
+  }
+
+  .cci2-mode-card {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .cci2-mode-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .cci2-mode-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .cci2-mode-arrow {
+    display: none;
+  }
+
+  .cci2-type-card {
+    padding: 16px;
+  }
+
+  .cci2-code-input {
+    font-size: 16px;
+    padding: 12px 14px;
+  }
+
+  .cci2-find-btn,
+  .cci2-board-btn,
+  .cci2-next-btn {
+    padding: 13px;
+    font-size: 14px;
+  }
+
+  .cci2-result-card,
+  .cci2-success-card,
+  .cci2-error-card {
+    padding: 16px;
+  }
+
+  .cci2-result-top {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .cci2-result-code strong {
+    font-size: 16px;
+  }
+
+  .cci2-route-bar {
+    padding: 12px 14px;
+  }
+
+  .cci2-route-city strong {
+    font-size: 14px;
+  }
+
+  .cci2-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .cci2-success-pills {
+    gap: 6px;
+  }
+
+  .cci2-spill {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+}
