@@ -67,8 +67,9 @@ function parseDepartureTime(value) {
 
 // Returns { status, minutesLeft } for check-in reminders.
 // status: "urgent" (<=10 min), "reminder" (<=20 min), or null (not due yet,
-// already departed, or not travelling today).
+// already departed, already checked in, or not travelling today).
 function getCheckInStatus(item) {
+  if (item.checked_in) return { status: null };
   if (item.travel_date !== getCambodiaTodayStr()) return { status: null };
 
   const depTime = parseDepartureTime(item.departure_time);
@@ -91,7 +92,7 @@ export default function TicketHistory() {
   const [bookings, setBookings] = useState([]);
   const [search, setSearch] = useState("");
   const [dateFilter, setDateFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [checkinFilter, setCheckinFilter] = useState("all");
   const [sortBy, setSortBy] = useState("newest");
   const [selectedTicket, setSelectedTicket] = useState(null);
   const [closing, setClosing] = useState(false);
@@ -139,7 +140,7 @@ Vehicle: ${item.vehicle_type}
 Seats: ${item.seat_numbers}
 Passengers: ${passengerCount(item)}
 Total: $${item.total_price}
-Status: ${item.status || "Paid"}
+Check-in: ${item.checked_in ? "Checked in" : "Not checked in"}
 `;
     const blob = new Blob([text], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
@@ -182,8 +183,10 @@ Status: ${item.status || "Paid"}
       );
     })
     .filter((item) => {
-      if (statusFilter === "all") return true;
-      return (item.status || "paid").toLowerCase() === statusFilter;
+      if (checkinFilter === "all") return true;
+      if (checkinFilter === "checked_in") return !!item.checked_in;
+      if (checkinFilter === "not_checked_in") return !item.checked_in;
+      return true;
     })
     .filter((item) => {
       if (dateFilter === "all") return true;
@@ -244,6 +247,8 @@ Status: ${item.status || "Paid"}
     0
   );
 
+  const totalCheckedIn = bookings.filter((item) => item.checked_in).length;
+
   return (
     <div className="th-page">
       <div className="th-shell">
@@ -291,8 +296,8 @@ Status: ${item.status || "Paid"}
           <div>
             <div className="th-stat-icon"><CheckCircle size={20} /></div>
             <div>
-              <span>Status</span>
-              <h3>Paid</h3>
+              <span>Checked In</span>
+              <h3>{totalCheckedIn} / {bookings.length}</h3>
             </div>
           </div>
         </section>
@@ -321,11 +326,10 @@ Status: ${item.status || "Paid"}
 
           <div className="th-select">
             <CheckCircle size={16} />
-            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
-              <option value="all">All Status</option>
-              <option value="paid">Paid</option>
-              <option value="pending">Pending</option>
-              <option value="cancelled">Cancelled</option>
+            <select value={checkinFilter} onChange={(e) => setCheckinFilter(e.target.value)}>
+              <option value="all">All Tickets</option>
+              <option value="checked_in">Checked In</option>
+              <option value="not_checked_in">Not Checked In</option>
             </select>
             <ChevronDown size={15} />
           </div>
@@ -362,9 +366,9 @@ Status: ${item.status || "Paid"}
                   }
                   alt={item.vehicle_type || "Bus"}
                 />
-                <span className="th-stub-status">
+                <span className={`th-stub-status ${item.checked_in ? "checked-in" : "pending"}`}>
                   <CheckCircle size={12} />
-                  {item.status || "Paid"}
+                  {item.checked_in ? "Checked In" : "Ready to Board"}
                 </span>
               </div>
 
@@ -458,6 +462,11 @@ Status: ${item.status || "Paid"}
                 <h3>CAMBODIA BUS</h3>
                 <span>EXPRESS E-TICKET</span>
               </div>
+            </div>
+
+            <div className={`th-pt-checkin-pill ${selectedTicket.checked_in ? "checked-in" : "pending"}`}>
+              <CheckCircle size={13} />
+              {selectedTicket.checked_in ? "Checked In" : "Ready to Board"}
             </div>
 
             <div className="th-pt-route">
