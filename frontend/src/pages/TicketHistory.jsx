@@ -65,6 +65,28 @@ function parseDepartureTime(value) {
   return null;
 }
 
+// Combines travel_date + departure_time into one Date object, so we can
+// tell whether a trip has already departed even if it wasn't today.
+function getDepartureDateTime(item) {
+  if (!item.travel_date) return null;
+  const depTime = parseDepartureTime(item.departure_time);
+  if (!depTime) return null;
+  const [y, m, d] = item.travel_date.split("-").map(Number);
+  return new Date(y, m - 1, d, depTime.hours, depTime.minutes, 0, 0);
+}
+
+// Ticket state for the badge: "checked_in" | "missed" | "upcoming"
+// "missed" = departure time has already passed and the ticket was never
+// checked in -- the passenger didn't board.
+function getTicketState(item) {
+  if (item.checked_in) return "checked_in";
+  const depDateTime = getDepartureDateTime(item);
+  if (depDateTime && getCambodiaNow().getTime() > depDateTime.getTime()) {
+    return "missed";
+  }
+  return "upcoming";
+}
+
 // Returns { status, minutesLeft } for check-in reminders.
 // status: "urgent" (<=10 min), "reminder" (<=20 min), or null (not due yet,
 // already departed, already checked in, or not travelling today).
@@ -140,7 +162,11 @@ Vehicle: ${item.vehicle_type}
 Seats: ${item.seat_numbers}
 Passengers: ${passengerCount(item)}
 Total: $${item.total_price}
-Check-in: ${item.checked_in ? "Checked in" : "Not checked in"}
+Check-in: ${
+  item.checked_in ? "Checked in" :
+  getTicketState(item) === "missed" ? "Not coming (missed departure)" :
+  "Not checked in"
+}
 `;
     const blob = new Blob([text], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
@@ -366,10 +392,18 @@ Check-in: ${item.checked_in ? "Checked in" : "Not checked in"}
                   }
                   alt={item.vehicle_type || "Bus"}
                 />
-                <span className={`th-stub-status ${item.checked_in ? "checked-in" : "pending"}`}>
-                  <CheckCircle size={12} />
-                  {item.checked_in ? "Checked In" : "Ready to Board"}
-                </span>
+                {(() => {
+                  const ticketState = getTicketState(item);
+                  const label =
+                    ticketState === "checked_in" ? "Checked In" :
+                    ticketState === "missed" ? "Not Coming" : "Ready to Board";
+                  return (
+                    <span className={`th-stub-status ${ticketState.replace("_", "-")}`}>
+                      <CheckCircle size={12} />
+                      {label}
+                    </span>
+                  );
+                })()}
               </div>
 
               <div className="th-stub-body">
@@ -464,10 +498,18 @@ Check-in: ${item.checked_in ? "Checked in" : "Not checked in"}
               </div>
             </div>
 
-            <div className={`th-pt-checkin-pill ${selectedTicket.checked_in ? "checked-in" : "pending"}`}>
-              <CheckCircle size={13} />
-              {selectedTicket.checked_in ? "Checked In" : "Ready to Board"}
-            </div>
+            {(() => {
+              const ticketState = getTicketState(selectedTicket);
+              const label =
+                ticketState === "checked_in" ? "Checked In" :
+                ticketState === "missed" ? "Not Coming" : "Ready to Board";
+              return (
+                <div className={`th-pt-checkin-pill ${ticketState.replace("_", "-")}`}>
+                  <CheckCircle size={13} />
+                  {label}
+                </div>
+              );
+            })()}
 
             <div className="th-pt-route">
               <div>
