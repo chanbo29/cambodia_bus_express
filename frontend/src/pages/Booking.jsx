@@ -584,7 +584,7 @@ export default function Booking() {
             {payingState === "waiting" && (
               <>
                 <img src={PAYMENT_QR_URL} alt="Payment QR code" className="bk-pay-qr" />
-                <h3>Scan to pay ${totalPrice.toFixed(2)}</h3>
+                <h3>Scan to pay ${totalPrice.toFixed(4)}</h3>
                 <p>Waiting for payment confirmation via {booking.paymentMethod}...</p>
                 <div className="bk-pay-spinner" />
               </>
