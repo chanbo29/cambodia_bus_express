@@ -17,7 +17,8 @@ from .views import (
     AnnouncementAdminListView,
 )
 from .views import StaffViewSet, StaffWorkRecordViewSet
-
+from django.urls import path
+from .views import StaffCheckInView, TicketHistoryView
 
 router = DefaultRouter()
 router.register("bookings", BookingViewSet, basename="booking")
@@ -50,4 +51,6 @@ urlpatterns = [
     path("public/verify-pin/", public_verify_pin),
     path("public/booking/", public_booking_lookup),
     path("public/booking/<int:booking_id>/checkin/", public_booking_checkin),
+    path("bookings/history/", TicketHistoryView.as_view(), name="ticket-history"),
+    path("checkin/", StaffCheckInView.as_view(), name="staff-checkin"),
 ]

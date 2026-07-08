@@ -191,3 +191,86 @@ class StaffWorkRecord(models.Model):
  
     def __str__(self):
         return f"{self.staff.name} — {self.date}"
+    
+import uuid
+from io import BytesIO
+
+from django.conf import settings
+from django.core.files.base import ContentFile
+from django.core import signing
+from django.db import models
+
+import qrcode
+
+
+def generate_booking_code():
+    return "CBE-" + uuid.uuid4().hex[:8].upper()
+
+
+class Booking(models.Model):
+    # Payment status -- separate from check-in status below.
+    STATUS_PENDING = "pending"
+    STATUS_PAID = "paid"
+    STATUS_CANCELLED = "cancelled"
+    STATUS_CHOICES = [
+        (STATUS_PENDING, "Pending"),
+        (STATUS_PAID, "Paid"),
+        (STATUS_CANCELLED, "Cancelled"),
+    ]
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="bookings"
+    )
+
+    # Human-typeable code, also used for manual check-in entry.
+    booking_code = models.CharField(
+        max_length=20, unique=True, default=generate_booking_code, editable=False
+    )
+
+    passenger_name = models.CharField(max_length=120)
+    phone = models.CharField(max_length=30, blank=True, null=True)
+
+    from_city = models.CharField(max_length=100)
+    to_city = models.CharField(max_length=100)
+    travel_date = models.DateField()
+    departure_time = models.CharField(max_length=20)  # e.g. "6:00 AM" -- kept as text to match your existing format
+    vehicle_type = models.CharField(max_length=50)  # e.g. "VIP Van", "Night Bus"
+    seat_numbers = models.CharField(max_length=100)  # comma-separated, e.g. "A3, A4"
+
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    # Payment status
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default=STATUS_PENDING)
+
+    # Check-in status -- independent of payment status
+    is_checked_in = models.BooleanField(default=False)
+    checked_in_at = models.DateTimeField(blank=True, null=True)
+    checked_in_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name="checkins_performed",
+    )
+
+    qr_image = models.ImageField(upload_to="ticket_qr/", blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.booking_code
+
+    def get_signed_token(self):
+        """A tamper-proof token embedded in the QR code (not just the raw code)."""
+        return signing.dumps({"booking_code": self.booking_code}, salt="ticket-qr")
+
+    def generate_qr(self, save=True):
+        token = self.get_signed_token()
+        img = qrcode.make(token)
+        buf = BytesIO()
+        img.save(buf, format="PNG")
+        filename = f"{self.booking_code}.png"
+        self.qr_image.save(filename, ContentFile(buf.getvalue()), save=save)

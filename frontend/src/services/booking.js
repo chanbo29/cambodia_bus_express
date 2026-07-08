@@ -49,3 +49,11 @@ export const patchMyProfile = async (payload) => {
   const response = await API.patch("/profile/", payload);
   return response.data;
 };
+
+
+import api from "./api"; // <-- adjust this path to your real axios instance
+ 
+export const checkInBooking = (bookingCode) =>
+  api
+    .post("/bookings/checkin/", { booking_code: bookingCode })
+    .then((res) => res.data);

@@ -19,6 +19,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
+from django.utils import timezone
 
 from .models import Booking, BusSchedule, WeeklySchedule
 from .serializers import BookingSerializer, BusScheduleSerializer, WeeklyScheduleSerializer
@@ -310,17 +311,6 @@ class PromotionViewSet(viewsets.ModelViewSet):
             return [AllowAny()]
         return [IsAdminUser()]
 
-
-class PromotionViewSet(viewsets.ModelViewSet):
-    queryset = Promotion.objects.all().order_by("-id")
-    serializer_class = PromotionSerializer
-
-    def get_permissions(self):
-        if self.request.method in ["GET", "HEAD", "OPTIONS"]:
-            return [AllowAny()]
-        return [IsAdminUser()]
-    
- 
  
 class AdminUserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all().order_by("-date_joined")
@@ -329,14 +319,8 @@ class AdminUserViewSet(viewsets.ModelViewSet):
     http_method_names = ["get", "patch", "delete"]
 
 
-
-# Add these to booking/views.py
-
-from django.utils import timezone
 from .models import Announcement
-from rest_framework import serializers, generics, permissions
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
+from rest_framework import serializers
 
 
 class AnnouncementSerializer(serializers.ModelSerializer):
@@ -393,8 +377,6 @@ class AnnouncementAdminListView(generics.ListAPIView):
     permission_classes = [permissions.IsAdminUser]
 
 
-
-from rest_framework import viewsets
 from .models import Staff, StaffWorkRecord
  
 class StaffSerializer(serializers.ModelSerializer):
@@ -532,6 +514,7 @@ def public_verify_pin(request):
         return Response({"valid": False}, status=200)
     return Response({"valid": str(staff.pin) == str(pin)})
 
+
 @api_view(["GET"])
 @permission_classes([AllowAny])
 def public_booking_lookup(request):
@@ -552,10 +535,13 @@ def public_booking_lookup(request):
             "departure_time": booking.departure_time,
             "seat_numbers":   booking.seat_numbers,
             "total_price":    str(booking.total_price),
+            "status":         booking.status,
             "checked_in":     booking.checked_in,
+            "checked_in_at":  booking.checked_in_at if hasattr(booking, "checked_in_at") else None,
         })
     except Booking.DoesNotExist:
         return Response({"error": "Booking not found"}, status=404)
+
 
 @api_view(["PATCH"])
 @permission_classes([AllowAny])
@@ -563,8 +549,41 @@ def public_booking_checkin(request, booking_id):
     """PATCH /api/public/booking/<id>/checkin/ — mark checked_in=True"""
     try:
         booking = Booking.objects.get(id=booking_id)
-        booking.checked_in = True
-        booking.save()
-        return Response({"success": True, "checked_in": True})
     except Booking.DoesNotExist:
         return Response({"error": "Booking not found"}, status=404)
+
+    if booking.status and booking.status.lower() == "cancelled":
+        return Response(
+            {"error": "This booking was cancelled and cannot be checked in."},
+            status=400,
+        )
+
+    if booking.checked_in:
+        return Response(
+            {
+                "error": "This ticket was already checked in.",
+                "checked_in": True,
+                "checked_in_at": booking.checked_in_at if hasattr(booking, "checked_in_at") else None,
+            },
+            status=409,
+        )
+
+    booking.checked_in = True
+    if hasattr(booking, "checked_in_at"):
+        booking.checked_in_at = timezone.now()
+    booking.save()
+
+    return Response({
+        "success": True,
+        "id": booking.id,
+        "booking_code": booking.booking_code,
+        "passenger_name": booking.passenger_name,
+        "phone": booking.phone,
+        "from_city": booking.from_city,
+        "to_city": booking.to_city,
+        "travel_date": str(booking.travel_date),
+        "departure_time": booking.departure_time,
+        "seat_numbers": booking.seat_numbers,
+        "checked_in": True,
+        "checked_in_at": booking.checked_in_at if hasattr(booking, "checked_in_at") else None,
+    })
