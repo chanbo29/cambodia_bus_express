@@ -31,14 +31,7 @@ class BookingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Booking
         fields = "__all__"
-        read_only_fields = [
-            "booking_code",
-            "qr_image",
-            "is_checked_in",
-            "checked_in_at",
-            "checked_in_by",
-            "created_at",
-        ]
+        read_only_fields = ["booking_code", "checked_in", "checked_in_at", "created_at"]
 
 
 class BusScheduleSerializer(serializers.ModelSerializer):
