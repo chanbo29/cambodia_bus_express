@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import abaLogo from "../assets/aba.jpg";
 import wingLogo from "../assets/wing.jpg";
 import bakongLogo from "../assets/bakong.png";
+// Replace this URL with your real payment QR image (hosted, e.g. on Cloudinary)
+const PAYMENT_QR_URL = "https://images.unsplash.com/photo-1595079676339-1534801ad6cf?q=80&w=400&auto=format&fit=crop";
 import { useNavigate } from "react-router-dom";
 import {
   Bus, Search, MapPin, Calendar, Users, User,
@@ -49,6 +51,11 @@ export default function Booking() {
     passengerName: "", phone: "", email: "",
     paymentMethod: "ABA Pay", bookingCode: "", bookingTime: "",
   });
+
+  // "waiting" -> showing the QR + waiting for demo payment confirmation
+  // "confirmed" -> showing the green checkmark, right before revealing the ticket
+  // null -> overlay hidden
+  const [payingState, setPayingState] = useState(null);
 
   useEffect(() => {
     const saved = localStorage.getItem("bookingData");
@@ -197,8 +204,9 @@ export default function Booking() {
     });
   };
 
-  const finishBooking = async () => {
-    if (!booking.passengerName || !booking.phone || !booking.email) { alert("Please fill passenger information"); return; }
+  // Actually creates the booking on the backend. Returns true/false so the
+  // caller (the payment overlay flow) knows whether to proceed or bail out.
+  const executeBooking = async () => {
     try {
       const data = await createBooking({
         passenger_name: booking.passengerName, phone: booking.phone, email: booking.email,
@@ -210,12 +218,38 @@ export default function Booking() {
       const bookedAt = data.created_at
         ? new Date(data.created_at).toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" })
         : new Date().toLocaleString("en-US", { dateStyle: "medium", timeStyle: "short" });
-      setBooking({ ...booking, bookingCode: data.booking_code, bookingTime: bookedAt });
+      setBooking((prev) => ({ ...prev, bookingCode: data.booking_code, bookingTime: bookedAt }));
       localStorage.setItem("lastBookingResult", JSON.stringify(data));
-      setStep(5);
+      return true;
     } catch (err) {
       alert("Booking failed: " + (err.response?.data ? JSON.stringify(err.response.data) : "Cannot connect to server"));
+      return false;
     }
+  };
+
+  // Click handler for "Pay & Confirm" -- shows the QR overlay first (demo
+  // wait), then creates the booking, then shows a brief "confirmed" state
+  // before revealing the ticket on step 5.
+  const handlePayClick = () => {
+    if (!booking.passengerName || !booking.phone || !booking.email) {
+      alert("Please fill passenger information");
+      return;
+    }
+
+    setPayingState("waiting");
+
+    setTimeout(async () => {
+      const ok = await executeBooking();
+      if (!ok) {
+        setPayingState(null);
+        return;
+      }
+      setPayingState("confirmed");
+      setTimeout(() => {
+        setPayingState(null);
+        setStep(5);
+      }, 1200);
+    }, 2000);
   };
 
   const paymentMethods = [
@@ -496,7 +530,7 @@ export default function Booking() {
 
               <div className="bk-actions full-span">
                 <button className="bk-back" onClick={() => setStep(3)}><ArrowLeft size={16} />{t("booking_back")}</button>
-                <button className="bk-next" onClick={finishBooking}><CreditCard size={16} />{t("booking_pay_btn")}</button>
+                <button className="bk-next" onClick={handlePayClick}><CreditCard size={16} />{t("booking_pay_btn")}</button>
               </div>
             </div>
           )}
@@ -542,6 +576,32 @@ export default function Booking() {
 
         </main>
       </div>
+
+      {/* ── Payment processing overlay ──────────────────────── */}
+      {payingState && (
+        <div className="bk-pay-overlay">
+          <div className="bk-pay-card">
+            {payingState === "waiting" && (
+              <>
+                <img src={PAYMENT_QR_URL} alt="Payment QR code" className="bk-pay-qr" />
+                <h3>Scan to pay ${totalPrice.toFixed(2)}</h3>
+                <p>Waiting for payment confirmation via {booking.paymentMethod}...</p>
+                <div className="bk-pay-spinner" />
+              </>
+            )}
+
+            {payingState === "confirmed" && (
+              <>
+                <div className="bk-pay-success-icon">
+                  <CheckCircle size={40} />
+                </div>
+                <h3>Payment confirmed!</h3>
+                <p>Generating your ticket...</p>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
