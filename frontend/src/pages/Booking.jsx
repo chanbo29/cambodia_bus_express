@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import abaLogo from "../assets/aba.jpg";
 import wingLogo from "../assets/wing.jpg";
 import bakongLogo from "../assets/bakong.png";
-// Replace this URL with your real payment QR image (hosted, e.g. on Cloudinary)
-const PAYMENT_QR_URL = "https://images.unsplash.com/photo-1595079676339-1534801ad6cf?q=80&w=400&auto=format&fit=crop";
+// Real payment QR image, hosted on Cloudinary
+const PAYMENT_QR_URL = "https://res.cloudinary.com/jvwlddbl/image/upload/v1783503722/photo_2026-06-23_15-03-06_zrth3p.jpg";
 import { useNavigate } from "react-router-dom";
 import {
   Bus, Search, MapPin, Calendar, Users, User,
