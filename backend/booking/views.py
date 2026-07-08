@@ -535,7 +535,6 @@ def public_booking_lookup(request):
             "departure_time": booking.departure_time,
             "seat_numbers":   booking.seat_numbers,
             "total_price":    str(booking.total_price),
-            "status":         booking.status,
             "checked_in":     booking.checked_in,
             "checked_in_at":  booking.checked_in_at if hasattr(booking, "checked_in_at") else None,
         })
@@ -551,12 +550,6 @@ def public_booking_checkin(request, booking_id):
         booking = Booking.objects.get(id=booking_id)
     except Booking.DoesNotExist:
         return Response({"error": "Booking not found"}, status=404)
-
-    if booking.status and booking.status.lower() == "cancelled":
-        return Response(
-            {"error": "This booking was cancelled and cannot be checked in."},
-            status=400,
-        )
 
     if booking.checked_in:
         return Response(
