@@ -4,11 +4,10 @@ import {
   MapPin, Lock, AlertTriangle, Delete, Search,
 } from "lucide-react";
 import "./StaffScan.css";
-
-const OFFICE    = { lat: 11.5827, lng: 104.8974, radius: 150 };
+const OFFICE    = { lat: 11.5830, lng: 104.8779, radius: 150 };
 const WINDOWS   = {
-  checkin:  { start: { h: 6,  m: 0 }, end: { h: 9,  m: 59 } },
-  checkout: { start: { h: 15, m: 0 }, end: { h: 21, m: 0  } },
+  checkin:  { start: { h: 19,  m: 0 }, end: { h: 20,  m: 59 } },
+  checkout: { start: { h: 21, m: 0 }, end: { h: 23, m: 0  } },
 };
 const WORK_START = { hour: 8, minute: 0 };
 const BASE       = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
